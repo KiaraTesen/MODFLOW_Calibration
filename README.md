@@ -13,3 +13,13 @@
 * Definir las funciones de pérdida.
 * Metodología aplicada a un acuífero real --> Ligua - Petorca, Chile central.
 
+## Metodología
+* Modelo WEAP - MODFLOW.
+* Establecer el rango de valores en los que se moverán las variables de decisión.
+* Identificar las salidas de interés.
+    * Niveles de agua subterránea en pozos DGA.
+    * Pozos colgados.
+    * MODFLOW Cell Head no crezca en el tiempo.
+    * Variación neta del volumen almacenado por 3 periodos de tiempo.
+* Restricciones
+
