@@ -4,7 +4,7 @@
 * Calibración de parámetros hidráulicos de un acuífero utilizando algorítmos bioinspirados.
 
 ## Objetivo específco
-* Optimizar la calibración de un modelo subterráneo utilizando PSO (Particle Swarm Optimization)
+* Optimizar la calibración de un modelo subterráneo utilizando PSO (Particle Swarm Optimization) y Convolución
 * Calibrar paramétros hidráulicos (variables de decisión): 
     * Conductividad hidráulica (Kx y Kz) --> Considerando Ky = Kx
     * Rendimiento específico (Sy) --> Considerando que Almacenamiento específico (Ss) = Sy / 100
