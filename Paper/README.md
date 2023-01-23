@@ -4,13 +4,13 @@
 # Estructura de paper
 
 ## Keywords
-* Particle Swarm Optimization --> Genético o bio-inspirado? Son lo mismo?
+* Distributed Particle Swarm Optimization
 * Convolutional Neural Networks (¿?)
 * Aquifer hydraulic parameters
 * Optimization (¿?)
 * Simulation - Optimization model
 
-## Introducción
+## Introducciónbbbb
 * Antecedentes a calibración de PH de un acuífero.
 
     Las aguas subterráneas juegan un rol muy importante en la Gestión Integrada de Recursos Hídricos (GIRH). Siendo aún más relevante en el balance hídrico de áreas donde la dinámica río-acuífero afecta las secciones del lecho del río, o donde las alcantarillas están ubicadas debajo del nivel del agua subterránea (Sanzana et al., 2019b), o en zonas donde el recurso superficial es escaso (Liu et al., 2022). Por esta razón, cada vez se ha hecho más necesario el uso de herramientas de modelación que permitan simplificar y/u optimizar distintos procesos. En la GIRH estas labores pueden llegar a ser complicadas dependiendo de las características del acuífero de interés (Sanzana et al., 2019a; b). En este sentido, una adecuada modelación de los sistemas de aguas subterráneas depende de un buen conocimiento de los parámetros hidrogeológicos del acuífero, como la conductividad hidráulica, transmisividad, coeficiente de almacenamiento, rendimiento específico y la tasa de recarga del acuífero (Lakshmi Prasad y Rastogi 2001). Sin embargo, estos parámetros comunmente necesitan ser estimados ya que no son fáciles de medir directamente pues requieren considerables recursos humanos y económicos (Bateni et al., 2015). 
@@ -60,6 +60,24 @@
 
 ## Data and  Methodology
 
+### Optimization models
+
+#### Distributed Particle Swarm Optimization 
+Para introducirnos al Distributed Particle Swarm Optimization algorithm (DPSO), debemos conocer como funciona el algorítmo PSO básico. PSO es un algoritmo evolutivo estocástico propuesto por Eberhart y Kennedy (1995) basado en la inteligencia colectiva de la población (conocido como enjambre). Una población consiste en partículas que se mueven a través del espacio de búsqueda multidimensional y cambian de posición, dependiendo de su propia experiencia (la mejor posición individual actual, pbest) y la experiencia de las otras partículas (la mejor posición global actual, gbest) (Erdeljan et al., 2014; Thomas et al., 2018). En cada generación, las partículas actualizan su posición cambiando su velocidad hacia pbest y gbest 
+
+El cambio de posición de la partícula i se logra moviendo la partícula de la posición anterior, según la ecuación:
+
+
+Kennedy y Eberhart [18], inspirados en el comportamiento de una bandada de pájaros en busca de comida [19], desarrollaron el algoritmo PSO que sigue las características de comportamiento comunes de los animales que se mueven en grupos. . Al principio, el algoritmo se desarrolló para sistemas continuos y, más tarde, se introdujeron algoritmos para sistemas discretos: PSO binario [20] y PSO entero [21-23]. Con el algoritmo binario cada partícula de la población puede tomar valores binarios (0 o 1). En casos más generales, como PSO entero, se logra un valor óptimo redondeando el óptimo real al entero más cercano.
+
+
+
+
+El algoritmo PSO distribuido se basa en la búsqueda de soluciones disponibles en el espacio paralelo [25]. La población (enjambre) consiste en varios sub-enjambres distribuidos, asignados a diferentes procesadores
+
+Independientemente de los subenjambres restantes, cada procesador ejecuta el algoritmo (un número definido de iteraciones) en los subenjambres locales. Después de un número de iteraciones previamente definido, se intercambian soluciones de diferentes sub-enjambres. La modificación en el algoritmo distribuido es la introducción de un nuevo período de sincronización de parámetros (Tsync), que define la frecuencia de comunicación entre sub-enjambres. El parámetro Tsync representa el número de iteraciones después de las cuales se actualizará el óptimo global (bg). Cuando los subenjambres reciben información sobre el óptimo global, cambian de velocidad como se muestra en las ecuaciones. 7-10.
+
+
 #### Integrated Managment Water Model --> Modelo WEAP - MODFLOW.
 * [Explicación del modelo - Mencionar que este está siendo desarrollado en el proyecto de Ligua Petorca (¿?)]
 * Ecuación que resuelve MODFLOW.
@@ -68,7 +86,7 @@
 
 #### Modelo de optamización
 
-* Particle Swarm Optimization (PSO) es un algoritmo evolutivo estocástico propuesto por Eberhart y Kennedy (1995). En PSO, la partícula se mueve a través del espacio de búsqueda siguiendo la mejor posición individual actual ( pbest ) y la mejor posición global actual ( gbest ). En cada generación, las partículas actualizan su posición cambiando su velocidad hacia pbest y gbest. [*TODO TEXTUAL DE Thomas et al., 2018*] 
+*   En PSO, la partícula se mueve a través del espacio de búsqueda siguiendo la mejor posición individual actual ( pbest ) y la mejor posición global actual ( gbest ).  [*TODO TEXTUAL DE Thomas et al., 2018*] 
 
 
  y Convolución --> ¿Por qué PSO y no un genético? --> Reducción del tiempo y trabaja en método asíncrono, teniendo en cuenta que contamos con un modelo que utiliza una arquitectura de modelación paralelizada.
@@ -113,6 +131,8 @@
 * Bateni, Sayed & Mortazavi-naeini, Mohammad & Ataie-Ashtiani, Behzad & Jeng, Dong-Sheng & Khanbilvardi, R.. (2015). Evaluation of Methods for Estimating Aquifer Hydraulic Parameters. Applied Soft Computing. 28. 10.1016/j.asoc.2014.12.022. 
 * Carrera, J., Alcolea, A., Medina, A. et al. Inverse problem in hydrogeology. Hydrogeol J 13, 206–222 (2005). https://doi.org/10.1007/s10040-004-0404-7
 * Eberhart R , Kennedy J . A new optimizer using particle swarm theory. In: Proceedings of the sixth international symposium on micro machine and human science. IEEE; 1995. p. 39–43. Oct 4 .
+* A. Erdeljan, D. Capko, S. Vukmirovic, D. Bojanic, V. Congradac. Distributed pso algorithm for data model partitioning in power distribution systems. J. Appl. Res. Technol., 12 (5) (2014), pp. 947-957
+* J. Kennedy and R. Eberhart, “Particle swarm optimization“, In: Proceedings of the 1995 IEEE International. Conference on Neural Networks (ICNN), IEEE Service Center, Piscataway, New Jersey, vol.4, pp.1942–1948, 1995.
 * Lakshmi Prasad K, Rastogi AK (2001) Estimating net aquifer recharge and zonal hydraulic conductivity values for Mahi Right Bank Canal project area, India by genetic algorithm. Journal of Hydrology 243:149–161. https:// doi. org/ 10. 1016/ S0022- 1694(00) 00364-4
 * Liu et al. (2020). Simulation of regional groundwater levels in arid regions using interpretable machine learning models. https://doi.org/10.1016/j.scitotenv.2022.154902
 * Patel, S., Eldho, T.I., Rastogi, A.K. et al. Groundwater parameter estimation using multiquadric-based meshfree simulation with covariance matrix adaptation evolution strategy optimization for a regional aquifer system. Hydrogeol J 30, 2205–2221 (2022). https://doi.org/10.1007/s10040-022-02544-y
