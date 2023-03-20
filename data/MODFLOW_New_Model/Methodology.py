@@ -21,7 +21,7 @@ path_GIS = r'..\GIS'
 path_output = r'..\output'
 
 iteration = 1
-
+"""
 #-------------------------------------------------------------
 #---    Modification of Hydraulic Properties - MODFLOW    ----
 #-------------------------------------------------------------
@@ -65,7 +65,7 @@ model.remove_package("UPW")
 upw = fpm.ModflowUpw(model = model, laytyp=1, layavg=0, chani=-1.0, layvka=0, laywet=0, hdry=-888, iphdry=1, hk=matriz_kx, hani=1.0, vka=matriz_kz, ss=matriz_ss, sy=matriz_sy, extension='upw')
 upw.write_file()
 model.run_model()
-"""
+
 #----------------------------------------
 #---    Move native files to WEAP    ----
 #----------------------------------------
@@ -87,7 +87,7 @@ for h in get_new_files:
         pass
     else:
         shutil.copy(os.path.join(os.getcwd(), h), os.path.join(path_MODFLOW_WEAP, h))
-        
+"""
 #-------------------------------------
 #---    Run WEAP-MODFLOW model    ----
 #-------------------------------------
@@ -95,7 +95,16 @@ for h in get_new_files:
 WEAP = win32.Dispatch("WEAP.WEAPApplication")
 WEAP.ActiveArea = "SyntheticProblem_WEAPMODFLOW_Prueba"
 WEAP.ActiveScenario = WEAP.Scenarios("Current Accounts")
-WEAP.Calculate()
+#WEAP.Calculate()
 
 #---    Export results
-"""
+
+WEAP.LoadFavorite('MODFLOW_results\Wells_simulation')
+WEAP.ExportResults(os.path.join(dir_iteration,'Simulated_wells_iter' + str(iteration) + '.csv'), True, True, True, False, False)
+
+#---------------------------------
+#---    Objective Function    ----
+#---------------------------------
+
+#---    Subject to
+
