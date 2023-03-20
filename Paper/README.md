@@ -46,7 +46,7 @@
 * Problema a resolver¨--> Objetivo y vació en el conocimiento.
 
     ### Objetivo principal
-    * Calibración de parámetros hidráulicos de un acuífero utilizando algorítmos bioinspirados. [Encontrar el set de parámetros óptimos que reduzca el error (qué monitorearemos - fitness function (¿?)) entre los valores observados y simulados] --> Se plantea un modelo de simulación - optimización (SO).
+    * Estimar los parámetros hidráulicos de un acuífero utilizando modelación inversa con algorítmos bioinspirados y convolutional neural networks junto a un modelo integrado de recursos hídricos.
     ### Objetivo específco
     * Optimizar la calibración de un modelo subterráneo utilizando PSO (Particle Swarm Optimization) y Convolución
     * Calibrar paramétros hidráulicos (variables de decisión): 
@@ -57,7 +57,7 @@
     * Definir las funciones de pérdida.
     * Metodología aplicada a un acuífero real --> Ligua - Petorca, Chile central.
 
-
+    . [Encontrar el set de parámetros óptimos que reduzca el error (qué monitorearemos - fitness function (¿?)) entre los valores observados y simulados] --> Se plantea un modelo de simulación - optimización (SO).
 ## Data and  Methodology
 
 ### Optimization models
