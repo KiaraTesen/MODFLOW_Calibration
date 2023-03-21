@@ -18,7 +18,7 @@ path_WEAP = r'C:\Users\Francisco Suárez P\Documents\WEAP Areas\SyntheticProblem
 path_model = r'..\MODFLOW_Model'
 path_nwt_exe = r'..\MODFLOW-NWT_1.2.0\bin\MODFLOW-NWT_64.exe'
 path_GIS = r'..\GIS'
-path_output = r'..\output'
+path_output = r'C:\Users\Francisco Suárez P\Desktop\GitHub - KT\MODFLOW_Calibration\data\output' # Necesita ruta completa por WEAP Export
 
 iteration = 1
 
@@ -100,15 +100,14 @@ for h in get_new_files:
 WEAP = win32.Dispatch("WEAP.WEAPApplication")
 WEAP.ActiveArea = "SyntheticProblem_WEAPMODFLOW_Prueba"
 WEAP.ActiveScenario = WEAP.Scenarios("Current Accounts")
-#WEAP.Calculate()
+WEAP.Calculate()
 
 #---    Export results
 favorites = pd.read_excel("../Favorites_WEAP.xlsx")
 
 for i,j in zip(favorites["BranchVariable"],favorites["WEAP Export"]):
     WEAP.LoadFavorite(i)
-    WEAP.ExportResults('iter_' + str(iteration) + '_' + j + '.csv', True, True, True, False, False)
-    print('Se guardó: ' + j + ', en: ' + os.path.join(dir_iteration, 'iter_' + str(iteration) + '_' + j + '.csv'))
+    WEAP.ExportResults(os.path.join(dir_iteration, f"iter_{str(iteration)}_{j}.csv"), True, True, True, False, False)
 
 #---------------------------------
 #---    Objective Function    ----
