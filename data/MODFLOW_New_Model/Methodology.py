@@ -21,6 +21,11 @@ path_GIS = r'..\GIS'
 path_output = r'..\output'
 
 iteration = 1
+
+dir_iteration = os.path.join(path_output, "iter_" + str(iteration))
+if not os.path.isdir(dir_iteration):
+    os.mkdir(dir_iteration)
+
 """
 #-------------------------------------------------------------
 #---    Modification of Hydraulic Properties - MODFLOW    ----
@@ -98,9 +103,12 @@ WEAP.ActiveScenario = WEAP.Scenarios("Current Accounts")
 #WEAP.Calculate()
 
 #---    Export results
+favorites = pd.read_excel("../Favorites_WEAP.xlsx")
 
-WEAP.LoadFavorite('MODFLOW_results\Wells_simulation')
-WEAP.ExportResults(os.path.join(dir_iteration,'Simulated_wells_iter' + str(iteration) + '.csv'), True, True, True, False, False)
+for i,j in zip(favorites["BranchVariable"],favorites["WEAP Export"]):
+    WEAP.LoadFavorite(i)
+    WEAP.ExportResults('iter_' + str(iteration) + '_' + j + '.csv', True, True, True, False, False)
+    print('Se guardó: ' + j + ', en: ' + os.path.join(dir_iteration, 'iter_' + str(iteration) + '_' + j + '.csv'))
 
 #---------------------------------
 #---    Objective Function    ----
