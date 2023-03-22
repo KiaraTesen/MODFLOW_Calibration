@@ -14,7 +14,7 @@ import shutil
 import win32com.client as win32
 
 #---    Paths
-path_WEAP = r'C:\Users\Francisco Suárez P\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW_Prueba'
+path_WEAP = r'C:\Users\Francisco Suárez P\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
 path_model = r'..\MODFLOW_Model'
 path_nwt_exe = r'..\MODFLOW-NWT_1.2.0\bin\MODFLOW-NWT_64.exe'
 path_GIS = r'..\GIS'
@@ -26,7 +26,6 @@ dir_iteration = os.path.join(path_output, "iter_" + str(iteration))
 if not os.path.isdir(dir_iteration):
     os.mkdir(dir_iteration)
 
-"""
 #-------------------------------------------------------------
 #---    Modification of Hydraulic Properties - MODFLOW    ----
 #-------------------------------------------------------------
@@ -92,13 +91,13 @@ for h in get_new_files:
         pass
     else:
         shutil.copy(os.path.join(os.getcwd(), h), os.path.join(path_MODFLOW_WEAP, h))
-"""
+
 #-------------------------------------
 #---    Run WEAP-MODFLOW model    ----
 #-------------------------------------
 
 WEAP = win32.Dispatch("WEAP.WEAPApplication")
-WEAP.ActiveArea = "SyntheticProblem_WEAPMODFLOW_Prueba"
+WEAP.ActiveArea = "SyntheticProblem_WEAPMODFLOW"
 WEAP.ActiveScenario = WEAP.Scenarios("Current Accounts")
 WEAP.Calculate()
 
