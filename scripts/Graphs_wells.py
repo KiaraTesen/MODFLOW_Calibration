@@ -15,6 +15,7 @@ iteration = 1
 
 #---    Paths
 path_output = r'C:\Users\Francisco Suárez P\Desktop\GitHub - KT\MODFLOW_Calibration\data\output' # Necesita ruta completa por WEAP Export
+path_obs_values = r'../data/ObservedData'
 dir_iteration = os.path.join(path_output, "iter_" + str(iteration))
 
 ows = ['OW22', 'OW29', 'OW35', 'OW36', 'OW43', 'OW48', 'OW51', 'OW83', 'OW87', 'OW97', 'OW100', 'OW157', 'OW159', 'OW167', 'OW169', 'OW181', 'OW188', 'OW209', 'OW233', 
@@ -24,33 +25,38 @@ export_ows = pd.read_csv(os.path.join(dir_iteration, f"iter_{str(iteration)}_Wel
 export_ows = export_ows.set_index('Branch')
 export_ows = export_ows.set_index(pd.to_datetime(export_ows.index))
 export_ows = export_ows.iloc[36:,:]
-print(export_ows)
+
+owo = pd.read_csv(os.path.join(path_obs_values, 'Wells_observed.csv'), skiprows = 3)
+owo = owo.set_index('Branch')
+owo = owo.set_index(pd.to_datetime(owo.index))
+owo = owo.iloc[36:,:]
 
 for i in range(0,6):
     if i < 5:
         locals()[f"ows_{i+1}"] = ows[5*i:5*i+5] 
-
     else:
         locals()[f"ows_{i+1}"] = ows[5*i:5*i+6]
 
 for j in range(0,6):
     vector = locals()[f"ows_{j+1}"]
-    
+
     if len(vector) == 5:
         fig, ((ax1, ax2, ax3), (ax4, ax5, ax6)) = plt.subplots(2,3, figsize = (15, 8))
         
         for k in range(len(vector)):
             sim_NAS = export_ows[vector[k]]
-            #print(sim_NAS.min())
-
+            obs_NAS = owo[vector[k]]
+            min_value = min(math.floor(sim_NAS.min()), math.floor(obs_NAS.min()))
+            max_value = max(math.ceil(sim_NAS.max()), math.ceil(obs_NAS.max()))
+            
             locals()[f'ax{k+1}'].plot(sim_NAS, 'k-', label = 'simulado')
+            locals()[f'ax{k+1}'].plot(obs_NAS, 'r-', label = 'observado')
             locals()[f'ax{k+1}'].set_title(str(vector[k]), size = 11, fontweight="bold")
             locals()[f'ax{k+1}'].legend(loc = "best")
             locals()[f'ax{k+1}'].tick_params(axis='both',labelsize=8)
             locals()[f'ax{k+1}'].set_xlim(np.datetime64('1985-10-01'), np.datetime64('2009-10-01'))
             locals()[f'ax{k+1}'].xaxis.set_major_locator(mdates.MonthLocator(interval=36))
-            locals()[f'ax{k+1}'].set_ylim(math.floor(sim_NAS.min()), math.ceil(sim_NAS.max()))
-            #print(int(math.floor(math.floor(sim_NAS.min())/5)*5), int(math.ceil(math.ceil(sim_NAS.max())/5)*5))
+            locals()[f'ax{k+1}'].set_ylim(min_value, max_value)
             plt.setp(locals()[f'ax{k+1}'].get_xticklabels(), rotation=90, ha='right')
 
         plt.subplots_adjust(wspace=0.25,hspace=0.4)
@@ -62,46 +68,19 @@ for j in range(0,6):
         
         for k in range(len(vector)):
             sim_NAS = export_ows[vector[k]]
-            #print(sim_NAS)
+            obs_NAS = owo[vector[k]]
+            min_value = min(math.floor(sim_NAS.min()), math.floor(obs_NAS.min()))
+            max_value = max(math.ceil(sim_NAS.max()), math.ceil(obs_NAS.max()))
+
             locals()[f'ax{k+1}'].plot(sim_NAS, 'k-', label = 'simulado')
+            locals()[f'ax{k+1}'].plot(obs_NAS, 'r-', label = 'observado')
             locals()[f'ax{k+1}'].set_title(str(vector[k]), size = 11, fontweight="bold")
             locals()[f'ax{k+1}'].legend(loc = "best")
             locals()[f'ax{k+1}'].tick_params(axis='both',labelsize=8)
             locals()[f'ax{k+1}'].set_xlim(np.datetime64('1985-10-01'), np.datetime64('2009-10-01'))
             locals()[f'ax{k+1}'].xaxis.set_major_locator(mdates.MonthLocator(interval=36))
-            locals()[f'ax{k+1}'].set_ylim(math.floor(sim_NAS.min()), math.ceil(sim_NAS.max()))
-            #print(int(math.floor(math.floor(sim_NAS.min())/5)*5), int(math.ceil(math.ceil(sim_NAS.max())/5)*5))
+            locals()[f'ax{k+1}'].set_ylim(min_value, max_value)
             plt.setp(locals()[f'ax{k+1}'].get_xticklabels(), rotation=90, ha='right')
 
         plt.subplots_adjust(wspace=0.25,hspace=0.4)
-        
-        plt.subplots_adjust(wspace=0.2,hspace=0.35)
         plt.savefig(os.path.join(dir_iteration, f"DW_ObsWell_{str(j+1)}.png"))
-
-
-#print(ows_1, ows_2, ows_3, ows_4, ows_5, ows_6)
-"""
-
-for j in SHACs:     
-
-    if j == 'L01' or j == 'L12':
-        fig, ((ax1)) = plt.subplots(1,1, figsize = (8, 4))
-        #fig.suptitle('SHAC - ' + str(j))
-        for i in range(len(locals()[j])):
-            observed_NAS = pd.read_excel(ruta_data + '/NAS_observed_DGA.xlsx', sheet_name = locals()[j][i])
-            observed_NAS = observed_NAS.set_index('Fecha')
-            observed_NAS = observed_NAS.set_index(pd.to_datetime(observed_NAS.index))
-            #print(observed_NAS)
-
-            sim_NAS = WEAP_export['Sim_' + locals()[j][i]]
-            #print(sim_NAS)
-
-            locals()[f'ax{i+1}'].plot(observed_NAS, 'o', markersize=4, label = 'observado')
-            locals()[f'ax{i+1}'].plot(sim_NAS, 'k-', label = 'simulado')
-            locals()[f'ax{i+1}'].set_title(str(locals()[j][i]), size = 11, fontweight="bold")
-            locals()[f'ax{i+1}'].legend(loc = "best")
-            locals()[f'ax{i+1}'].tick_params(axis='both',labelsize=8)
-
-        plt.subplots_adjust(wspace=0.2,hspace=0.35)
-        plt.savefig(ruta_results + '/' + version + '/NAS/Pozos_SHAC_' + str(j) + '.png')
-"""

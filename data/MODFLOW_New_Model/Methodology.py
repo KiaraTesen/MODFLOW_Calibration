@@ -25,7 +25,7 @@ iteration = 1
 dir_iteration = os.path.join(path_output, "iter_" + str(iteration))
 if not os.path.isdir(dir_iteration):
     os.mkdir(dir_iteration)
-
+"""
 #-------------------------------------------------------------
 #---    Modification of Hydraulic Properties - MODFLOW    ----
 #-------------------------------------------------------------
@@ -91,7 +91,7 @@ for h in get_new_files:
         pass
     else:
         shutil.copy(os.path.join(os.getcwd(), h), os.path.join(path_MODFLOW_WEAP, h))
-
+"""
 #-------------------------------------
 #---    Run WEAP-MODFLOW model    ----
 #-------------------------------------
