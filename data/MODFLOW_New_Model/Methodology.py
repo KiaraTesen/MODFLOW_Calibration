@@ -36,6 +36,7 @@ class Particle:
         self.x = x      # X contiene a los dos kernel
         self.v = v      # velocidad del muestreo inicial = 0
         self.x_best = x # Para muestreo inicial sería X
+        self.y_best = 10000000000
 
 n = 5    # Population size
 kernel_shape = (5,5)
@@ -58,6 +59,7 @@ df_init_sampling = pd.DataFrame(columns = ['x', 'v', 'x_best', 'OF'])
 for P in pob:
 
     y = Run_WEAP_MODFLOW(HP, path_output, iter, initial_shape_HP, n_var, kernel_shape, P.x, active_matriz, path_model, path_nwt_exe, path_obs_data, 'muestreo')
+    P.y_best = y
 
     df_init_sampling.loc[iter,'x'] = P.x
     df_init_sampling.loc[iter,'v'] = P.v
@@ -73,7 +75,7 @@ df_init_sampling.to_csv('Prueba.csv')
 
 #---    PSO
 maxiter = 10
-α = 0.8    # Cognitive scaling parameter
+α = 0.8    # Cognitive scaling parameter # si el error no baja tanto
 β = 0.8    # Social scaling parameter
 
 w = 0.5    # inertia velocity
@@ -118,10 +120,13 @@ for m in range(maxiter):
         y = Run_WEAP_MODFLOW(HP, path_output, str(m), initial_shape_HP, n_var, kernel_shape, P.x, active_matriz, path_model, path_nwt_exe, path_obs_data, 'algorithm')
 
         if y < y_best:
-            x_best = np.copy(P.x_best)    # DUDA - NO SERÍA DIRECTO?: P.x_best = np.copy(P.x) y x_best = np.copy(P.x) 
+            x_best = np.copy(P.x)
+            P.x_best = np.copy(P.x)
             y_best = y
-        if y < Run_WEAP_MODFLOW(HP, path_output, str(m), initial_shape_HP, n_var, kernel_shape, P.x_best, active_matriz, path_model, path_nwt_exe, path_obs_data, 'algorithm-comp'):
-            P.x_best = np.copy(P.x)       # DUDA - O ESTE IF NO IRIA PRIMERO?
+            P.y_best = y
+        elif y < P.y_best:
+            P.x_best = np.copy(P.x)
+            P.y_best = y
 
         #---    Update the inertia velocity
         w = w_max - m * ((w_max-w_min)/maxiter)
