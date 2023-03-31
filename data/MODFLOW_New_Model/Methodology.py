@@ -8,6 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os
 from functools import reduce
+import time
 import warnings
 warnings.filterwarnings('ignore')
 
@@ -36,7 +37,7 @@ class Particle:
         self.v = v      # velocidad del muestreo inicial = 0
         self.x_best = x # Para muestreo inicial sería X
 
-n = 3    # Population size
+n = 5    # Population size
 kernel_shape = (5,5)
 n_kernels = 1
 n_hp = 2
@@ -71,7 +72,7 @@ for P in pob:
 df_init_sampling.to_csv('Prueba.csv')
 
 #---    PSO
-maxiter = 1
+maxiter = 10
 α = 0.8    # Cognitive scaling parameter
 β = 0.8    # Social scaling parameter
 
@@ -82,9 +83,12 @@ w_max = 0.9    # maximum value for the inertia velocity
 vMax = np.multiply(u_bounds-l_bounds,0.2)    # Max velocity
 vMin = -vMax    # Min velocity
 
-for m in range(maxiter):
+start_time = time.time()
 
+for m in range(maxiter):
+    a = 0
     for P in pob:
+        print('Iteration: ', str(m), ', - Population: ', str(a))
         #---    Update particle velocity
         ϵ1,ϵ2 = np.random.uniform(), np.random.uniform()    # One value between 0 and 1
         P.v = w*P.v + α*ϵ1*(P.x_best - P.x) + β*ϵ2*(x_best - P.x)
@@ -121,5 +125,6 @@ for m in range(maxiter):
 
         #---    Update the inertia velocity
         w = w_max - m * ((w_max-w_min)/maxiter)
-
+        a += 1
 print(y_best)
+print("{} segundos".format(time.time() - start_time))
