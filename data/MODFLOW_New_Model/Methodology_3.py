@@ -66,6 +66,41 @@ x_best = pob[0].x_best
 y_best = 100000000000
 
 #---    PSO
+def init_pso(gbest_val_arg, gbest_pos_arg, position_arg, velocity_arg, pbest_val_arg, 
+         pbest_pos_arg,f_optim,α_arg,β_arg,w_arg,vMax_arg,vMin_arg,
+         u_bounds_arg,l_bounds_arg):
+    global gbest_val
+    global gbest_pos
+    global position
+    global velocity
+    global pbest_val
+    global pbest_pos
+    global f
+    global α
+    global β
+    global w
+    global vMax
+    global vMin
+    global u_bounds
+    global l_bounds
+
+    gbest_val = gbest_val_arg
+    gbest_pos = gbest_pos_arg
+    position = position_arg
+    velocity = velocity_arg
+    pbest_val = pbest_val_arg
+    pbest_pos = pbest_pos_arg
+    f = f_optim
+    α = α_arg                       # Cognitive scaling parameter # si el error no baja tanto
+    β = β_arg                       # Social scaling parameter
+    w = w_arg                       # inertia velocity
+    vMax = vMax_arg
+    vMin = vMin_arg
+    u_bounds = u_bounds_arg
+    l_bounds = l_bounds_arg
+
+
+
 maxiter = 3
 α = 0.8         # Cognitive scaling parameter # si el error no baja tanto
 β = 0.8         # Social scaling parameter
@@ -141,3 +176,4 @@ df_iter.to_csv(os.path.join(path_output, 'df_iter.csv'))
 print(y_best)
 print("{} segundos".format(time.time() - start_time))
 """
+
