@@ -10,7 +10,6 @@ import win32com.client as win32
 from sklearn.metrics import mean_squared_error
 import math
 import warnings
-import pythoncom
 warnings.filterwarnings('ignore')
 
 #---    Visualization of the matriz
@@ -76,11 +75,14 @@ def get_evaluate_st_bounds(min_v, max_v, vector_modif):
         P_max = 0
     return P_min + P_max
 
-def Run_WEAP_MODFLOW(sample_scaled, HP, iteration, initial_shape_HP, n_var_1, n_var_2, n_var, n_hp, kernel_shape_1, kernel_shape_2, active_matriz, path_model, path_nwt_exe, path_obs_data, path_output):
+def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled, n_var_1, n_var_2, n_var, n_hp, kernel_shape_1, kernel_shape_2, active_matriz, path_model, path_nwt_exe, path_obs_data):
     dir_iteration = os.path.join(path_output, "iter_" + str(iteration))
     if not os.path.isdir(dir_iteration):
         os.mkdir(dir_iteration)
-
+    
+    #--------------------------
+    #---    Run MODFLOW    ----
+    #--------------------------
     #---    Modified matriz
     shape_k1_HP = initial_shape_HP
     new_shape_HP = initial_shape_HP
@@ -95,34 +97,27 @@ def Run_WEAP_MODFLOW(sample_scaled, HP, iteration, initial_shape_HP, n_var_1, n_
         globals()["matriz_1_" + str(m)] = get_HP(initial_shape_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_1_" + str(m)])
         get_image_matriz(globals()["matriz_1_" + str(m)], str(m), os.path.join(dir_iteration, 'First_' + str(m) +'.png'))
         plt.clf()
-
-        #globals()["vector_1_" + str(m)] = globals()["matriz_1_" + str(m)].flatten()
-        #new_shape_HP[m] = globals()["vector_1_" + str(m)]
-        shape_k1_HP[m] = globals()["matriz_1_" + str(m)].flatten()
+        globals()["vector_1_" + str(m)] = globals()["matriz_1_" + str(m)].flatten()
+        shape_k1_HP[m] = globals()["vector_1_" + str(m)]
 
         # Second kernel
         kernel_2_kx = sample_scaled[int(n_var_1):int(n_var_1 + n_var_2/n_hp)].reshape(kernel_shape_2)
         kernel_2_sy = sample_scaled[int(n_var_1 + n_var_2/n_hp):n_var].reshape(kernel_shape_2)
 
-        globals()["matriz_2_" + str(m)] = get_HP(shape_k1_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_2_" + str(m)])
-        get_image_matriz(globals()["matriz_2_" + str(m)], str(m), os.path.join(dir_iteration, 'Second_' + str(m) +'.png'))
+        globals()["matriz_" + str(m)] = get_HP(shape_k1_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_2_" + str(m)])
+        get_image_matriz(globals()["matriz_" + str(m)], str(m), os.path.join(dir_iteration, 'Second_' + str(m) +'.png'))
         plt.clf()
+        globals()["vector_" + str(m)] = globals()["matriz_" + str(m)].flatten()
+        new_shape_HP[m] = globals()["vector_" + str(m)]
 
-        new_shape_HP[m] = globals()["matriz_2_" + str(m)].flatten()
-        #globals()["vector_1_" + str(m)] = globals()["matriz_1_" + str(m)].flatten()
-        #new_shape_HP[m] = globals()["vector_1_" + str(m)]
     #---    Other variables that MODFLOW require
-    matriz_kx = matriz_2_kx
     matriz_kz = matriz_kx/10
-    matriz_sy = matriz_2_sy
     matriz_ss = matriz_sy/100
     new_shape_HP['kz'] = matriz_kz.flatten()
     new_shape_HP['ss'] = matriz_ss.flatten()
     new_shape_HP.to_file(os.path.join(dir_iteration, 'Elements_iter_' + str(iteration) + '.shp'))
     
-    #-----------------------------------------
-    #---    New native files - MODFLOW    ----
-    #-----------------------------------------
+    #---    Generate new native files
     model = fpm.Modflow.load(path_model + '/SyntheticAquifer_NY.nam', version = 'mfnwt', exe_name = path_nwt_exe)
     model.write_input()
     model.remove_package("UPW")
@@ -130,9 +125,7 @@ def Run_WEAP_MODFLOW(sample_scaled, HP, iteration, initial_shape_HP, n_var_1, n_
     upw.write_file()
     model.run_model()
     
-    #----------------------------------------
-    #---    Move native files to WEAP    ----
-    #----------------------------------------
+    #---    Move native files to WEAP
     get_old_files = os.listdir(path_model)
     get_new_files = os.listdir(os.getcwd())
 
@@ -153,8 +146,7 @@ def Run_WEAP_MODFLOW(sample_scaled, HP, iteration, initial_shape_HP, n_var_1, n_
     #-------------------------------------
     #---    Run WEAP-MODFLOW model    ----
     #-------------------------------------
-    #
-    WEAP = win32.Dispatch("WEAP.WEAPApplication", clsctx=pythoncom.CLSCTX_LOCAL_SERVER)
+    WEAP = win32.Dispatch("WEAP.WEAPApplication")
     WEAP.ActiveArea = "SyntheticProblem_WEAPMODFLOW"
     #WEAP.ActiveScenario = WEAP.Scenarios("Current Accounts")
     WEAP.Calculate()
@@ -168,7 +160,6 @@ def Run_WEAP_MODFLOW(sample_scaled, HP, iteration, initial_shape_HP, n_var_1, n_
     #---------------------------------
     #---    Objective Function    ----
     #---------------------------------
-
     #---    Well analysis
     obs_well = get_data(os.path.join(path_obs_data, 'Wells_observed.csv'), 3)
     ow = obs_well.columns
@@ -207,3 +198,4 @@ def Run_WEAP_MODFLOW(sample_scaled, HP, iteration, initial_shape_HP, n_var_1, n_
     of = gw*srmse_well + gq*rmse_q + gk*P_kx + gs*P_sy
     #print(f"Objective function: {of}")
     return of
+    
