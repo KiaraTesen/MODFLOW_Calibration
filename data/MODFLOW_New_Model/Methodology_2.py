@@ -41,63 +41,55 @@ class Particle:
         self.y_best = 10000000000
 
 n = 2                                                           # Population size
-kernel_shape = (5,5)
 n_kernels = 2
+kernel_shape_1 = (5,5)
+kernel_shape_2 = (3,3)
 n_hp = 2
-n_var = reduce(lambda x,y: x*y, kernel_shape)*n_kernels*n_hp    # Number of variables
-elem_kernels = n_kernels * n_hp
+n_var_1 = reduce(lambda x,y: x*y, kernel_shape_1)*n_hp                 
+n_var_2 = reduce(lambda x,y: x*y, kernel_shape_2)*n_hp
+n_var = n_var_1 + n_var_2                                       # Number of variables
 
-l_bounds = np.concatenate((np.repeat(0, n_var/elem_kernels), np.repeat(0, n_var/elem_kernels), 
-                           np.repeat(0, n_var/elem_kernels), np.repeat(0, n_var/elem_kernels)), axis = 0)           # First and third block: Hydraulic conductivity (K), 0.85 - Second and fourth block: Specific yield (Sy), 0.05
-u_bounds = np.concatenate((np.repeat(0.1, n_var/elem_kernels), np.repeat(0.2, n_var/elem_kernels), 
-                           np.repeat(0.1, n_var/elem_kernels), np.repeat(0.2, n_var/elem_kernels)), axis = 0)       # First and third block: Hydraulic conductivity (K), 1.01 - Second and fourth block: Specific yield (Sy), 0.99
+l_bounds = np.concatenate((np.repeat(0, n_var_1/n_hp), np.repeat(0, n_var_1/n_hp),                      # First and third block: Hydraulic conductivity (K), 0.85 - 
+                           np.repeat(0, n_var_2/n_hp), np.repeat(0, n_var_2/n_hp)), axis = 0)           # Second and fourth block: Specific yield (Sy), 0.05   
+u_bounds = np.concatenate((np.repeat(0.1, n_var_1/n_hp), np.repeat(0.2, n_var_1/n_hp),                  # First and third block: Hydraulic conductivity (K), 1.01 - 
+                           np.repeat(1.01, n_var_2/n_hp), np.repeat(0.99, n_var_2/n_hp)), axis = 0)       # Second and fourth block: Specific yield (Sy), 0.99
 
 sample_scaled = get_sampling_LH(n_var, n, l_bounds, u_bounds)
-
 pob = [Particle(x,np.array([0]*(n_var))) for x in sample_scaled]
 
 x_best = pob[0].x_best
 y_best = 100000000000
 
+"""
+####    YA NO SERÍA NECESARIO    ####
 iter = 0
-df_init_sampling = pd.DataFrame(columns = ['x', 'v', 'x_best', 'OF'])
 for P in pob:
-
     y = Run_WEAP_MODFLOW(HP, path_output, iter, initial_shape_HP, n_var, kernel_shape, P.x, active_matriz, path_model, path_nwt_exe, path_obs_data, 'muestreo')
     P.y_best = y
-
-    df_init_sampling.loc[iter,'x'] = P.x
-    df_init_sampling.loc[iter,'v'] = P.v
-    df_init_sampling.loc[iter,'x_best'] = P.x_best
-    df_init_sampling.loc[iter,'OF'] = y
-
     if y < y_best:
         x_best = P.x_best
         y_best = y
-
     iter += 1  
-df_init_sampling.to_csv('Prueba.csv')
+"""
 
 #---    PSO
-maxiter = 10
-α = 0.8    # Cognitive scaling parameter # si el error no baja tanto
-β = 0.8    # Social scaling parameter
+maxiter = 1
+α = 0.8         # Cognitive scaling parameter # si el error no baja tanto
+β = 0.8         # Social scaling parameter
+w = 0.5         # inertia velocity
+w_min = 0.4     # minimum value for the inertia velocity
+w_max = 0.9     # maximum value for the inertia velocity
 
-w = 0.5    # inertia velocity
-w_min = 0.4    # minimum value for the inertia velocity
-w_max = 0.9    # maximum value for the inertia velocity
-
-vMax = np.multiply(u_bounds-l_bounds,0.2)    # Max velocity
-vMin = -vMax    # Min velocity
+vMax = np.multiply(u_bounds-l_bounds,0.2)       # Max velocity
+vMin = -vMax                                    # Min velocity
 
 start_time = time.time()
-
 for m in range(maxiter):
-    a = 0
+    #a = 0
     for P in pob:
-        print('Iteration: ', str(m), ', - Population: ', str(a))
+        #print('Iteration: ', str(m), ', - Population: ', str(a))
         #---    Update particle velocity
-        ϵ1,ϵ2 = np.random.uniform(), np.random.uniform()    # One value between 0 and 1
+        ϵ1,ϵ2 = np.random.uniform(), np.random.uniform()            # One value between 0 and 1
         P.v = w*P.v + α*ϵ1*(P.x_best - P.x) + β*ϵ2*(x_best - P.x)
 
         #---    Adjust particle velocity
@@ -122,7 +114,8 @@ for m in range(maxiter):
             P.x[index_pMin] = l_bounds[index_pMin]
 
         #---    Evaluate the fitnness function
-        y = Run_WEAP_MODFLOW(HP, path_output, str(m), initial_shape_HP, n_var, kernel_shape, P.x, active_matriz, path_model, path_nwt_exe, path_obs_data, 'algorithm')
+        y = Run_WEAP_MODFLOW(P.x, HP, str(m), initial_shape_HP, n_var_1, n_var_2, n_var, n_hp, kernel_shape_1, kernel_shape_2, active_matriz, 
+                             path_model, path_nwt_exe, path_obs_data, path_output)
 
         if y < y_best:
             x_best = np.copy(P.x)
@@ -135,6 +128,6 @@ for m in range(maxiter):
 
         #---    Update the inertia velocity
         w = w_max - m * ((w_max-w_min)/maxiter)
-        a += 1
+        #a += 1
 print(y_best)
 print("{} segundos".format(time.time() - start_time))
