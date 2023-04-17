@@ -17,13 +17,13 @@ warnings.filterwarnings('ignore')
 IP_SERVER_ADD = int(sys.argv[1])
 
 #---    Paths
-path_WEAP = r'C:\Users\Francisco Suárez P\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
-#path_WEAP = r'C:\Users\vagrant\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
+#path_WEAP = r'C:\Users\Francisco Suárez P\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
+path_WEAP = r'C:\Users\vagrant\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
 path_model = os.path.join(path_WEAP, 'MODFLOW_model')
 path_nwt_exe = r'..\MODFLOW-NWT_1.2.0\bin\MODFLOW-NWT_64.exe'
 path_GIS = r'..\GIS'
-path_output = r'C:\Users\Francisco Suárez P\Desktop\GitHub - KT\MODFLOW_Calibration\data\output'      
-#path_output = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\output'         # Necesita ruta completa por WEAP Export
+#path_output = r'C:\Users\Francisco Suárez P\Desktop\GitHub - KT\MODFLOW_Calibration\data\output'      
+path_output = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\output'         # Necesita ruta completa por WEAP Export
 path_obs_data = r'..\ObservedData'
 
 #---    Initial matriz
