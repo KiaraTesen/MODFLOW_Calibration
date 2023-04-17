@@ -11,7 +11,7 @@ from functools import reduce
 import time
 import warnings
 import sys
-from request_server,request_server import send_request_py
+from request_server.request_server import send_request_py
 warnings.filterwarnings('ignore')
 
 IP_SERVER_ADD = int(sys.argv[1])
