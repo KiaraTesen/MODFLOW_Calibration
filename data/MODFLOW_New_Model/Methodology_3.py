@@ -38,11 +38,11 @@ for k in HP:
 
 #---    Initial Sampling (Latyn Hypercube)
 class Particle:
-    def __init__(self,x,v):
+    def __init__(self,x,v,y):
         self.x = x                      # X contiene a los dos kernel
         self.v = v                      # velocidad del muestreo inicial = 0
         self.x_best = x                 # Para muestreo inicial sería X
-        self.y = 10000000000
+        self.y = y
         self.y_best = y
 
 n = 1                                                           # Population size
@@ -60,7 +60,7 @@ u_bounds = np.concatenate((np.repeat(0.2, n_var_1/n_hp), np.repeat(0.4, n_var_1/
                            np.repeat(0.1, n_var_2/n_hp), np.repeat(0.2, n_var_2/n_hp)), axis = 0)       # Second and fourth block: Specific yield (Sy), 0.99
 sample_scaled = get_sampling_LH(n_var, n, l_bounds, u_bounds)
 
-pob = Particle(sample_scaled[0],np.array([0]*(n_var)))
+pob = Particle(sample_scaled[0],np.array([0]*(n_var)),10000000000)
 
 y_best = Run_WEAP_MODFLOW(path_output, str(m), initial_shape_HP, HP, pob.x, n_var_1, n_var_2, n_var, n_hp, kernel_shape_1, kernel_shape_2, active_matriz, 
                           path_model, path_nwt_exe, path_obs_data)
