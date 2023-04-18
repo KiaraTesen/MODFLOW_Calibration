@@ -62,7 +62,7 @@ sample_scaled = get_sampling_LH(n_var, n, l_bounds, u_bounds)
 
 pob = Particle(sample_scaled[0],np.array([0]*(n_var)),10000000000)
 
-y_best = Run_WEAP_MODFLOW(path_output, str(m), initial_shape_HP, HP, pob.x, n_var_1, n_var_2, n_var, n_hp, kernel_shape_1, kernel_shape_2, active_matriz, 
+y_best = Run_WEAP_MODFLOW(path_output, str(0), initial_shape_HP, HP, pob.x, n_var_1, n_var_2, n_var, n_hp, kernel_shape_1, kernel_shape_2, active_matriz, 
                           path_model, path_nwt_exe, path_obs_data)
 pob.y = y_best
 pob.y_best = y_best
@@ -116,7 +116,7 @@ for m in range(maxiter):
         pob.x[index_pMin] = l_bounds[index_pMin]
 
     #---    Evaluate the fitnness function
-    y = Run_WEAP_MODFLOW(path_output, str(m), initial_shape_HP, HP, pob.x, n_var_1, n_var_2, n_var, n_hp, kernel_shape_1, kernel_shape_2, active_matriz, 
+    y = Run_WEAP_MODFLOW(path_output, str(m+1), initial_shape_HP, HP, pob.x, n_var_1, n_var_2, n_var, n_hp, kernel_shape_1, kernel_shape_2, active_matriz, 
                          path_model, path_nwt_exe, path_obs_data)
     pob.y = y
     gbest = send_request_py(IP_SERVER_ADD, y, pob.x)
