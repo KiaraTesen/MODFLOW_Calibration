@@ -14,7 +14,7 @@ import sys
 from request_server.request_server import send_request_py
 warnings.filterwarnings('ignore')
 
-IP_SERVER_ADD = int(sys.argv[1])
+IP_SERVER_ADD = sys.argv[1]
 
 #---    Paths
 #path_WEAP = r'C:\Users\Francisco Suárez P\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
