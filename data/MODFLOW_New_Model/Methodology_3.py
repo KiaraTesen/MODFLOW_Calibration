@@ -69,7 +69,7 @@ pob.y_best = y_best
 gbest = send_request_py(IP_SERVER_ADD, y_best, pob.x)           # Update global particle
 
 #---    Save objective function value
-df_iter = pd.DataFrame(columns = ['x', 'v', 'x_best', 'y'])
+df_iter = pd.DataFrame(columns = ['x', 'v', 'x_best', 'y', 'y_best'])
 df_iter.loc[0,'x'] = pob.x
 df_iter.loc[0,'y'] = pob.y
 df_iter.loc[0,'v'] = pob.v
@@ -118,8 +118,8 @@ for m in range(maxiter):
     #---    Evaluate the fitnness function
     y = Run_WEAP_MODFLOW(path_output, str(m+1), initial_shape_HP, HP, pob.x, n_var_1, n_var_2, n_var, n_hp, kernel_shape_1, kernel_shape_2, active_matriz, 
                          path_model, path_nwt_exe, path_obs_data)
-    pob.y = y
     gbest = send_request_py(IP_SERVER_ADD, y, pob.x)
+    pob.y = y
 
     if all(np.array(gbest) == pob.x):
         pob.x_best = np.copy(pob.x)
@@ -137,8 +137,7 @@ for m in range(maxiter):
 
     #---    Update the inertia velocity
     w = w_max - m * ((w_max-w_min)/maxiter)
-iter += 1
+    iter += 1
 
 df_iter.to_csv(os.path.join(path_output, 'df_iter.csv'))
 print(y_best)
-print("{} segundos".format(time.time() - start_time))
