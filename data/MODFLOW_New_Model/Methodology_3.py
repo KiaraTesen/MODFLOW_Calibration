@@ -77,7 +77,7 @@ df_iter.loc[0,'x_best'] = pob.x_best
 df_iter.loc[0,'y_best'] = pob.y_best
 
 #---    PSO
-maxiter = 5
+maxiter = 3
 
 α = 0.8         # Cognitive scaling parameter # si el error no baja tanto
 β = 0.8         # Social scaling parameter
