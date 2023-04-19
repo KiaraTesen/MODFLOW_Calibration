@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 #---    Packages
-from Functions_DPSO import *
+from Functions_PSO import *
 import geopandas as gpd
 import pandas as pd
 import numpy as np
@@ -46,28 +46,24 @@ class Particle:
         self.y_best = y
 
 n = 1                                                           # Population size
+n_kernels = 2
+kernel_shape_1 = (5,5)
+kernel_shape_2 = (3,3)
+n_hp = 2
+n_var_1 = reduce(lambda x,y: x*y, kernel_shape_1)*n_hp                 
+n_var_2 = reduce(lambda x,y: x*y, kernel_shape_2)*n_hp
+n_var = n_var_1 + n_var_2                                       # Number of variables
 
-kernel_shape_1_kx = (5,5)
-kernel_shape_1_sy = (5,5)
-kernel_shape_2_kx = (3,3)
-kernel_shape_2_sy = (3,3)
-
-n_var_1_kx = reduce(lambda x,y: x*y, kernel_shape_1_kx)     
-n_var_1_sy = reduce(lambda x,y: x*y, kernel_shape_1_sy)              
-n_var_2_kx = reduce(lambda x,y: x*y, kernel_shape_2_kx)
-n_var_2_sy = reduce(lambda x,y: x*y, kernel_shape_2_sy)
-n_var = n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy       # Number of variables
-
-l_bounds = np.concatenate((np.repeat(0, n_var_1_kx), np.repeat(0, n_var_1_sy),                      # First and third block: Hydraulic conductivity (K), 0.85 - 
-                           np.repeat(0, n_var_2_kx), np.repeat(0, n_var_2_sy)), axis = 0)           # Second and fourth block: Specific yield (Sy), 0.05   
-u_bounds = np.concatenate((np.repeat(0.2, n_var_1_kx), np.repeat(0.2, n_var_1_sy),                  # First and third block: Hydraulic conductivity (K), 1.01 - 
-                           np.repeat(0.12, n_var_2_kx), np.repeat(0.1, n_var_2_sy)), axis = 0)      # Second and fourth block: Specific yield (Sy), 0.99
+l_bounds = np.concatenate((np.repeat(0, n_var_1/n_hp), np.repeat(0, n_var_1/n_hp),                      # First and third block: Hydraulic conductivity (K), 0.85 - 
+                           np.repeat(0, n_var_2/n_hp), np.repeat(0, n_var_2/n_hp)), axis = 0)           # Second and fourth block: Specific yield (Sy), 0.05   
+u_bounds = np.concatenate((np.repeat(0.2, n_var_1/n_hp), np.repeat(0.4, n_var_1/n_hp),                  # First and third block: Hydraulic conductivity (K), 1.01 - 
+                           np.repeat(0.1, n_var_2/n_hp), np.repeat(0.2, n_var_2/n_hp)), axis = 0)       # Second and fourth block: Specific yield (Sy), 0.99
 sample_scaled = get_sampling_LH(n_var, n, l_bounds, u_bounds)
 
 pob = Particle(sample_scaled[0],np.array([0]*(n_var)),10000000000)
 
-y_best = Run_WEAP_MODFLOW(path_output, str(0), initial_shape_HP, HP, pob.x, n_var_1_kx, n_var_1_sy, n_var_2_kx, n_var_2_sy, n_var, kernel_shape_1_kx, kernel_shape_1_sy, 
-                          kernel_shape_2_kx, kernel_shape_2_sy, active_matriz, path_model, path_nwt_exe, path_obs_data)
+y_best = Run_WEAP_MODFLOW(path_output, str(0), initial_shape_HP, HP, pob.x, n_var_1, n_var_2, n_var, n_hp, kernel_shape_1, kernel_shape_2, active_matriz, 
+                          path_model, path_nwt_exe, path_obs_data)
 pob.y = y_best
 pob.y_best = y_best
 gbest = send_request_py(IP_SERVER_ADD, y_best, pob.x)           # Update global particle
@@ -120,8 +116,8 @@ for m in range(maxiter):
         pob.x[index_pMin] = l_bounds[index_pMin]
 
     #---    Evaluate the fitnness function
-    y = Run_WEAP_MODFLOW(path_output, str(m+1), initial_shape_HP, HP, pob.x, n_var_1_kx, n_var_1_sy, n_var_2_kx, n_var_2_sy, n_var, kernel_shape_1_kx, kernel_shape_1_sy, 
-                         kernel_shape_2_kx, kernel_shape_2_sy, active_matriz, path_model, path_nwt_exe, path_obs_data)
+    y = Run_WEAP_MODFLOW(path_output, str(m+1), initial_shape_HP, HP, pob.x, n_var_1, n_var_2, n_var, n_hp, kernel_shape_1, kernel_shape_2, active_matriz, 
+                         path_model, path_nwt_exe, path_obs_data)
     gbest = send_request_py(IP_SERVER_ADD, y, pob.x)
     pob.y = y
 

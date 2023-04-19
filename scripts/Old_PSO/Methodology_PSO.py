@@ -24,7 +24,7 @@ path_obs_data = r'..\ObservedData'
 
 #---    Initial matriz
 HP = ['kx', 'sy'] 
-initial_shape_HP = gpd.read_file(path_GIS + '/Elements_init.shp')                   # El shape que se use depende del mejor resultado (?)
+initial_shape_HP = gpd.read_file(path_GIS + '/Elements_initial.shp')                   # El shape que se use depende del mejor resultado (?)
 active_matriz = initial_shape_HP['Active'].to_numpy().reshape((84,185))             # Matriz de ceros y unos que permite uniformizar mantener área activa
 
 for k in HP:
