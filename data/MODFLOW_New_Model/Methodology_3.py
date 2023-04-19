@@ -121,7 +121,7 @@ for m in range(maxiter):
     pob.y = y
     gbest = send_request_py(IP_SERVER_ADD, y, pob.x)
 
-    if np.array(gbest) == pob.x:
+    if all(np.array(gbest) == pob.x):
         pob.x_best = np.copy(pob.x)
         pob.y_best = y
     elif y < pob.y_best:
