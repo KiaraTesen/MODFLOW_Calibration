@@ -139,7 +139,7 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
 
     #---    Move new files
     for h in get_new_files:
-        if h.endswith('.py') or h == '__pycache__':
+        if h.endswith('.py') or h == '__pycache__' or h == 'sp':
             pass 
         else:
             shutil.move(os.path.join(os.getcwd(), h), os.path.join(path_model, h))
