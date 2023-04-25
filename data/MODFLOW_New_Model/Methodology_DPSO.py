@@ -89,14 +89,14 @@ file_object.write(f"{0}\n")
 file_object.close()
 
 #---    PSO
-maxiter = 1
+maxiter = 3
 
 α = 0.8         # Cognitive scaling parameter # si el error no baja tanto
 β = 0.8         # Social scaling parameter
 w = 0.5         # inertia velocity
 w_min = 0.4     # minimum value for the inertia velocity
 w_max = 0.9     # maximum value for the inertia velocity
-vMax = np.around(np.multiply(u_bounds-l_bounds,0.2),4)       # Max velocity
+vMax = np.around(np.multiply(u_bounds-l_bounds,0.8),4)       # Max velocity
 vMin = -vMax                                                 # Min velocity
 
 iter = 1
@@ -138,10 +138,11 @@ for m in range(maxiter):
     gbest = send_request_py(IP_SERVER_ADD, y, pob.x)
     pob.y = y
 
-    if all(np.array(gbest) == pob.x):
-        pob.x_best = np.copy(pob.x)
-        pob.y_best = y
-    elif y < pob.y_best:
+    if not all(np.array(gbest) == pob.x):
+        if y < pob.y_best:
+            pob.x_best = np.copy(pob.x)
+            pob.y_best = y
+    else:
         pob.x_best = np.copy(pob.x)
         pob.y_best = y
 

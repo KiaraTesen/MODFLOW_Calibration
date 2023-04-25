@@ -89,7 +89,7 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
     new_shape_HP = initial_shape_HP
 
     for m in HP:
-        decimals_kx = 3
+        decimals_kx = 4
         decimals_sy = 4
         # First kernel
         kernel_1_kx = sample_scaled[:int(n_var_1_kx)].reshape(kernel_shape_1_kx)
