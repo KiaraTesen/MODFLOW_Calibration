@@ -62,10 +62,10 @@ n_var_2_kx = reduce(lambda x,y: x*y, kernel_shape_2_kx)
 n_var_2_sy = reduce(lambda x,y: x*y, kernel_shape_2_sy)
 n_var = n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy       # Number of variables
 
-l_bounds = np.concatenate((np.repeat(0, n_var_1_kx), np.repeat(0, n_var_1_sy),                      # First and third block: Hydraulic conductivity (K), 0.85 - 
-                           np.repeat(0, n_var_2_kx), np.repeat(0, n_var_2_sy)), axis = 0)           # Second and fourth block: Specific yield (Sy), 0.05   
-u_bounds = np.concatenate((np.repeat(0.2, n_var_1_kx), np.repeat(0.2, n_var_1_sy),                  # First and third block: Hydraulic conductivity (K), 1.01 - 
-                           np.repeat(0.12, n_var_2_kx), np.repeat(0.1, n_var_2_sy)), axis = 0)      # Second and fourth block: Specific yield (Sy), 0.99
+l_bounds = np.concatenate((np.around(np.repeat(0, n_var_1_kx),4), np.around(np.repeat(0, n_var_1_sy),4),                      # First and third block: Hydraulic conductivity (K), 0.85 - 
+                           np.around(np.repeat(0, n_var_2_kx),4), np.around(np.repeat(0, n_var_2_sy),4)), axis = 0)           # Second and fourth block: Specific yield (Sy), 0.05   
+u_bounds = np.concatenate((np.around(np.repeat(0.2, n_var_1_kx),4), np.around(np.repeat(0.2, n_var_1_sy),4),                  # First and third block: Hydraulic conductivity (K), 1.01 - 
+                           np.around(np.repeat(0.12, n_var_2_kx),4), np.around(np.repeat(0.1, n_var_2_sy),4)), axis = 0)      # Second and fourth block: Specific yield (Sy), 0.99
 sample_scaled = get_sampling_LH(n_var, n, l_bounds, u_bounds)
 
 pob = Particle(sample_scaled[0],np.array([0]*(n_var)),10000000000)
@@ -89,7 +89,7 @@ file_object.write(f"{0}\n")
 file_object.close()
 
 #---    PSO
-maxiter = 10
+maxiter = 1
 
 α = 0.8         # Cognitive scaling parameter # si el error no baja tanto
 β = 0.8         # Social scaling parameter
@@ -104,7 +104,7 @@ for m in range(maxiter):
     time.sleep(1)
     #---    Register
     file_object = open("log_iteration.txt", 'a')
-    file_object.write(f"{m}\n")
+    file_object.write(f"{iter}\n")
     file_object.close()
 
     #---    Update particle velocity
@@ -157,4 +157,3 @@ for m in range(maxiter):
     iter += 1
 
 df_iter.to_csv(os.path.join(path_output, 'df_iter.csv'))
-#print(y_best)
