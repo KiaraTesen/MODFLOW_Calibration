@@ -29,7 +29,7 @@ def get_sampling_LH(n_var, n, l_bounds, u_bounds):
     engine = LatinHypercube(d=n_var)
     sample = engine.random(n=n)
     sample_scaled = scale(sample, l_bounds, u_bounds)
-    return sample_scaled
+    return np.around(sample_scaled, 4)
 
 #---    Modification of HP
 def get_HP(Shape_HP, variable, active_matriz, decimals, kernel):
