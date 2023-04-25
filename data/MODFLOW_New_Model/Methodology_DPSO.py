@@ -24,6 +24,12 @@ path_GIS = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\GIS'
 path_output = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\output'         # Necesita ruta completa por WEAP Export
 path_obs_data = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\ObservedData'
 
+#---    Iteration register
+all_lines = []
+with open('log_iteration.txt') as f:
+    for line in f:
+      all_lines.append(line.replace("\n",""))
+
 #---    Initial matriz
 HP = ['kx', 'sy'] 
 initial_shape_HP = gpd.read_file(path_GIS + '/Elements_initial.shp')                   # El shape que se use depende del mejor resultado (?)
@@ -78,8 +84,12 @@ df_iter.loc[0,'v'] = pob.v
 df_iter.loc[0,'x_best'] = pob.x_best
 df_iter.loc[0,'y_best'] = pob.y_best
 
+file_object = open("log_iteration.txt", 'a')
+file_object.write(f"{0}\n")
+file_object.close()
+
 #---    PSO
-maxiter = 50
+maxiter = 10
 
 α = 0.8         # Cognitive scaling parameter # si el error no baja tanto
 β = 0.8         # Social scaling parameter
@@ -92,6 +102,11 @@ vMin = -vMax                                    # Min velocity
 iter = 1
 for m in range(maxiter):
     time.sleep(1)
+    #---    Register
+    file_object = open("log_iteration.txt", 'a')
+    file_object.write(f"{m}\n")
+    file_object.close()
+
     #---    Update particle velocity
     ϵ1,ϵ2 = np.random.uniform(), np.random.uniform()            # One value between 0 and 1
     pob.v = w*pob.v + α*ϵ1*(pob.x_best - pob.x) + β*ϵ2*(gbest - pob.x)
@@ -142,4 +157,4 @@ for m in range(maxiter):
     iter += 1
 
 df_iter.to_csv(os.path.join(path_output, 'df_iter.csv'))
-print(y_best)
+#print(y_best)
