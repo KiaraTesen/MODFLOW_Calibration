@@ -68,7 +68,7 @@ u_bounds = np.concatenate((np.around(np.repeat(0.2, n_var_1_kx),4), np.around(np
                            np.around(np.repeat(0.12, n_var_2_kx),4), np.around(np.repeat(0.1, n_var_2_sy),4)), axis = 0)      # Second and fourth block: Specific yield (Sy), 0.99
 sample_scaled = get_sampling_LH(n_var, n, l_bounds, u_bounds)
 
-pob = Particle(sample_scaled[0],np.array([0]*(n_var)),10000000000)
+pob = Particle(sample_scaled[0],np.around(np.array([0]*(n_var)),4),10000000000)
 
 y_best = Run_WEAP_MODFLOW(path_output, str(0), initial_shape_HP, HP, pob.x, n_var_1_kx, n_var_1_sy, n_var_2_kx, n_var_2_sy, n_var, kernel_shape_1_kx, kernel_shape_1_sy, 
                           kernel_shape_2_kx, kernel_shape_2_sy, active_matriz, path_model, path_nwt_exe, path_obs_data)
@@ -96,8 +96,8 @@ maxiter = 1
 w = 0.5         # inertia velocity
 w_min = 0.4     # minimum value for the inertia velocity
 w_max = 0.9     # maximum value for the inertia velocity
-vMax = np.multiply(u_bounds-l_bounds,0.2)       # Max velocity
-vMin = -vMax                                    # Min velocity
+vMax = np.around(np.multiply(u_bounds-l_bounds,0.2),4)       # Max velocity
+vMin = -vMax                                                 # Min velocity
 
 iter = 1
 for m in range(maxiter):
@@ -109,7 +109,7 @@ for m in range(maxiter):
 
     #---    Update particle velocity
     ϵ1,ϵ2 = np.random.uniform(), np.random.uniform()            # One value between 0 and 1
-    pob.v = w*pob.v + α*ϵ1*(pob.x_best - pob.x) + β*ϵ2*(gbest - pob.x)
+    pob.v = np.around(w*pob.v,4) + np.around(α*ϵ1*(pob.x_best - pob.x),4) + np.around(β*ϵ2*(gbest - pob.x),4)
 
     #---    Adjust particle velocity
     index_vMax = np.where(pob.v > vMax)
