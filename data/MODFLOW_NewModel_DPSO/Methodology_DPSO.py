@@ -108,7 +108,7 @@ for m in range(maxiter):
     file_object.close()
 
     #---    Update particle velocity
-    ϵ1,ϵ2 = np.random.uniform(), np.random.uniform()            # One value between 0 and 1
+    ϵ1,ϵ2 = np.around(np.random.uniform(),4), np.around(np.random.uniform(),4)            # One value between 0 and 1
     pob.v = np.around(np.around(w*pob.v,4) + np.around(α*ϵ1*(pob.x_best - pob.x),4) + np.around(β*ϵ2*(gbest - pob.x),4),4)
 
     #---    Adjust particle velocity
