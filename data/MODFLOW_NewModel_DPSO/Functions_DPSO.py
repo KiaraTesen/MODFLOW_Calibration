@@ -12,7 +12,7 @@ import math
 import warnings
 warnings.filterwarnings('ignore')
 
-#---    Visualization of the matriz
+#---    Visualization of the matriz -
 def get_image_matriz(matriz, variable, path_out):
     fig=plt.figure(figsize = (16,8))
     ax = plt.axes()
