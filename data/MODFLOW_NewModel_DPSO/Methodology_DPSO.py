@@ -72,9 +72,16 @@ pob = Particle(sample_scaled[0],np.around(np.array([0]*(n_var)),4),10000000000)
 
 y_best = Run_WEAP_MODFLOW(path_output, str(0), initial_shape_HP, HP, pob.x, n_var_1_kx, n_var_1_sy, n_var_2_kx, n_var_2_sy, n_var, kernel_shape_1_kx, kernel_shape_1_sy, 
                           kernel_shape_2_kx, kernel_shape_2_sy, active_matriz, path_model, path_nwt_exe, path_obs_data)
+print('Primer y_best: ', y_best)
 pob.y = y_best
 pob.y_best = y_best
+
+print("ANTES DE MANDAR EL PRIMER RESULTADO")
+print(pob.x, pob.v, pob.y, pob.y_best, pob.x_best)
+
 gbest = send_request_py(IP_SERVER_ADD, y_best, pob.x)           # Update global particle
+print("DESPUÉS DE MANDAR EL PRIMER RESULTADO")
+print(pob.x, pob.v, pob.y, pob.y_best, pob.x_best)
 
 #---    Save objective function value
 df_iter = pd.DataFrame(columns = ['x', 'v', 'x_best', 'y', 'y_best'])
@@ -89,7 +96,7 @@ file_object.write(f"{0}\n")
 file_object.close()
 
 #---    PSO
-maxiter = 3
+maxiter = 1
 
 α = 0.8         # Cognitive scaling parameter # si el error no baja tanto
 β = 0.8         # Social scaling parameter
@@ -98,9 +105,12 @@ w_min = 0.4     # minimum value for the inertia velocity
 w_max = 0.9     # maximum value for the inertia velocity
 vMax = np.around(np.multiply(u_bounds-l_bounds,0.8),4)       # Max velocity
 vMin = -vMax                                                 # Min velocity
+print('VMAX: ', vMax, 'VMIN', vMin)
 
+print("ITERACIONES")
 iter = 1
 for m in range(maxiter):
+    print("Iter #:" , iter)
     time.sleep(1)
     #---    Register
     file_object = open("log_iteration.txt", 'a')
@@ -109,7 +119,10 @@ for m in range(maxiter):
 
     #---    Update particle velocity
     ϵ1,ϵ2 = np.around(np.random.uniform(),4), np.around(np.random.uniform(),4)            # One value between 0 and 1
+    print("e1: ", ϵ1, "e2: ", ϵ2)
+
     pob.v = np.around(np.around(w*pob.v,4) + np.around(α*ϵ1*(pob.x_best - pob.x),4) + np.around(β*ϵ2*(gbest - pob.x),4),4)
+    print("Velocidad sin reajuste: ", pob.v)
 
     #---    Adjust particle velocity
     index_vMax = np.where(pob.v > vMax)
@@ -119,10 +132,10 @@ for m in range(maxiter):
         pob.v[index_vMax] = vMax[index_vMax]
     if np.array(index_vMin).size > 0:
         pob.v[index_vMin] = vMin[index_vMin]
-    
+    print("Velocidad con reajuste: ", pob.v)
     #---    Update particle position
     pob.x += pob.v
-
+    print("x sin ajuste: ", pob.x)
     #---    Adjust particle position
     index_pMax = np.where(pob.x > u_bounds)
     index_pMin = np.where(pob.x < l_bounds)
@@ -131,12 +144,18 @@ for m in range(maxiter):
         pob.x[index_pMax] = u_bounds[index_pMax]
     if np.array(index_pMin).size > 0:
         pob.x[index_pMin] = l_bounds[index_pMin]
-
+    print("x con ajuste: " , pob.x)
     #---    Evaluate the fitnness function
     y = Run_WEAP_MODFLOW(path_output, str(m+1), initial_shape_HP, HP, pob.x, n_var_1_kx, n_var_1_sy, n_var_2_kx, n_var_2_sy, n_var, kernel_shape_1_kx, kernel_shape_1_sy, 
                          kernel_shape_2_kx, kernel_shape_2_sy, active_matriz, path_model, path_nwt_exe, path_obs_data)
+    print("Y de la iter#: ", y, "iter #:", iter)
+
+    print("ANTES DE MANDAR EL PRIMER RESULTADO")
+    print(pob.x, pob.v, pob.y, pob.y_best, pob.x_best)
+    
     gbest = send_request_py(IP_SERVER_ADD, y, pob.x)
-    pob.y = y
+    print("DESPUES DE ENVIAR EL RESULTADO: ")
+    print(pob.x, pob.v, pob.y, pob.y_best, pob.x_best)
 
     if not all(np.array(gbest) == pob.x):
         if y < pob.y_best:
@@ -146,6 +165,10 @@ for m in range(maxiter):
         pob.x_best = np.copy(pob.x)
         pob.y_best = y
 
+    pob.y = y
+
+    print("DESPUES DE COMPARAR: ")
+    print(pob.x, pob.v, pob.y, pob.y_best, pob.x_best)
     #---    Registro de resultados por máquina #############
     df_iter.loc[iter,'x'] = pob.x
     df_iter.loc[iter,'y'] = pob.y
@@ -155,6 +178,7 @@ for m in range(maxiter):
 
     #---    Update the inertia velocity
     w = w_max - m * ((w_max-w_min)/maxiter)
+    print("NUEVO w: ", w)
     iter += 1
 
 df_iter.to_csv(os.path.join(path_output, 'df_iter.csv'))
