@@ -4,23 +4,23 @@ data/output
 
 data/MODFLOW_Model
 
-data/MODFLOW_New_Model/SyntheticAquifer_NY.bas
-data/MODFLOW_New_Model/SyntheticAquifer_NY.cbc
-data/MODFLOW_New_Model/SyntheticAquifer_NY.chd
-data/MODFLOW_New_Model/SyntheticAquifer_NY.chk
-data/MODFLOW_New_Model/SyntheticAquifer_NY.dis
-data/MODFLOW_New_Model/SyntheticAquifer_NY.drn
-data/MODFLOW_New_Model/SyntheticAquifer_NY.fdn
-data/MODFLOW_New_Model/SyntheticAquifer_NY.fhd
-data/MODFLOW_New_Model/SyntheticAquifer_NY.lst
-data/MODFLOW_New_Model/SyntheticAquifer_NY.nam
-data/MODFLOW_New_Model/SyntheticAquifer_NY.nwt
-data/MODFLOW_New_Model/SyntheticAquifer_NY.oc
-data/MODFLOW_New_Model/SyntheticAquifer_NY.rch
-data/MODFLOW_New_Model/SyntheticAquifer_NY.riv
-data/MODFLOW_New_Model/SyntheticAquifer_NY.upw
-data/MODFLOW_New_Model/UPW.chk
-data/MODFLOW_New_Model/sp
+data/MODFLOW_NewModel_DPSO/SyntheticAquifer_NY.bas
+data/MODFLOW_NewModel_DPSO/SyntheticAquifer_NY.cbc
+data/MODFLOW_NewModel_DPSO/SyntheticAquifer_NY.chd
+data/MODFLOW_NewModel_DPSO/SyntheticAquifer_NY.chk
+data/MODFLOW_NewModel_DPSO/SyntheticAquifer_NY.dis
+data/MODFLOW_NewModel_DPSO/SyntheticAquifer_NY.drn
+data/MODFLOW_NewModel_DPSO/SyntheticAquifer_NY.fdn
+data/MODFLOW_NewModel_DPSO/SyntheticAquifer_NY.fhd
+data/MODFLOW_NewModel_DPSO/SyntheticAquifer_NY.lst
+data/MODFLOW_NewModel_DPSO/SyntheticAquifer_NY.nam
+data/MODFLOW_NewModel_DPSO/SyntheticAquifer_NY.nwt
+data/MODFLOW_NewModel_DPSO/SyntheticAquifer_NY.oc
+data/MODFLOW_NewModel_DPSO/SyntheticAquifer_NY.rch
+data/MODFLOW_NewModel_DPSO/SyntheticAquifer_NY.riv
+data/MODFLOW_NewModel_DPSO/SyntheticAquifer_NY.upw
+data/MODFLOW_NewModel_DPSO/UPW.chk
+data/MODFLOW_NewModel_DPSO/sp
 
 data/GIS/Old_Elements
 
