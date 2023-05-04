@@ -84,15 +84,20 @@ print("DESPUÉS DE MANDAR EL PRIMER RESULTADO")
 print(pob.x, pob.v, pob.y, pob.y_best, pob.x_best)
 
 #---    Save objective function value
-df_iter = pd.DataFrame(columns = ['x', 'v', 'x_best', 'y', 'y_best'])
-df_iter.loc[0,'x'] = pob.x
-df_iter.loc[0,'y'] = pob.y
-df_iter.loc[0,'v'] = pob.v
-df_iter.loc[0,'x_best'] = pob.x_best
-df_iter.loc[0,'y_best'] = pob.y_best
+#df_iter = pd.DataFrame(columns = ['x', 'v', 'x_best', 'y', 'y_best'])
+#df_iter.loc[0,'x'] = pob.x
+#df_iter.loc[0,'y'] = pob.y
+#df_iter.loc[0,'v'] = pob.v
+#df_iter.loc[0,'x_best'] = pob.x_best
+#df_iter.loc[0,'y_best'] = pob.y_best
 
 file_object = open("log_iteration.txt", 'a')
-file_object.write(f"{0}\n")
+file_object.write(f"{'Iteracion inicial: 0'}\n")
+file_object.write(f"{'Pob.x: ', pob.x}\n")
+file_object.write(f"{'Pob.y: ', pob.y}\n")
+file_object.write(f"{'Pob.v: ', pob.v}\n")
+file_object.write(f"{'Pob.x_best: ', pob.x_best}\n")
+file_object.write(f"{'Pob.y_best: ', pob.y_best}\n")
 file_object.close()
 
 #---    PSO
@@ -170,15 +175,24 @@ for m in range(maxiter):
     print("DESPUES DE COMPARAR: ")
     print(pob.x, pob.v, pob.y, pob.y_best, pob.x_best)
     #---    Registro de resultados por máquina #############
-    df_iter.loc[iter,'x'] = pob.x
-    df_iter.loc[iter,'y'] = pob.y
-    df_iter.loc[iter,'v'] = pob.v
-    df_iter.loc[iter,'x_best'] = pob.x_best
-    df_iter.loc[iter,'y_best'] = pob.y_best
+    #df_iter.loc[iter,'x'] = pob.x
+    #df_iter.loc[iter,'y'] = pob.y
+    #df_iter.loc[iter,'v'] = pob.v
+    #df_iter.loc[iter,'x_best'] = pob.x_best
+    #df_iter.loc[iter,'y_best'] = pob.y_best
+
+    file_object = open("log_iteration.txt", 'a')
+    file_object.write(f"{'Iteracion: ', iter}\n")
+    file_object.write(f"{'Pob.x: ', pob.x}\n")
+    file_object.write(f"{'Pob.y: ', pob.y}\n")
+    file_object.write(f"{'Pob.v: ', pob.v}\n")
+    file_object.write(f"{'Pob.x_best: ', pob.x_best}\n")
+    file_object.write(f"{'Pob.y_best: ', pob.y_best}\n")
+    file_object.close()
 
     #---    Update the inertia velocity
     w = w_max - m * ((w_max-w_min)/maxiter)
     print("NUEVO w: ", w)
     iter += 1
 
-df_iter.to_csv(os.path.join(path_output, 'df_iter.csv'))
+#df_iter.to_csv(os.path.join(path_output, 'df_iter.csv'))
