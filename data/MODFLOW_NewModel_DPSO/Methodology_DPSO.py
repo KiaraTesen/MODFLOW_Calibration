@@ -117,10 +117,6 @@ iter = 1
 for m in range(maxiter):
     print("Iter #:" , iter)
     time.sleep(1)
-    #---    Register
-    file_object = open("log_iteration.txt", 'a')
-    file_object.write(f"{iter}\n")
-    file_object.close()
 
     #---    Update particle velocity
     ϵ1,ϵ2 = np.around(np.random.uniform(),4), np.around(np.random.uniform(),4)            # One value between 0 and 1
