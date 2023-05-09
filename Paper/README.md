@@ -10,7 +10,28 @@
 * Optimization (¿?)
 * Simulation - Optimization model
 
-## Introducciónbbbb
+## Introducción
+Las aguas subterráneas juegan un rol muy importante en la Gestión Integrada de Recursos Hídricos (GIRH). Siendo aún más relevante en el balance hídrico en zonas donde el recurso superficial es escaso \citep{Liuetal2022}. Por esta razón, en la GIRH, cada vez se ha hecho más necesario el uso de herramientas de modelación que permitan simplificar, optimizar y entender los distintos procesos que ocurren en las cuencas y acuíferos. Estas labores pueden llegar a ser complicadas dependiendo de las características del acuífero de interés \citep{Sanzanaetal2019}. En este sentido, una adecuada modelación de los sistemas de aguas subterráneas depende de un buen conocimiento de los parámetros hidrogeológicos del acuífero, como la conductividad hidráulica, transmisividad, coeficiente de almacenamiento, rendimiento específico y la tasa de recarga del acuífero \citep{LakshmiPrasadAndRastogi2001}. Sin embargo, estos parámetros comunmente necesitan ser estimados ya que no son fáciles de medir directamente pues requieren considerables recursos humanos y económicos \citep{Batenietal2015}. 
+    
+En los últimos años, investigadores han adoptado el modelado inverso de aguas subterráneas como un enfoque matemático válido para estimar los parámetros de los acuíferos \citep{Carreraetal2005, HendricksFranssenetal2009, Mohairetal2017, Pateletal2022}. En este sentido, se utilizan Simulation optimization (SO) models, en donde los parámetros distribuidos se asignan a un modelo matemático con condiciones de contorno conocidas, cuyos resultados alimentan al modelo de optimización, el cual tiene el objetivo de asegurar la minimización de errores entre las variables observadas y simuladas para obtener valores óptimos de los parámetros hidráulicos \citep{LakshmiPrasadAndRastogi2001, Pateletal2022}. La simulación del sistema subterráneo se realiza utilizando modelos basado en cuadrículas o mallas, como los modelos de diferencias finitas (FDM) o de elementos finitos (FEM); o simuladores independientes de una malla, como Meshfree (Mfree). Mientras que, por otro lado, los modelos de optimización métodos tradicionales como nonlinear programming (NLP) techniques basadas en gradientes (*CITAS*), por ejemplo, the steepest descent method, conjugate gradient method, Gauss–Newton method, etc; y métodos no tradicionales, como los algoritmos evolutivos (*CITAS*), por ejemplo, (*****). La desventaja de los algorítmos basados en gradientes es que pueden dar como resultado valores óptimos locales en lugar de globales debido a la falta de convexidad inherente en los modelos de acuíferos, ya que la ecuación del modelo de flujo puede ser lineal con respecto a una variable de estado, que a su vez es altamente no lineal con respecto a los parámetros del sistema \citep{LakshmiPrasadAndRastogi2001, Batenietal2015}. Por tanto, para abordar estos inconvenientes (*shortcomings*) se aplican los algoritmos evolutivos, ya que pueden manejar problemas altamente no lineales y convergen al óptimo global en lugar del local \citep{Batenietal2015}. 
+
+Hablar de otros papers con metodologías distribuidas
+
+
+
+
+
+
+
+
+------
+
+
+
+
+
+
+
 * Antecedentes a calibración de PH de un acuífero.
 
     Las aguas subterráneas juegan un rol muy importante en la Gestión Integrada de Recursos Hídricos (GIRH). Siendo aún más relevante en el balance hídrico de áreas donde la dinámica río-acuífero afecta las secciones del lecho del río, o donde las alcantarillas están ubicadas debajo del nivel del agua subterránea (Sanzana et al., 2019b), o en zonas donde el recurso superficial es escaso (Liu et al., 2022). Por esta razón, cada vez se ha hecho más necesario el uso de herramientas de modelación que permitan simplificar y/u optimizar distintos procesos. En la GIRH estas labores pueden llegar a ser complicadas dependiendo de las características del acuífero de interés (Sanzana et al., 2019a; b). En este sentido, una adecuada modelación de los sistemas de aguas subterráneas depende de un buen conocimiento de los parámetros hidrogeológicos del acuífero, como la conductividad hidráulica, transmisividad, coeficiente de almacenamiento, rendimiento específico y la tasa de recarga del acuífero (Lakshmi Prasad y Rastogi 2001). Sin embargo, estos parámetros comunmente necesitan ser estimados ya que no son fáciles de medir directamente pues requieren considerables recursos humanos y económicos (Bateni et al., 2015). 
