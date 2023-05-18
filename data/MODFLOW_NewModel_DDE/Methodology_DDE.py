@@ -88,7 +88,7 @@ maxiter = 10
 vms = 20        # Number of VMs we use for the experiment
 
 α = 0.8         # Step size [0, 0.9] - [0.45, 0.95]
-pc = 0.9        # Crossover probability - [0.1, 0.8]
+pc = 0.8        # Crossover probability - [0.1, 0.8]
 
 id_vm = ######## FUNCION PARA OBTENER EL ID #############
 for m in range(maxiter):

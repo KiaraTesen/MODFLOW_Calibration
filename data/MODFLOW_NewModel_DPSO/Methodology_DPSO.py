@@ -95,8 +95,8 @@ file_object.close()
 #---    PSO
 maxiter = 10
 
-α = 0.8                                                     # Cognitive scaling parameter
-β = 0.8                                                     # Social scaling parameter
+α = 1.49                                                    # Cognitive scaling parameter
+β = 1.49                                                    # Social scaling parameter
 w = 0.5                                                     # inertia velocity
 w_min = 0.4                                                 # minimum value for the inertia velocity
 w_max = 0.9                                                 # maximum value for the inertia velocity
