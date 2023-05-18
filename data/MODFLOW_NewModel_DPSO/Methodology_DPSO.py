@@ -24,6 +24,12 @@ path_GIS = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\GIS'
 path_output = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\output'         # Need full path for WEAP Export
 path_obs_data = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\ObservedData'
 
+#---    Monitoring iteration
+all_lines = []
+with open('mon_iteration.txt') as f:
+    for line in f:
+      all_lines.append(line.replace("\n",""))
+
 #---    Iteration register
 all_lines = []
 with open('log_iteration.txt') as f:
@@ -92,6 +98,11 @@ file_object.write(f"{'Pob.x_best: ', pob.x_best}\n")
 file_object.write(f"{'Pob.y_best: ', pob.y_best}\n")
 file_object.close()
 
+#---    Save number of iteration 
+file_object = open("mon_iteration.txt", 'a')
+file_object.write('0','\n')
+file_object.close()
+
 #---    PSO
 maxiter = 10
 
@@ -155,6 +166,11 @@ for m in range(maxiter):
     file_object.write(f"{'Pob.v: ', pob.v}\n")
     file_object.write(f"{'Pob.x_best: ', pob.x_best}\n")
     file_object.write(f"{'Pob.y_best: ', pob.y_best}\n")
+    file_object.close()
+
+    #---    Save number of iteration 
+    file_object = open("mon_iteration.txt", 'a')
+    file_object.write(str(m+1),'\n')
     file_object.close()
 
     #---    Update the inertia velocity
