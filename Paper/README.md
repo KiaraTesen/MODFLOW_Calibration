@@ -107,12 +107,6 @@ Independientemente de los subenjambres restantes, cada procesador ejecuta el alg
 
 #### Modelo de optamización
 
-*   En PSO, la partícula se mueve a través del espacio de búsqueda siguiendo la mejor posición individual actual ( pbest ) y la mejor posición global actual ( gbest ).  [*TODO TEXTUAL DE Thomas et al., 2018*] 
-
-
- y Convolución --> ¿Por qué PSO y no un genético? --> Reducción del tiempo y trabaja en método asíncrono, teniendo en cuenta que contamos con un modelo que utiliza una arquitectura de modelación paralelizada.
-
-
 * Plantear modelo de optimización --> Identificar las salidas de interés --> Función objetivo.   
     * Niveles de agua subterránea en pozos DGA. --> (Euclidean norm (Lingireddy, 1997), Sum of Squared Difference (SSD). Sum of the Root Mean Squared Error (SRMSE) (Patel et al., 2022))
     * Pozos colgados.
@@ -134,9 +128,7 @@ Independientemente de los subenjambres restantes, cada procesador ejecuta el alg
 * Considerar tamaño de la máscara (i), kernel (k), stride y zero padding.
 
 #### Study area (Podría ir después de explicar Convolución)
-* Caracteríastica de los acuíferos (área, confinado(¿? Esto también explicaría porqué el uso de NWT))
 * Características semi áridas de las cuencas.
-
 
 ## Results
 * Presentar un mapa del comportamiento de la generación de variables de decisión vs el error [Ejemplo1](/Paper/EjemplosResultados/Captura1.PNG).

@@ -190,12 +190,11 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
         globals()["P_" + str(i)] = get_evaluate_st_bounds((locals()[str(i) + "_min"]), (locals()[str(i) + "_max"]), globals()["vector_modif_" + str(i)])
 
     #---    Total Objective Function
-    gw = 0.8
-    gq = 1 - gw
-    gk = 0.5
-    gs = 1 - gk
+    g1 = 0.4
+    g2 = 0.2
+    g3 = 0.4
 
-    of = gw*srmse_well + gq*rmse_q + gk*P_kx + gs*P_sy
+    of = g1*srmse_well + g2*rmse_q + g3*(P_kx + P_sy)
     #print(f"Objective function: {of}")
     return of
     
