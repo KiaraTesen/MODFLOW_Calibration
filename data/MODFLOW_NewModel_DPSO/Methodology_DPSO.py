@@ -25,10 +25,10 @@ path_output = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\output'     
 path_obs_data = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\ObservedData'
 
 #---    Monitoring iteration
-all_lines = []
-with open('mon_iteration.txt') as f:
-    for line in f:
-      all_lines.append(line.replace("\n",""))
+all_lines_2 = []
+with open('mon_iteration.txt') as g:
+    for line in g:
+      all_lines_2.append(line.replace("\n",""))
 
 #---    Iteration register
 all_lines = []
@@ -99,12 +99,12 @@ file_object.write(f"{'Pob.y_best: ', pob.y_best}\n")
 file_object.close()
 
 #---    Save number of iteration 
-file_object = open("mon_iteration.txt", 'a')
-file_object.write('0','\n')
-file_object.close()
+file_object_2 = open("mon_iteration.txt", 'a')
+file_object_2.write('0','\n')
+file_object_2.close()
 
 #---    PSO
-maxiter = 10
+maxiter = 2
 
 α = 1.49                                                    # Cognitive scaling parameter
 β = 1.49                                                    # Social scaling parameter
@@ -169,9 +169,9 @@ for m in range(maxiter):
     file_object.close()
 
     #---    Save number of iteration 
-    file_object = open("mon_iteration.txt", 'a')
-    file_object.write(str(m+1),'\n')
-    file_object.close()
+    file_object_2 = open("mon_iteration.txt", 'a')
+    file_object_2.write(str(m+1),'\n')
+    file_object_2.close()
 
     #---    Update the inertia velocity
     w = w_max - m * ((w_max-w_min)/maxiter)
