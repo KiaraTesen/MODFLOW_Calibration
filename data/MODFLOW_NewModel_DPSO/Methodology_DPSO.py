@@ -93,7 +93,7 @@ file_object.write(f"{'Pob.y_best: ', pob.y_best}\n")
 file_object.close()
 
 #---    PSO
-maxiter = 2
+maxiter = 20
 
 α = 1.49                                                    # Cognitive scaling parameter
 β = 1.49                                                    # Social scaling parameter
