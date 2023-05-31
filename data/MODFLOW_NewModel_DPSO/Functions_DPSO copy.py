@@ -12,7 +12,6 @@ import math
 import warnings
 warnings.filterwarnings('ignore')
 
-"""
 #---    Visualization of the matriz -
 def get_image_matriz(matriz, variable, path_out):
     fig=plt.figure(figsize = (16,8))
@@ -24,7 +23,6 @@ def get_image_matriz(matriz, variable, path_out):
     cax = fig.add_axes([ax.get_position().x1+0.01,ax.get_position().y0,0.02,ax.get_position().height])
     plt.colorbar(im, cax=cax)
     plt.savefig(path_out)
-"""
 
 #---    Sampling by Latin Hypecube
 def get_sampling_LH(n_var, n, l_bounds, u_bounds):
@@ -98,8 +96,8 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
         kernel_1_sy = sample_scaled[int(n_var_1_kx):int(n_var_1_kx + n_var_1_sy)].reshape(kernel_shape_1_sy)
         
         globals()["matriz_1_" + str(m)] = get_HP(initial_shape_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_1_" + str(m)])
-        #get_image_matriz(globals()["matriz_1_" + str(m)], str(m), os.path.join(dir_iteration, 'First_' + str(m) +'.png'))
-        #plt.clf()
+        get_image_matriz(globals()["matriz_1_" + str(m)], str(m), os.path.join(dir_iteration, 'First_' + str(m) +'.png'))
+        plt.clf()
         globals()["vector_1_" + str(m)] = globals()["matriz_1_" + str(m)].flatten()
         shape_k1_HP[m] = globals()["vector_1_" + str(m)]
 
@@ -108,8 +106,8 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
         kernel_2_sy = sample_scaled[int(n_var_1_kx + n_var_1_sy + n_var_2_kx):n_var].reshape(kernel_shape_2_sy)
 
         globals()["matriz_" + str(m)] = get_HP(shape_k1_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_2_" + str(m)])
-        #get_image_matriz(globals()["matriz_" + str(m)], str(m), os.path.join(dir_iteration, 'Second_' + str(m) +'.png'))
-        #plt.clf()
+        get_image_matriz(globals()["matriz_" + str(m)], str(m), os.path.join(dir_iteration, 'Second_' + str(m) +'.png'))
+        plt.clf()
         globals()["vector_" + str(m)] = globals()["matriz_" + str(m)].flatten()
         new_shape_HP[m] = globals()["vector_" + str(m)]
 

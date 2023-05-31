@@ -35,10 +35,10 @@ HP = ['kx', 'sy']
 initial_shape_HP = gpd.read_file(path_GIS + '/Elements_initial.shp')
 active_matriz = initial_shape_HP['Active'].to_numpy().reshape((84,185))             # Matrix of zeros and ones that allows maintaining active area
 
-#for k in HP:
-    #locals()["init_matriz_" + str(k)] = initial_shape_HP[k].to_numpy().reshape((84,185))
-    #get_image_matriz(locals()["init_matriz_" + str(k)], str(k), os.path.join(path_GIS, str(k) +'.png'))
-    #plt.clf()
+for k in HP:
+    locals()["init_matriz_" + str(k)] = initial_shape_HP[k].to_numpy().reshape((84,185))
+    get_image_matriz(locals()["init_matriz_" + str(k)], str(k), os.path.join(path_GIS, str(k) +'.png'))
+    plt.clf()
 
 n = 1                                                           # Population size
 
@@ -68,8 +68,8 @@ class Particle:
     def __init__(self,x,v,y):
         self.x = x                      # X represents the kernels
         self.v = v                      # initial velocity = zeros
-        self.y = y
         self.x_best = x                 
+        self.y = y
         self.y_best = y
 
 sample_scaled = get_sampling_LH(n_var, n, l_bounds, u_bounds)
@@ -85,7 +85,6 @@ gbest = send_request_py(IP_SERVER_ADD, y_init, pob.x)           # Update global 
 #---    Save objective function value
 file_object = open("log_iteration.txt", 'a')
 file_object.write(f"{'Iteracion inicial: 0'}\n")
-file_object.write(f"{'Gbest: ', gbest}\n")
 file_object.write(f"{'Pob.x: ', pob.x}\n")
 file_object.write(f"{'Pob.y: ', pob.y}\n")
 file_object.write(f"{'Pob.v: ', pob.v}\n")
@@ -94,7 +93,7 @@ file_object.write(f"{'Pob.y_best: ', pob.y_best}\n")
 file_object.close()
 
 #---    PSO
-maxiter = 3
+maxiter = 20
 
 α = 1.49                                                    # Cognitive scaling parameter
 β = 1.49                                                    # Social scaling parameter
@@ -106,7 +105,7 @@ vMin = -vMax                                                # Min velocity
 
 for m in range(maxiter):
     print("Iter #:" , m+1)
-    #time.sleep(1)
+    time.sleep(1)
 
     #---    Update particle velocity
     ϵ1,ϵ2 = np.around(np.random.uniform(),4), np.around(np.random.uniform(),4)            # [0, 1]
@@ -137,17 +136,20 @@ for m in range(maxiter):
     #---    Evaluate the fitnness function
     y = Run_WEAP_MODFLOW(path_output, str(m+1), initial_shape_HP, HP, pob.x, n_var_1_kx, n_var_1_sy, n_var_2_kx, n_var_2_sy, n_var, kernel_shape_1_kx, kernel_shape_1_sy, 
                          kernel_shape_2_kx, kernel_shape_2_sy, active_matriz, path_model, path_nwt_exe, path_obs_data)
-    pob.y = y
     gbest = send_request_py(IP_SERVER_ADD, y, pob.x)
 
-    if y < pob.y_best:
+    if not all(np.array(gbest) == pob.x):
+        if y < pob.y_best:
+            pob.x_best = np.copy(pob.x)
+            pob.y_best = y
+    else:
         pob.x_best = np.copy(pob.x)
         pob.y_best = y
+    pob.y = y
 
     #---    Save objective function value
     file_object = open("log_iteration.txt", 'a')
     file_object.write(f"{'Iteracion: ', str(m+1)}\n")
-    file_object.write(f"{'Gbest: ', gbest}\n")
     file_object.write(f"{'Pob.x: ', pob.x}\n")
     file_object.write(f"{'Pob.y: ', pob.y}\n")
     file_object.write(f"{'Pob.v: ', pob.v}\n")
