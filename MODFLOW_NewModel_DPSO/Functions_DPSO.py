@@ -12,18 +12,6 @@ import math
 import warnings
 warnings.filterwarnings('ignore')
 
-#---    Visualization of the matriz -
-def get_image_matriz(matriz, variable, path_out):
-    fig=plt.figure(figsize = (16,8))
-    ax = plt.axes()
-    im = ax.imshow(matriz)
-    plt.title(variable)
-    plt.xlabel('Column')
-    plt.ylabel('Row')
-    cax = fig.add_axes([ax.get_position().x1+0.01,ax.get_position().y0,0.02,ax.get_position().height])
-    plt.colorbar(im, cax=cax)
-    plt.savefig(path_out)
-
 #---    Sampling by Latin Hypecube
 def get_sampling_LH(n_var, n, l_bounds, u_bounds):
     engine = LatinHypercube(d=n_var)
@@ -38,7 +26,7 @@ def get_HP(Shape_HP, variable, active_matriz, decimals, kernel):
 
     matriz = np.zeros((rows,columns))
     for i in range(0,len(Shape_HP['ROW'])):
-        matriz[Shape_HP['ROW'][i]-1][Shape_HP['COLUMN'][i]-1] = Shape_HP[variable][i] # AQUÍ HACER LA OPERACION
+        matriz[Shape_HP['ROW'][i]-1][Shape_HP['COLUMN'][i]-1] = Shape_HP[variable][i] 
 
         #---    Convolution
         new_matriz = signal.convolve2d(matriz, kernel, boundary = 'symm', mode = 'same')
@@ -96,8 +84,6 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
         kernel_1_sy = sample_scaled[int(n_var_1_kx):int(n_var_1_kx + n_var_1_sy)].reshape(kernel_shape_1_sy)
         
         globals()["matriz_1_" + str(m)] = get_HP(initial_shape_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_1_" + str(m)])
-        get_image_matriz(globals()["matriz_1_" + str(m)], str(m), os.path.join(dir_iteration, 'First_' + str(m) +'.png'))
-        plt.clf()
         globals()["vector_1_" + str(m)] = globals()["matriz_1_" + str(m)].flatten()
         shape_k1_HP[m] = globals()["vector_1_" + str(m)]
 
@@ -106,8 +92,6 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
         kernel_2_sy = sample_scaled[int(n_var_1_kx + n_var_1_sy + n_var_2_kx):n_var].reshape(kernel_shape_2_sy)
 
         globals()["matriz_" + str(m)] = get_HP(shape_k1_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_2_" + str(m)])
-        get_image_matriz(globals()["matriz_" + str(m)], str(m), os.path.join(dir_iteration, 'Second_' + str(m) +'.png'))
-        plt.clf()
         globals()["vector_" + str(m)] = globals()["matriz_" + str(m)].flatten()
         new_shape_HP[m] = globals()["vector_" + str(m)]
 
@@ -139,7 +123,7 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
 
     #---    Move new files
     for h in get_new_files:
-        if h.endswith('.py') or h == '__pycache__' or h == 'sp' or h.endswith('.txt'):
+        if h.endswith('.py') or h == '__pycache__' or h == 'sp' or h.endswith('.txt') or h == 'output':
             pass 
         else:
             shutil.move(os.path.join(os.getcwd(), h), os.path.join(path_model, h))
@@ -171,13 +155,11 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
         mse_well = mean_squared_error(obs_well[i], sim_well[i])
         rmse_well = math.sqrt(mse_well)
         srmse_well += rmse_well
-    #print(f"SRMSE - well: {srmse_well}")
 
     #---    Streamflow analysis
     df_q = pd.read_csv(os.path.join(dir_iteration, f"iter_{str(iteration)}_Streamflow_gauges.csv"), skiprows = 3)
     mse_q = mean_squared_error(df_q['Observed'], df_q['Modeled'])
     rmse_q = math.sqrt(mse_q)
-    #print(f"SRMSE - q: {rmse_q}")
 
     #---    Subject to
     kx_min = 0.280
@@ -195,6 +177,5 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
     g3 = 0.4
 
     of = g1*srmse_well + g2*rmse_q + g3*(P_kx + P_sy)
-    #print(f"Objective function: {of}")
     return of
     

@@ -21,7 +21,7 @@ path_WEAP = r'C:\Users\vagrant\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW
 path_model = os.path.join(path_WEAP, 'MODFLOW_model')
 path_nwt_exe = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\MODFLOW-NWT_1.2.0\bin\MODFLOW-NWT_64.exe'
 path_GIS = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\GIS'    
-path_output = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\output'         # Need full path for WEAP Export
+path_output = r'C:\Users\aimee\OneDrive\Escritorio\GitHub\MODFLOW_Calibration\MODFLOW_NewModel_DPSO\output'         # Need full path for WEAP Export
 path_obs_data = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\ObservedData'
 
 #---    Iteration register
@@ -34,11 +34,6 @@ with open('log_iteration.txt') as f:
 HP = ['kx', 'sy'] 
 initial_shape_HP = gpd.read_file(path_GIS + '/Elements_initial.shp')
 active_matriz = initial_shape_HP['Active'].to_numpy().reshape((84,185))             # Matrix of zeros and ones that allows maintaining active area
-
-#for k in HP:
-    #locals()["init_matriz_" + str(k)] = initial_shape_HP[k].to_numpy().reshape((84,185))
-    #get_image_matriz(locals()["init_matriz_" + str(k)], str(k), os.path.join(path_GIS, str(k) +'.png'))
-    #plt.clf()
 
 n = 1                                                           # Population size
 
@@ -85,16 +80,16 @@ gbest = send_request_py(IP_SERVER_ADD, y_init, pob.x)           # Update global 
 #---    Save objective function value
 file_object = open("log_iteration.txt", 'a')
 file_object.write(f"{'Iteracion inicial: 0'}\n")
-file_object.write(f"{'Gbest: ', gbest}\n")
 file_object.write(f"{'Pob.x: ', pob.x}\n")
 file_object.write(f"{'Pob.y: ', pob.y}\n")
 file_object.write(f"{'Pob.v: ', pob.v}\n")
 file_object.write(f"{'Pob.x_best: ', pob.x_best}\n")
 file_object.write(f"{'Pob.y_best: ', pob.y_best}\n")
+file_object.write(f"{'Gbest: ', gbest}\n")
 file_object.close()
 
 #---    PSO
-maxiter = 3
+maxiter = 20
 
 α = 1.49                                                    # Cognitive scaling parameter
 β = 1.49                                                    # Social scaling parameter
@@ -105,8 +100,7 @@ vMax = np.around(np.multiply(u_bounds-l_bounds,0.8),4)      # Max velocity
 vMin = -vMax                                                # Min velocity
 
 for m in range(maxiter):
-    print("Iter #:" , m+1)
-    #time.sleep(1)
+    time.sleep(1)
 
     #---    Update particle velocity
     ϵ1,ϵ2 = np.around(np.random.uniform(),4), np.around(np.random.uniform(),4)            # [0, 1]
@@ -137,22 +131,24 @@ for m in range(maxiter):
     #---    Evaluate the fitnness function
     y = Run_WEAP_MODFLOW(path_output, str(m+1), initial_shape_HP, HP, pob.x, n_var_1_kx, n_var_1_sy, n_var_2_kx, n_var_2_sy, n_var, kernel_shape_1_kx, kernel_shape_1_sy, 
                          kernel_shape_2_kx, kernel_shape_2_sy, active_matriz, path_model, path_nwt_exe, path_obs_data)
-    pob.y = y
     gbest = send_request_py(IP_SERVER_ADD, y, pob.x)
 
     if y < pob.y_best:
         pob.x_best = np.copy(pob.x)
         pob.y_best = y
+        pob.y = y
+    else:
+        pob.y = y
 
     #---    Save objective function value
     file_object = open("log_iteration.txt", 'a')
     file_object.write(f"{'Iteracion: ', str(m+1)}\n")
-    file_object.write(f"{'Gbest: ', gbest}\n")
     file_object.write(f"{'Pob.x: ', pob.x}\n")
     file_object.write(f"{'Pob.y: ', pob.y}\n")
     file_object.write(f"{'Pob.v: ', pob.v}\n")
     file_object.write(f"{'Pob.x_best: ', pob.x_best}\n")
     file_object.write(f"{'Pob.y_best: ', pob.y_best}\n")
+    file_object.write(f"{'Gbest: ', gbest}\n")
     file_object.close()
 
     #---    Update the inertia velocity
