@@ -1,8 +1,6 @@
 data/MODFLOW-NWT_1.2.0
 data/GIS/Old_Elements
 
-MODFLOW_NewModel_DPSO/output
-
 data/MODFLOW_Model
 
 MODFLOW_NewModel_DPSO/SyntheticAquifer_NY.bas
