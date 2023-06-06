@@ -2,11 +2,13 @@
 A Hybrid Approach of Convolutional Layers and Distributed Bio-inspired Algorithms with an Integrated Water Management Model to Groundwater Parameters Estimation
 
 # Introducción (Extensión ~ 1 hoja máx)
-Las aguas subterráneas juegan un rol muy importante en la Gestión Integrada de Recursos Hídricos (GIRH). Siendo aún más relevante en el balance hídrico en zonas donde el recurso superficial es escaso \citep{Liuetal2022}. Por esta razón, en la GIRH, cada vez se ha hecho más necesario el uso de herramientas de modelación que permitan simplificar, optimizar y entender los distintos procesos que ocurren en las cuencas y acuíferos. Por tanto, existen diferentes investigaciones que han acoplado programas computacionales que modelan sistemas superficiales y subterráneos (Bailey et al., 2016; Sanzana et al., 2019a; Zhang y Chui, 2020). Dentro de los más usados está el software WEAP (Water Evaluation and Planning System) (Yates et al., 2005a; Yates et al., 2005b), que permite representar los procesos involucrados en la dinámica de una cuenca (e.g. distribución y disponibilidad del recurso hídrico), junto a MODFLOW (Harbaugh et al., 2000), que permite modelar el flujo de aguas subterráneas. La ventaja del acople entre WEAP y MODFLOW es que, según la configuración establecida, permite un intercambio bidireccional de flujos en cada paso de tiempo, donde los resultados de WEAP se cargan en los archivos de entrada MODFLOW, y viceversa (Sanzana et al., 2019a). Esta integración se realiza con la finalidad de estudiar la disponibilidad hídrica superficial y subterránea, y su adecuado aprovechamiento (DGA, 2019a; Fotovat et al., 2019).
+Las aguas subterráneas juegan un rol muy importante en la Gestión Integrada de Recursos Hídricos (GIRH). Siendo aún más relevante en el balance hídrico en zonas donde el recurso superficial es escaso \citep{Liuetal2022}. Por esta razón, en la GIRH, cada vez se ha hecho más necesario el uso de herramientas de modelación que permitan simplificar, optimizar y entender los distintos procesos que ocurren en las cuencas y acuíferos. Por tanto, existen diferentes investigaciones que han acoplado programas computacionales que modelan sistemas superficiales y subterráneos \citep{Baileyetal2016, Sanzanaetal2019, ZhangandChui2020}. Dentro de los más usados está el software WEAP (Water Evaluation and Planning System) \citep{Yatesetal2005a, Yatesetal2005b}, que permite representar los procesos involucrados en la dinámica de una cuenca (e.g. distribución y disponibilidad del recurso hídrico), junto a MODFLOW \citep{Harbaughetal2000}, que permite modelar el flujo de aguas subterráneas. La ventaja del acople entre WEAP y MODFLOW es que, según la configuración establecida, permite un intercambio bidireccional de flujos en cada paso de tiempo, donde los resultados de WEAP se cargan en los archivos de entrada MODFLOW, y viceversa \citep{Sanzanaetal2019}. Esta integración se realiza con la finalidad de estudiar la disponibilidad hídrica superficial y subterránea, y su adecuado aprovechamiento \citep{Porhemmatetal2019}.
 
 En la GIRH se requiere de una adecuada modelación de los sistemas de aguas subterráneas, lo que depende de un buen conocimiento de los parámetros hidrogeológicos del acuífero, como la conductividad hidráulica, transmisividad, coeficiente de almacenamiento, rendimiento específico y la tasa de recarga del acuífero \citep{LakshmiPrasadAndRastogi2001}. Sin embargo, estos parámetros comunmente necesitan ser estimados ya que no son fáciles de medir directamente pues requieren considerables recursos humanos y económicos \citep{Batenietal2015}. En los últimos años, investigadores han adoptado el modelado inverso de aguas subterráneas como un enfoque matemático válido para estimar los parámetros de los acuíferos \citep{Carreraetal2005, HendricksFranssenetal2009, Mohairetal2017, Pateletal2022}. En este sentido, se utilizan Simulation optimization (SO) models, en donde los parámetros distribuidos se asignan a un modelo matemático con condiciones de contorno conocidas, cuyos resultados alimentan al modelo de optimización, el cual tiene el objetivo de asegurar la minimización de errores entre las variables observadas y simuladas para obtener valores óptimos de los parámetros hidráulicos \citep{LakshmiPrasadAndRastogi2001, Pateletal2022}. 
 
 Los modelos de optimización utilizan métodos tradicionales basados en gradientes, por ejemplo, the steepest descent method, conjugate gradient method, Gauss–Newton method \citep{Cigizoglu2005, Meza2010, Qinetal2018}, among others; y métodos no tradicionales, como los algoritmos evolutivos , por ejemplo, Genetic Algorithm, Particle Swarm Optimization, Simulated Annealing, Differential Evolution, among others \citep{Gauretal2011, Huangetal2008, Yang2014}. La desventaja de los algorítmos basados en gradientes es que pueden dar como resultado valores óptimos locales en lugar de globales debido a la falta de convexidad inherente en los modelos de acuíferos, ya que la ecuación del modelo de flujo puede ser lineal con respecto a una variable de estado, que a su vez es altamente no lineal con respecto a los parámetros del sistema \citep{LakshmiPrasadAndRastogi2001, Batenietal2015}. Por tanto, para abordar estos inconvenientes (*shortcomings*) se aplican los algoritmos evolutivos, ya que pueden manejar problemas altamente no lineales y convergen al óptimo global en lugar del local \citep{Batenietal2015}. 
+
+
 
 
 [Hablar de algorítmos evolutivos --> PSO y DE - poco teoría, aplicaciones en hidrogeología y citas]
@@ -14,7 +16,13 @@ En el área de las aguas subterráneas, los algorítmos evolutivos han sido eval
 
 Hablar de otros papers con metodologías distribuidas
 
-[Objetivo]
+-
+
+Por lo antes expuesto, the main objective of this research is the calibration of hydraulic parameters of an aquifer using a hybrid and asynchronous approach of convolutional layers and distributed bio-inspired algorithms in an integrated water management model.
+
+[Hablar del modelo, considerando que es una desventaja el tiempo de modelación aunque se ha implementado una metodología de ejecución en paralelo que permite reducir los tiempos de simulación.]
+
+-
 
 
 [Vacío en el conocimiento a abordar - Hablar de convolución - Metodología]
@@ -36,7 +44,7 @@ Las variables de decisión son la conductividad hidráulica, rendimiento y almac
 ......
     ---
 
-    Hablar del modelo, considerando que es una desventaja el tiempo de modelación aunque se ha implementado una metodología de ejecución en paralelo que permite reducir los tiempos de simulación.
+
 
     Aplicaciones de PSO y Convolución en hidrología e hidrogeología.
     Una de las críticas a los algorítmos genéticos es que requieren muchas evaluaciones de funciones antes de llegar a la solución óptima superior (Lingireddy, 1997) y aunque los avances tecnológicos han hecho que esto no sea tan crítico, el problema persiste al evaluar acuíferos muy grandes (Lingireddy, 1997). [ ---- Aquí hablaría de la paralelización ---- ]
@@ -139,12 +147,3 @@ Independientemente de los subenjambres restantes, cada procesador ejecuta el alg
 * Sanzana, P., Gironas, J., Braud, I., Hitschfeld, N., Vargas, X., Vicuña, S, Munoz, J. F., Villegas, R., Rubio, E. & Herrera, R. (2019a). Herramientas hidroinformaticas y consideraciones para modelar procesos superficiales y subterráneos acoplados mediante WEAP-MODFLOW. XXVIII Congreso LatinoAmericano de Hidráulica. Recuperado de: https://hal.archives-ouvertes.fr/hal-02023789
 * Sanzana, P., Gironas, J., Braud, I., Muñoz, J. F., Vicuña, S, Reyes-Paecke, S., La Barrera, F. de, Branger, F., Rodríguez, F., Vargas, X., Hitschfeld, N. & Hornazábal, S. (2019b). Impact of Urban Growth and High Residential Irrigation on Streamflow and Groundwater Levels in a Peri‐Urban Semiarid Catchment. Journal of the American Water Resources Association, 55(3), 720–739. doi.org/10.1111/1752-1688.12743
 * A. Thomas, P. Majumdar, T.I. Eldho, A.K. Rastogi (2018). Simulation optimization model for aquifer parameter estimation using coupled meshfree point collocation method and cat swarm optimization. Eng. Anal. Boundary Elem., 91 (2018), pp. 60-72
-
-
-
-
-
-
-
-
-
