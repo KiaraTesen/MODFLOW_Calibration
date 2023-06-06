@@ -6,32 +6,18 @@ Las aguas subterráneas juegan un rol muy importante en la Gestión Integrada de
 
 En la GIRH se requiere de una adecuada modelación de los sistemas de aguas subterráneas, lo que depende de un buen conocimiento de los parámetros hidrogeológicos del acuífero, como la conductividad hidráulica, transmisividad, coeficiente de almacenamiento, rendimiento específico y la tasa de recarga del acuífero \citep{LakshmiPrasadAndRastogi2001}. Sin embargo, estos parámetros comunmente necesitan ser estimados ya que no son fáciles de medir directamente pues requieren considerables recursos humanos y económicos \citep{Batenietal2015}. En los últimos años, investigadores han adoptado el modelado inverso de aguas subterráneas como un enfoque matemático válido para estimar los parámetros de los acuíferos \citep{Carreraetal2005, HendricksFranssenetal2009, Mohairetal2017, Pateletal2022}. En este sentido, se utilizan Simulation optimization (SO) models, en donde los parámetros distribuidos se asignan a un modelo matemático con condiciones de contorno conocidas, cuyos resultados alimentan al modelo de optimización, el cual tiene el objetivo de asegurar la minimización de errores entre las variables observadas y simuladas para obtener valores óptimos de los parámetros hidráulicos \citep{LakshmiPrasadAndRastogi2001, Pateletal2022}. 
 
-Los modelos de optimización utilizan métodos tradicionales basados en gradientes, por ejemplo, the steepest descent method, conjugate gradient method, Gauss–Newton method \citep{Cigizoglu2005, Meza2010, Qinetal2018}, among others; y métodos no tradicionales, como los algoritmos evolutivos , por ejemplo, Genetic Algorithm, Particle Swarm Optimization, Simulated Annealing, Differential Evolution, among others \citep{Gauretal2011, Huangetal2008, Yang2014}. La desventaja de los algorítmos basados en gradientes es que pueden dar como resultado valores óptimos locales en lugar de globales debido a la falta de convexidad inherente en los modelos de acuíferos, ya que la ecuación del modelo de flujo puede ser lineal con respecto a una variable de estado, que a su vez es altamente no lineal con respecto a los parámetros del sistema \citep{LakshmiPrasadAndRastogi2001, Batenietal2015}. Por tanto, para abordar estos inconvenientes (*shortcomings*) se aplican los algoritmos evolutivos, ya que pueden manejar problemas altamente no lineales y convergen al óptimo global en lugar del local \citep{Batenietal2015}. 
+Los modelos de optimización utilizan métodos tradicionales basados en gradientes, por ejemplo, the steepest descent method, conjugate gradient method, Gauss–Newton method \citep{Cigizoglu2005, Meza2010, Qinetal2018}, among others; y métodos no tradicionales, como los algoritmos bioinspirados , por ejemplo, Genetic Algorithm, Particle Swarm Optimization, Simulated Annealing, Differential Evolution, among others \citep{Gauretal2011, Huangetal2008, Yang2014}. La desventaja de los algorítmos basados en gradientes es que pueden dar como resultado valores óptimos locales en lugar de globales debido a la falta de convexidad inherente en los modelos de acuíferos, ya que la ecuación del modelo de flujo puede ser lineal con respecto a una variable de estado, que a su vez es altamente no lineal con respecto a los parámetros del sistema \citep{LakshmiPrasadAndRastogi2001, Batenietal2015}. Por tanto, para abordar estos inconvenientes (*shortcomings*), lot of work related to solve GW problems, aplican los algoritmos evolutivos, ya que pueden manejar problemas altamente no lineales y convergen al óptimo global en lugar del local \citep{Batenietal2015}. Sin embargo, estos métodos son computacionalmente costosos para problemas a gran escala, como lo son los problemas de GIRH evaluados mediante un Integrated Water Management Model (IWMM), debido al esfuerzo de preprocesamiento requerido. 
 
+Por lo antes expuesto, the main objective of this research is the calibration of hydraulic parameters of an aquifer using a hybrid and asynchronous approach of convolutional layers and distributed bio-inspired algorithms with an integrated water management model. Por tanto, se plantea a SO model, en donde se evalúan modelos de optimización que utilizan la combinación de dos algorítmos bioinspirados, Particle Swarm Optimization (PSO) and Differential Evolution (DE) con las Convolutional Layers para la estimación adecuada de los parámetros hidráulicos de un acuífero. Mientras que la simulación del sistema subterráneo se realiza con un IWMM (WEAP-MODFLOW) para lograr una mejor representación de los precesos de recarga y descarga del sistema. 
 
+PSO es un algoritmo evolutivo estocástico propuesto por Eberhart y Kennedy (\citeyear{EberhartandKennedy1995}) and has become one of the most used swarm-intelligence-based algorithms in different research areas \citep{Erdeljanetal2014, SanchezGarciaetal2019, Thomasetal2018} due to its simplicity and flexibility \citep{Yang2014}. Asimismo, DE is a vector-based metaheuristic algorithm developed by Storn and Price (\citeyear{StornandPrice1995}), which has some similarity to pattern search and genetic algorithms due to its use of crossover and mutation \citep{Yang2014}. Investigaciones recientes han aplicado ambos algorítmos de manera distribuida, [Se sacaría lo que puse en la descripción de DPSO y DDE?]. Además se plantea utilizar CL como proceso de filtrado de los paámetros hidráulicos a calibrar, por tanto, las variables de decisión serán los valores que tomen los kernel (qué es el kernel).
 
-
-[Hablar de algorítmos evolutivos --> PSO y DE - poco teoría, aplicaciones en hidrogeología y citas]
-En el área de las aguas subterráneas, los algorítmos evolutivos han sido evaluados satisfactoriamente en diferentes usos, por ejemplo, GA ....
-
-Hablar de otros papers con metodologías distribuidas
+Finally, a simplified synthetic model is considered as a first approach that will allows validating the proposed DPSO-CL and DDE-CL algorithms. Sin embargo, como se mencionó anteriormente, trabajar con un modelo integrado y algoritmos de optimización genera un gasto computacional alto, por lo que se utilizará una arquitectura de procesamiento en paralelo que permite reducir los tiempos de simulación, aplicando los algoritmos en diferentes máquinas que comunican sus resultados entre sí o a una máquina server, tras cada generación, dependiendo de la consifugración del algorítmo. 
 
 -
-
-Por lo antes expuesto, the main objective of this research is the calibration of hydraulic parameters of an aquifer using a hybrid and asynchronous approach of convolutional layers and distributed bio-inspired algorithms in an integrated water management model.
-
-[Hablar del modelo, considerando que es una desventaja el tiempo de modelación aunque se ha implementado una metodología de ejecución en paralelo que permite reducir los tiempos de simulación.]
-
--
+[Vacío en el conocimiento a abordar - RECALCAR CONVOLUCION Y ALGORITMOS]
 
 
-[Vacío en el conocimiento a abordar - Hablar de convolución - Metodología]
-
-En la presente investigación se plantea un modelo de simulación optimización (SO model), en donde el modelo de optimización utiliza la combinación de un algorítmo evolutivo, Particle Swarm Optimization (PSO) y las Convolutional Neural Networks para la estimación adecuada de los parámetros hidráulicos de un acuífero real. Mientras que la simulación del sistema subterráneo se realiza con un modelo de diferencias finitas (FDM), MODFLOW, el cuál está acoplado a un modelo de hidrología superficial, WEAP, los cuales permiten una mejor representación de los precesos de recarga y descarga del sistema. 
-
-[Metodología breve]
-
-Las variables de decisión son la conductividad hidráulica, rendimiento y almacenamiento específico
 
 [Idea de cierre]
 
@@ -42,17 +28,11 @@ Las variables de decisión son la conductividad hidráulica, rendimiento y almac
 ......
 ......
 ......
-    ---
+
+Sin embargo, en la presente investigación se hará uso también de Convoluciones [ ---- Previamente poner antecedentes de las convoluciones en ciencias físicas ---- luego explicar porqué es conveniente usarlas juntas ---- ]
 
 
-
-    Aplicaciones de PSO y Convolución en hidrología e hidrogeología.
-    Una de las críticas a los algorítmos genéticos es que requieren muchas evaluaciones de funciones antes de llegar a la solución óptima superior (Lingireddy, 1997) y aunque los avances tecnológicos han hecho que esto no sea tan crítico, el problema persiste al evaluar acuíferos muy grandes (Lingireddy, 1997). [ ---- Aquí hablaría de la paralelización ---- ]
-
-    Sin embargo, en la presente investigación se hará uso también de Convoluciones [ ---- Previamente poner antecedentes de las convoluciones en ciencias físicas ---- luego explicar porqué es conveniente usarlas juntas ---- ]
-
-    Los algorítmos genéticos (GA) Lsolo se ocupan de problemas de optimización sin restricciones (Lingireddy, 1997). Los GA con un enfoque indirecto tienen la ventaja que es adecuado para situaciones en las que los datos disponibles son escasos (Lingireddy, 1997). DeJong(1975) recommended a high probability of crossover along with a low probability of mutation for good convergence characteristics of a genetic algorithm. Typical values of probabilities of crossover and mutation are 0.6 ~ 0.7 (0 - 1) and 0.02 ~ 0.03 (0 - 0.1) respectively (Lingireddy, 1997).
-
+El algoritmo PSO distribuido se basa en la búsqueda de soluciones disponibles en el espacio paralelo [25]. --> Paper que hablaa de Tsync
 
 * Problema a resolver¨--> Objetivo y vació en el conocimiento.
 
@@ -69,69 +49,6 @@ Las variables de decisión son la conductividad hidráulica, rendimiento y almac
     * Metodología aplicada a un acuífero real --> Ligua - Petorca, Chile central.
 
     . [Encontrar el set de parámetros óptimos que reduzca el error (qué monitorearemos - fitness function (¿?)) entre los valores observados y simulados] --> Se plantea un modelo de simulación - optimización (SO).
-
-
-
-
-
-
-## Metodología
-* Modelo WEAP - MODFLOW.
-* Establecer el rango de valores en los que se moverán las variables de decisión.
-* Identificar las salidas de interés.
-    * Niveles de agua subterránea en pozos DGA.
-    * Pozos colgados.
-    * MODFLOW Cell Head no crezca en el tiempo.
-    * Variación neta del volumen almacenado por 3 periodos de tiempo.
-* Restricciones
-
-
-
-
-## Data and  Methodology
-
-### Optimization models
-
-#### Distributed Particle Swarm Optimization 
-Para introducirnos al Distributed Particle Swarm Optimization algorithm (DPSO), debemos conocer como funciona el algorítmo PSO básico. PSO es un algoritmo evolutivo estocástico propuesto por Eberhart y Kennedy (1995) basado en la inteligencia colectiva de la población (conocido como enjambre). Una población consiste en partículas que se mueven a través del espacio de búsqueda multidimensional y cambian de posición, dependiendo de su propia experiencia (la mejor posición individual actual, pbest) y la experiencia de las otras partículas (la mejor posición global actual, gbest) (Erdeljan et al., 2014; Thomas et al., 2018). En cada generación, las partículas actualizan su posición cambiando su velocidad hacia pbest y gbest 
-
-El cambio de posición de la partícula i se logra moviendo la partícula de la posición anterior, según la ecuación:
-
-
-Kennedy y Eberhart [18], inspirados en el comportamiento de una bandada de pájaros en busca de comida [19], desarrollaron el algoritmo PSO que sigue las características de comportamiento comunes de los animales que se mueven en grupos. . Al principio, el algoritmo se desarrolló para sistemas continuos y, más tarde, se introdujeron algoritmos para sistemas discretos: PSO binario [20] y PSO entero [21-23]. Con el algoritmo binario cada partícula de la población puede tomar valores binarios (0 o 1). En casos más generales, como PSO entero, se logra un valor óptimo redondeando el óptimo real al entero más cercano.
-
-
-
-
-El algoritmo PSO distribuido se basa en la búsqueda de soluciones disponibles en el espacio paralelo [25]. La población (enjambre) consiste en varios sub-enjambres distribuidos, asignados a diferentes procesadores
-
-Independientemente de los subenjambres restantes, cada procesador ejecuta el algoritmo (un número definido de iteraciones) en los subenjambres locales. Después de un número de iteraciones previamente definido, se intercambian soluciones de diferentes sub-enjambres. La modificación en el algoritmo distribuido es la introducción de un nuevo período de sincronización de parámetros (Tsync), que define la frecuencia de comunicación entre sub-enjambres. El parámetro Tsync representa el número de iteraciones después de las cuales se actualizará el óptimo global (bg). Cuando los subenjambres reciben información sobre el óptimo global, cambian de velocidad como se muestra en las ecuaciones. 7-10.
-
-
-#### Integrated Managment Water Model --> Modelo WEAP - MODFLOW.
-* [Explicación del modelo - Mencionar que este está siendo desarrollado en el proyecto de Ligua Petorca (¿?)]
-* Ecuación que resuelve MODFLOW.
-* Imagen del modelo
-* MODFLOW es un modelo de diferencias finitas (FDM). El FDM/FEM utiliza una cuadrícula/malla predefinida donde la ecuación del flujo de agua subterránea se aproxima mediante un conjunto de ecuaciones algebraicas para la cuadrícula/malla elegida en el sistema. Estos métodos son computacionalmente costosos para problemas a gran escala debido al esfuerzo de preprocesamiento requerido (Thomas et al., 2018). Sin embargo, se utilizará una arquitectura de procesamiento en paralelo que permite reducir los tiempos de simulación *(Cita dependiendo de la publicación PREPRINT que se haga)*
-
-#### Modelo de optamización
-
-* Plantear modelo de optimización --> Identificar las salidas de interés --> Función objetivo.   
-    * Niveles de agua subterránea en pozos DGA. --> (Euclidean norm (Lingireddy, 1997), Sum of Squared Difference (SSD). Sum of the Root Mean Squared Error (SRMSE) (Patel et al., 2022))
-    * Pozos colgados.
-    * Variación neta del volumen almacenado por 3 periodos de tiempo.
-    * No deberían haber celdas aisladas con unicos valores, es decir, si se escoge un valor debe tener una celda adyacente como mínimo con el mismo valor.
-* Restricciones
-    * Restricciones implícitas:
-        Mencionar también la ecuación del flujo de aguas subterráneas para un acuífero en tres dimensiones (depende de las condiciones del acuífero). Estas ecuaciones son funciones implícitas del conjunto de parámetros del acuífero (variables de decisión) y pueden denominarse restricciones implícitas (Lingireddy, 1997).
-    * Restricciones explícitas:
-        * Establecer el rango de valores en los que se moverán las variables de decisión (Conductividad hidráulica, rendimiento y almacenamiento específico). Serían 36 variables de decisión (Kx, Kz y Sy). Estos valores se establecen en función de estudios geológicos en la zona (citar carta geológica de la zona, guía DGA, 2019).
-        * MODFLOW Cell Head no crezca en el tiempo.
-        * MODFLOW Cell Head no tenga caídas abruptas en primeros años.
-        * MODFLOW Cell Head no tenga caídas mayores a más de 90 metros.
-
-    *En el estudio desarrollado por Lingireddy (1997) se emplea un enfoque de doble nivel para satisfacer las restricciones implícitas del sistema. En este enfoque, las restricciones se satisfacen fuera del marco de optimización. La ventaja de este enfoque es que es posible desarrollar un modelo de optimización generalizado adecuado para problemas de estado estacionario o no estacionario. Además, al desacoplar las restricciones implícitas del sistema del modelo de optimización, es posible utilizar métodos de evaluación de funciones aproximadas, como redes neuronales, en lugar de métodos rigurosos pero computacionalmente intensivos de elementos finitos o diferencias finitas.* (Sin embargo se puede usar un modelo de elementos finitos)
-
 
 ## Bibliography
 
