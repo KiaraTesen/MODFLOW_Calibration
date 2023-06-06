@@ -1,57 +1,39 @@
 # Title
-* 
+A Hybrid Approach of Convolutional Layers and Distributed Bio-inspired Algorithms with an Integrated Water Management Model to Groundwater Parameters Estimation
 
-# Estructura de paper
+# Introducción (Extensión ~ 1 hoja máx)
+Las aguas subterráneas juegan un rol muy importante en la Gestión Integrada de Recursos Hídricos (GIRH). Siendo aún más relevante en el balance hídrico en zonas donde el recurso superficial es escaso \citep{Liuetal2022}. Por esta razón, en la GIRH, cada vez se ha hecho más necesario el uso de herramientas de modelación que permitan simplificar, optimizar y entender los distintos procesos que ocurren en las cuencas y acuíferos. Por tanto, existen diferentes investigaciones que han acoplado programas computacionales que modelan sistemas superficiales y subterráneos (Bailey et al., 2016; Sanzana et al., 2019a; Zhang y Chui, 2020). Dentro de los más usados está el software WEAP (Water Evaluation and Planning System) (Yates et al., 2005a; Yates et al., 2005b), que permite representar los procesos involucrados en la dinámica de una cuenca (e.g. distribución y disponibilidad del recurso hídrico), junto a MODFLOW (Harbaugh et al., 2000), que permite modelar el flujo de aguas subterráneas. La ventaja del acople entre WEAP y MODFLOW es que, según la configuración establecida, permite un intercambio bidireccional de flujos en cada paso de tiempo, donde los resultados de WEAP se cargan en los archivos de entrada MODFLOW, y viceversa (Sanzana et al., 2019a). Esta integración se realiza con la finalidad de estudiar la disponibilidad hídrica superficial y subterránea, y su adecuado aprovechamiento (DGA, 2019a; Fotovat et al., 2019).
 
-## Keywords
-* Distributed Particle Swarm Optimization
-* Convolutional Neural Networks (¿?)
-* Aquifer hydraulic parameters
-* Optimization (¿?)
-* Simulation - Optimization model
+En la GIRH se requiere de una adecuada modelación de los sistemas de aguas subterráneas, lo que depende de un buen conocimiento de los parámetros hidrogeológicos del acuífero, como la conductividad hidráulica, transmisividad, coeficiente de almacenamiento, rendimiento específico y la tasa de recarga del acuífero \citep{LakshmiPrasadAndRastogi2001}. Sin embargo, estos parámetros comunmente necesitan ser estimados ya que no son fáciles de medir directamente pues requieren considerables recursos humanos y económicos \citep{Batenietal2015}. En los últimos años, investigadores han adoptado el modelado inverso de aguas subterráneas como un enfoque matemático válido para estimar los parámetros de los acuíferos \citep{Carreraetal2005, HendricksFranssenetal2009, Mohairetal2017, Pateletal2022}. En este sentido, se utilizan Simulation optimization (SO) models, en donde los parámetros distribuidos se asignan a un modelo matemático con condiciones de contorno conocidas, cuyos resultados alimentan al modelo de optimización, el cual tiene el objetivo de asegurar la minimización de errores entre las variables observadas y simuladas para obtener valores óptimos de los parámetros hidráulicos \citep{LakshmiPrasadAndRastogi2001, Pateletal2022}. 
 
-## Introducción
-Las aguas subterráneas juegan un rol muy importante en la Gestión Integrada de Recursos Hídricos (GIRH). Siendo aún más relevante en el balance hídrico en zonas donde el recurso superficial es escaso \citep{Liuetal2022}. Por esta razón, en la GIRH, cada vez se ha hecho más necesario el uso de herramientas de modelación que permitan simplificar, optimizar y entender los distintos procesos que ocurren en las cuencas y acuíferos. Estas labores pueden llegar a ser complicadas dependiendo de las características del acuífero de interés \citep{Sanzanaetal2019}. En este sentido, una adecuada modelación de los sistemas de aguas subterráneas depende de un buen conocimiento de los parámetros hidrogeológicos del acuífero, como la conductividad hidráulica, transmisividad, coeficiente de almacenamiento, rendimiento específico y la tasa de recarga del acuífero \citep{LakshmiPrasadAndRastogi2001}. Sin embargo, estos parámetros comunmente necesitan ser estimados ya que no son fáciles de medir directamente pues requieren considerables recursos humanos y económicos \citep{Batenietal2015}. 
-    
-En los últimos años, investigadores han adoptado el modelado inverso de aguas subterráneas como un enfoque matemático válido para estimar los parámetros de los acuíferos \citep{Carreraetal2005, HendricksFranssenetal2009, Mohairetal2017, Pateletal2022}. En este sentido, se utilizan Simulation optimization (SO) models, en donde los parámetros distribuidos se asignan a un modelo matemático con condiciones de contorno conocidas, cuyos resultados alimentan al modelo de optimización, el cual tiene el objetivo de asegurar la minimización de errores entre las variables observadas y simuladas para obtener valores óptimos de los parámetros hidráulicos \citep{LakshmiPrasadAndRastogi2001, Pateletal2022}. La simulación del sistema subterráneo se realiza utilizando modelos basado en cuadrículas o mallas, como los modelos de diferencias finitas (FDM) o de elementos finitos (FEM); o simuladores independientes de una malla, como Meshfree (Mfree). Mientras que, por otro lado, los modelos de optimización métodos tradicionales como nonlinear programming (NLP) techniques basadas en gradientes (*CITAS*), por ejemplo, the steepest descent method, conjugate gradient method, Gauss–Newton method, etc; y métodos no tradicionales, como los algoritmos evolutivos (*CITAS*), por ejemplo, (*****). La desventaja de los algorítmos basados en gradientes es que pueden dar como resultado valores óptimos locales en lugar de globales debido a la falta de convexidad inherente en los modelos de acuíferos, ya que la ecuación del modelo de flujo puede ser lineal con respecto a una variable de estado, que a su vez es altamente no lineal con respecto a los parámetros del sistema \citep{LakshmiPrasadAndRastogi2001, Batenietal2015}. Por tanto, para abordar estos inconvenientes (*shortcomings*) se aplican los algoritmos evolutivos, ya que pueden manejar problemas altamente no lineales y convergen al óptimo global en lugar del local \citep{Batenietal2015}. 
+Los modelos de optimización utilizan métodos tradicionales basados en gradientes, por ejemplo, the steepest descent method, conjugate gradient method, Gauss–Newton method \citep{Cigizoglu2005, Meza2010, Qinetal2018}, among others; y métodos no tradicionales, como los algoritmos evolutivos , por ejemplo, Genetic Algorithm, Particle Swarm Optimization, Simulated Annealing, Differential Evolution, among others \citep{Gauretal2011, Huangetal2008, Yang2014}. La desventaja de los algorítmos basados en gradientes es que pueden dar como resultado valores óptimos locales en lugar de globales debido a la falta de convexidad inherente en los modelos de acuíferos, ya que la ecuación del modelo de flujo puede ser lineal con respecto a una variable de estado, que a su vez es altamente no lineal con respecto a los parámetros del sistema \citep{LakshmiPrasadAndRastogi2001, Batenietal2015}. Por tanto, para abordar estos inconvenientes (*shortcomings*) se aplican los algoritmos evolutivos, ya que pueden manejar problemas altamente no lineales y convergen al óptimo global en lugar del local \citep{Batenietal2015}. 
+
+
+[Hablar de algorítmos evolutivos --> PSO y DE - poco teoría, aplicaciones en hidrogeología y citas]
+En el área de las aguas subterráneas, los algorítmos evolutivos han sido evaluados satisfactoriamente en diferentes usos, por ejemplo, GA ....
 
 Hablar de otros papers con metodologías distribuidas
 
+[Objetivo]
 
 
+[Vacío en el conocimiento a abordar - Hablar de convolución - Metodología]
+
+En la presente investigación se plantea un modelo de simulación optimización (SO model), en donde el modelo de optimización utiliza la combinación de un algorítmo evolutivo, Particle Swarm Optimization (PSO) y las Convolutional Neural Networks para la estimación adecuada de los parámetros hidráulicos de un acuífero real. Mientras que la simulación del sistema subterráneo se realiza con un modelo de diferencias finitas (FDM), MODFLOW, el cuál está acoplado a un modelo de hidrología superficial, WEAP, los cuales permiten una mejor representación de los precesos de recarga y descarga del sistema. 
+
+[Metodología breve]
+
+Las variables de decisión son la conductividad hidráulica, rendimiento y almacenamiento específico
+
+[Idea de cierre]
 
 
+......
 
 
-
-------
-
-
-
-
-
-
-
-* Antecedentes a calibración de PH de un acuífero.
-
-    Las aguas subterráneas juegan un rol muy importante en la Gestión Integrada de Recursos Hídricos (GIRH). Siendo aún más relevante en el balance hídrico de áreas donde la dinámica río-acuífero afecta las secciones del lecho del río, o donde las alcantarillas están ubicadas debajo del nivel del agua subterránea (Sanzana et al., 2019b), o en zonas donde el recurso superficial es escaso (Liu et al., 2022). Por esta razón, cada vez se ha hecho más necesario el uso de herramientas de modelación que permitan simplificar y/u optimizar distintos procesos. En la GIRH estas labores pueden llegar a ser complicadas dependiendo de las características del acuífero de interés (Sanzana et al., 2019a; b). En este sentido, una adecuada modelación de los sistemas de aguas subterráneas depende de un buen conocimiento de los parámetros hidrogeológicos del acuífero, como la conductividad hidráulica, transmisividad, coeficiente de almacenamiento, rendimiento específico y la tasa de recarga del acuífero (Lakshmi Prasad y Rastogi 2001). Sin embargo, estos parámetros comunmente necesitan ser estimados ya que no son fáciles de medir directamente pues requieren considerables recursos humanos y económicos (Bateni et al., 2015). 
-    
-    En los últimos años, investigadores han adoptado el modelado inverso de aguas subterráneas como un enfoque matemático válido para estimar los parámetros de los acuíferos (Carrera et al., 2005 *+CITAS*). En este sentido, se utilizan modelos de simulación optimización (Simulation optimization (SO) models), en donde los parámetros distribuidos se asignan a un modelo matemático con condiciones de contorno conocidas, cuyos resultados alimentan al modelo de optimización, el cual tiene el objetivo de asegurar la minimización de errores entre las variables observadas y simuladas para obtener valores óptimos de los parámetros hidráulicos (Lakshmi Prasad y Rastogi 2001; Patel et al., 2022). La simulación del sistema subterráneo se realiza utilizando modelos basado en cuadrículas o mallas, como los modelos de diferencias finitas (FDM) o de elementos finitos (FEM); o simuladores independientes de una malla, como Meshfree (Mfree). Mientras que, los algoritmos de optimización ampliamente usados son aquellos que usan técnicas de programación no lineal (nonlinear programming (NLP) techniques) (*CITAS*) como the steepest descent method, conjugate gradient method, Gauss–Newton method, etc. Sin embargo, las técnicas clásicas de optimización basadas en gradientes pueden dar como resultado valores óptimos locales en lugar de globales debido a la falta de convexidad inherente en los modelos de acuíferos, ya que la ecuación del modelo de flujo puede ser lineal con respecto a una variable de estado, que a su vez es altamente no lineal con respecto a los parámetros del sistema (Lakshmi Prasad y Rastogi 2001; Bateni et al., 2015). Por tanto, para abordar estos inconvenientes (*shortcomings*) se aplican métodos no tradicionales, como los algoritmos evolutivos, ya que pueden manejar problemas altamente no lineales y convergen al óptimo global en lugar del local (Bateni et al., 2015). 
-
-    [Hablar de algorítmos evolutivos --> PSO]
-    En el área de las aguas subterráneas, los algorítmos evolutivos han sido evaluados satisfactoriamente en diferentes usos, por ejemplo, GA ....
-
-    Thomas et al., 2018
-    [Hablar de convolución]
-
-    En la presente investigación se plantea un modelo de simulación optimización (SO model), en donde el modelo de optimización utiliza la combinación de un algorítmo evolutivo, Particle Swarm Optimization (PSO) y las Convolutional Neural Networks para la estimación adecuada de los parámetros hidráulicos de un acuífero real. Mientras que la simulación del sistema subterráneo se realiza con un modelo de diferencias finitas (FDM), MODFLOW, el cuál está acoplado a un modelo de hidrología superficial, WEAP, los cuales permiten una mejor representación de los precesos de recarga y descarga del sistema. 
-
-    [Metodología breve]
-
-    Las variables de decisión son la conductividad hidráulica, rendimiento y almacenamiento específico
-
-    [Vacío en el conocimiento a abordar]
-
+......
+......
+......
     ---
 
     Hablar del modelo, considerando que es una desventaja el tiempo de modelación aunque se ha implementado una metodología de ejecución en paralelo que permite reducir los tiempos de simulación.
@@ -79,6 +61,25 @@ Hablar de otros papers con metodologías distribuidas
     * Metodología aplicada a un acuífero real --> Ligua - Petorca, Chile central.
 
     . [Encontrar el set de parámetros óptimos que reduzca el error (qué monitorearemos - fitness function (¿?)) entre los valores observados y simulados] --> Se plantea un modelo de simulación - optimización (SO).
+
+
+
+
+
+
+## Metodología
+* Modelo WEAP - MODFLOW.
+* Establecer el rango de valores en los que se moverán las variables de decisión.
+* Identificar las salidas de interés.
+    * Niveles de agua subterránea en pozos DGA.
+    * Pozos colgados.
+    * MODFLOW Cell Head no crezca en el tiempo.
+    * Variación neta del volumen almacenado por 3 periodos de tiempo.
+* Restricciones
+
+
+
+
 ## Data and  Methodology
 
 ### Optimization models
@@ -123,21 +124,6 @@ Independientemente de los subenjambres restantes, cada procesador ejecuta el alg
 
     *En el estudio desarrollado por Lingireddy (1997) se emplea un enfoque de doble nivel para satisfacer las restricciones implícitas del sistema. En este enfoque, las restricciones se satisfacen fuera del marco de optimización. La ventaja de este enfoque es que es posible desarrollar un modelo de optimización generalizado adecuado para problemas de estado estacionario o no estacionario. Además, al desacoplar las restricciones implícitas del sistema del modelo de optimización, es posible utilizar métodos de evaluación de funciones aproximadas, como redes neuronales, en lugar de métodos rigurosos pero computacionalmente intensivos de elementos finitos o diferencias finitas.* (Sin embargo se puede usar un modelo de elementos finitos)
 
-#### Convolución
-* 12 máscaras, cada una representa un SHAC (5 Petorca y 7 La Ligua). Considerar que dentro de cada máscara hay una variación interna.
-* Considerar tamaño de la máscara (i), kernel (k), stride y zero padding.
-
-#### Study area (Podría ir después de explicar Convolución)
-* Características semi áridas de las cuencas.
-
-## Results
-* Presentar un mapa del comportamiento de la generación de variables de decisión vs el error [Ejemplo1](/Paper/EjemplosResultados/Captura1.PNG).
-* Valores observados vs simulados en diferentes pozos (¿Se puede en simulación transiente?) [Ejemplo2](/Paper/EjemplosResultados/Captura2.PNG).
-* Boxplot de los valores de las variables de decisión en las generaciones, para evalular la estabilidad (¿Cómo se haría si son diferentes?) [Ejemplo3](/Paper/EjemplosResultados/Captura3.PNG)
-* ¿Existirá mapa de isobaras de los acuíferos de La Ligua y Petorca?
-* Comparación de parámetros hidráulicos obtenidos por bombeo o geología de la zona [Ejemplo4](/Paper/EjemplosResultados/Captura4.PNG)
-* Comparación de tiempos de ejecución, convergencia [Ejemplo5](/Paper/EjemplosResultados/Captura5.PNG)
-
 
 ## Bibliography
 
@@ -161,28 +147,4 @@ Independientemente de los subenjambres restantes, cada procesador ejecuta el alg
 
 
 
-# MODFLOW Parameters Calibration
-
-## Objetivo principal
-* Calibración de parámetros hidráulicos de un acuífero utilizando algorítmos bioinspirados.
-
-## Objetivo específco
-* Optimizar la calibración de un modelo subterráneo utilizando PSO (Particle Swarm Optimization) y Convolución
-* Calibrar paramétros hidráulicos (variables de decisión): 
-    * Conductividad hidráulica (Kx y Kz) --> Considerando Ky = Kx
-    * Rendimiento específico (Sy) --> Considerando que Almacenamiento específico (Ss) = Sy / 100
-    * Supuesto: No hay variación de los parámentros en el tiempo. Limitación del programa.
-* Calcular la incertidumbre asociada a los valores de las variables de decisión.
-* Definir las funciones de pérdida.
-* Metodología aplicada a un acuífero real --> Ligua - Petorca, Chile central.
-
-## Metodología
-* Modelo WEAP - MODFLOW.
-* Establecer el rango de valores en los que se moverán las variables de decisión.
-* Identificar las salidas de interés.
-    * Niveles de agua subterránea en pozos DGA.
-    * Pozos colgados.
-    * MODFLOW Cell Head no crezca en el tiempo.
-    * Variación neta del volumen almacenado por 3 periodos de tiempo.
-* Restricciones
 
