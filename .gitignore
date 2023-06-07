@@ -3,7 +3,8 @@ data/GIS/Old_Elements
 
 data/MODFLOW_Model
 
-sp
+MODFLOW_NewModel_DPSO/sp
+MODFLOW_NewModel_DPSO/sp
 
 MODFLOW_NewModel_DPSO/SyntheticAquifer_NY.bas
 MODFLOW_NewModel_DPSO/SyntheticAquifer_NY.cbc
