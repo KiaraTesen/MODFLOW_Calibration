@@ -64,7 +64,7 @@ class Particle:
         self.x = x                      # X represents the kernels
         self.v = v                      # initial velocity = zeros
         self.y = y
-        self.x_best = x                 
+        self.x_best = np.copy(x)                 
         self.y_best = y
 
 sample_scaled = get_sampling_LH(n_var, n, l_bounds, u_bounds)
@@ -132,7 +132,7 @@ for m in range(maxiter):
     y = Run_WEAP_MODFLOW(path_output, str(m+1), initial_shape_HP, HP, pob.x, n_var_1_kx, n_var_1_sy, n_var_2_kx, n_var_2_sy, n_var, kernel_shape_1_kx, kernel_shape_1_sy, 
                          kernel_shape_2_kx, kernel_shape_2_sy, active_matriz, path_model, path_nwt_exe, path_obs_data)
     gbest = send_request_py(IP_SERVER_ADD, y, pob.x)
-
+    
     if y < pob.y_best:
         pob.x_best = np.copy(pob.x)
         pob.y_best = y
