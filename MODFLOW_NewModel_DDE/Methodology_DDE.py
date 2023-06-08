@@ -21,7 +21,7 @@ MY_IP_PORT = f"{MY_IP}:{MY_PORT}"
 
 #---
 vms = 5        # Number of VMs we use for the experiment
-IP_POOL = [f"10.0.0.{11+i}" for i in range(vms)]
+IP_POOL = [f"10.0.0.{12+i}" for i in range(vms)]
 IP_POOL.remove(MY_IP)
 
 IP_PORT_POOL = [f"{ip}:8888" for ip in IP_POOL]
