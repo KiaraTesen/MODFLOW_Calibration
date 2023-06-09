@@ -22,6 +22,25 @@ MODFLOW_NewModel_DPSO/SyntheticAquifer_NY.rch
 MODFLOW_NewModel_DPSO/SyntheticAquifer_NY.riv
 MODFLOW_NewModel_DPSO/SyntheticAquifer_NY.upw
 MODFLOW_NewModel_DPSO/UPW.chk
-MODFLOW_NewModel_DPSO/sp
+
+MODFLOW_NewModel_DDE/sp
+MODFLOW_NewModel_DDE/sp
+
+MODFLOW_NewModel_DDE/SyntheticAquifer_NY.bas
+MODFLOW_NewModel_DDE/SyntheticAquifer_NY.cbc
+MODFLOW_NewModel_DDE/SyntheticAquifer_NY.chd
+MODFLOW_NewModel_DDE/SyntheticAquifer_NY.chk
+MODFLOW_NewModel_DDE/SyntheticAquifer_NY.dis
+MODFLOW_NewModel_DDE/SyntheticAquifer_NY.drn
+MODFLOW_NewModel_DDE/SyntheticAquifer_NY.fdn
+MODFLOW_NewModel_DDE/SyntheticAquifer_NY.fhd
+MODFLOW_NewModel_DDE/SyntheticAquifer_NY.lst
+MODFLOW_NewModel_DDE/SyntheticAquifer_NY.nam
+MODFLOW_NewModel_DDE/SyntheticAquifer_NY.nwt
+MODFLOW_NewModel_DDE/SyntheticAquifer_NY.oc
+MODFLOW_NewModel_DDE/SyntheticAquifer_NY.rch
+MODFLOW_NewModel_DDE/SyntheticAquifer_NY.riv
+MODFLOW_NewModel_DDE/SyntheticAquifer_NY.upw
+MODFLOW_NewModel_DDE/UPW.chk
 
 vagrant
