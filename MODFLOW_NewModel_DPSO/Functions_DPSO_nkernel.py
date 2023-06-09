@@ -12,6 +12,18 @@ import math
 import warnings
 warnings.filterwarnings('ignore')
 
+#---    Visualization of the matriz -
+def get_image_matriz(matriz, variable, path_out):
+    fig=plt.figure(figsize = (16,8))
+    ax = plt.axes()
+    im = ax.imshow(matriz)
+    plt.title(variable)
+    plt.xlabel('Column')
+    plt.ylabel('Row')
+    cax = fig.add_axes([ax.get_position().x1+0.01,ax.get_position().y0,0.02,ax.get_position().height])
+    plt.colorbar(im, cax=cax)
+    plt.savefig(path_out)
+
 #---    Sampling by Latin Hypecube
 def get_sampling_LH(n_var, n, l_bounds, u_bounds):
     engine = LatinHypercube(d=n_var)
@@ -63,8 +75,10 @@ def get_evaluate_st_bounds(min_v, max_v, vector_modif):
         P_max = 0
     return P_min + P_max
 
-def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled, n_var_1_kx, n_var_1_sy, n_var_2_kx, n_var_2_sy, n_var, kernel_shape_1_kx, kernel_shape_1_sy, 
-                     kernel_shape_2_kx, kernel_shape_2_sy, active_matriz, path_model, path_nwt_exe, path_obs_data):
+def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled, n_var_1_kx, n_var_1_sy, n_var_2_kx, n_var_2_sy, n_var_3_kx, 
+                     n_var_3_sy, n_var_4_kx, n_var_4_sy, n_var, kernel_shape_1_kx, kernel_shape_1_sy, kernel_shape_2_kx, kernel_shape_2_sy, 
+                     kernel_shape_3_kx, kernel_shape_3_sy, kernel_shape_4_kx, kernel_shape_4_sy, active_matriz, path_model, path_nwt_exe, 
+                     path_obs_data):
     dir_iteration = os.path.join(path_output, "iter_" + str(iteration))
     if not os.path.isdir(dir_iteration):
         os.mkdir(dir_iteration)
@@ -74,6 +88,8 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
     #--------------------------
     #---    Modified matriz
     shape_k1_HP = initial_shape_HP
+    shape_k2_HP = initial_shape_HP
+    shape_k3_HP = initial_shape_HP
     new_shape_HP = initial_shape_HP
 
     for m in HP:
@@ -84,14 +100,36 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
         kernel_1_sy = sample_scaled[int(n_var_1_kx):int(n_var_1_kx + n_var_1_sy)].reshape(kernel_shape_1_sy)
         
         globals()["matriz_1_" + str(m)] = get_HP(initial_shape_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_1_" + str(m)])
+        get_image_matriz(globals()["matriz_1_" + str(m)], str(m), os.path.join(dir_iteration, 'First_' + str(m) +'.png'))
+        plt.clf()
         globals()["vector_1_" + str(m)] = globals()["matriz_1_" + str(m)].flatten()
         shape_k1_HP[m] = globals()["vector_1_" + str(m)]
 
         # Second kernel
         kernel_2_kx = sample_scaled[int(n_var_1_kx + n_var_1_sy):int(n_var_1_kx + n_var_1_sy + n_var_2_kx)].reshape(kernel_shape_2_kx)
-        kernel_2_sy = sample_scaled[int(n_var_1_kx + n_var_1_sy + n_var_2_kx):n_var].reshape(kernel_shape_2_sy)
+        kernel_2_sy = sample_scaled[int(n_var_1_kx + n_var_1_sy + n_var_2_kx):int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy)].reshape(kernel_shape_2_sy)
 
-        globals()["matriz_" + str(m)] = get_HP(shape_k1_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_2_" + str(m)])
+        globals()["matriz_2_" + str(m)] = get_HP(shape_k1_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_2_" + str(m)])
+        get_image_matriz(globals()["matriz_2_" + str(m)], str(m), os.path.join(dir_iteration, 'Second_' + str(m) +'.png'))
+        plt.clf()
+        globals()["vector_2_" + str(m)] = globals()["matriz_2_" + str(m)].flatten()
+        shape_k2_HP[m] = globals()["vector_2_" + str(m)]
+
+        # Third kernel
+        kernel_3_kx = sample_scaled[int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy):int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy + n_var_3_kx)].reshape(kernel_shape_3_kx)
+        kernel_3_sy = sample_scaled[int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy + n_var_3_kx):int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy + n_var_3_kx + n_var_3_sy)].reshape(kernel_shape_3_sy)
+
+        globals()["matriz_3_" + str(m)] = get_HP(shape_k2_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_3_" + str(m)])
+        get_image_matriz(globals()["matriz_3_" + str(m)], str(m), os.path.join(dir_iteration, 'Third_' + str(m) +'.png'))
+        plt.clf()
+        globals()["vector_3_" + str(m)] = globals()["matriz_3_" + str(m)].flatten()
+        shape_k3_HP[m] = globals()["vector_3_" + str(m)]
+
+        # Fourth kernel
+        kernel_4_kx = sample_scaled[int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy + n_var_3_kx + n_var_3_sy):int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy + n_var_3_kx + n_var_3_sy + n_var_4_kx)].reshape(kernel_shape_4_kx)
+        kernel_4_sy = sample_scaled[int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy + n_var_3_kx + n_var_3_sy + n_var_4_kx):n_var].reshape(kernel_shape_4_sy)
+
+        globals()["matriz_" + str(m)] = get_HP(shape_k3_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_4_" + str(m)])
         globals()["vector_" + str(m)] = globals()["matriz_" + str(m)].flatten()
         new_shape_HP[m] = globals()["vector_" + str(m)]
 
@@ -101,7 +139,7 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
     new_shape_HP['kz'] = matriz_kz.flatten()
     new_shape_HP['ss'] = matriz_ss.flatten()
     new_shape_HP.to_file(os.path.join(dir_iteration, 'Elements_iter_' + str(iteration) + '.shp'))
-    
+"""
     #---    Generate new native files
     model = fpm.Modflow.load(path_model + '/SyntheticAquifer_NY.nam', version = 'mfnwt', exe_name = path_nwt_exe)
     model.write_input()
@@ -178,4 +216,4 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
 
     of = g1*srmse_well + g2*rmse_q + g3*(P_kx + P_sy)
     return of
-    
+"""    

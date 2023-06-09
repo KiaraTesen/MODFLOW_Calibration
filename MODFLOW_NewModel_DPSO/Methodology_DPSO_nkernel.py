@@ -56,20 +56,24 @@ n_var_4_kx = reduce(lambda x,y: x*y, kernel_shape_4_kx) #
 n_var_4_sy = reduce(lambda x,y: x*y, kernel_shape_4_sy) #
 n_var = n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy + n_var_3_kx + n_var_3_sy + n_var_4_kx + n_var_4_sy     # Number of variables
 
-lb_1_kx, ub_1_kx = 0, 0.2               # [0.85 - 1.01]
-lb_1_sy, ub_1_sy = 0, 0.2               # [0.05 - 0.99]
-lb_2_kx, ub_2_kx = 0, 0.12
-lb_2_sy, ub_2_sy = 0, 0.1
-lb_3_kx, ub_3_kx = 0, 0.2
-lb_3_sy, ub_3_sy = 0, 0.2
-lb_4_kx, ub_4_kx = 0, 0.12
-lb_4_sy, ub_4_sy = 0, 0.1
+lb_1_kx, ub_1_kx = 0, 0.050              # [0.015 - 3.482]
+lb_1_sy, ub_1_sy = 0, 0.025               # [0.05 - 0.99]
+lb_2_kx, ub_2_kx = 0, 0.040
+lb_2_sy, ub_2_sy = 0, 0.015
+lb_3_kx, ub_3_kx = 0, 0.063
+lb_3_sy, ub_3_sy = 0, 0.053
+lb_4_kx, ub_4_kx = 0, 0.110
+lb_4_sy, ub_4_sy = 0, 0.100
 
 
-l_bounds = np.concatenate((np.around(np.repeat(lb_1_kx, n_var_1_kx),4), np.around(np.repeat(lb_1_sy, n_var_1_sy),4),                      # First and third block: Kx
-                           np.around(np.repeat(lb_2_kx, n_var_2_kx),4), np.around(np.repeat(lb_2_sy, n_var_2_sy),4)), axis = 0)           # Second and fourth block: Sy
+l_bounds = np.concatenate((np.around(np.repeat(lb_1_kx, n_var_1_kx),4), np.around(np.repeat(lb_1_sy, n_var_1_sy),4),
+                           np.around(np.repeat(lb_2_kx, n_var_2_kx),4), np.around(np.repeat(lb_2_sy, n_var_2_sy),4),
+                           np.around(np.repeat(lb_3_kx, n_var_3_kx),4), np.around(np.repeat(lb_3_sy, n_var_3_sy),4),
+                           np.around(np.repeat(lb_4_kx, n_var_4_kx),4), np.around(np.repeat(lb_4_sy, n_var_4_sy),4)), axis = 0)
 u_bounds = np.concatenate((np.around(np.repeat(ub_1_kx, n_var_1_kx),4), np.around(np.repeat(ub_1_sy, n_var_1_sy),4),                 
-                           np.around(np.repeat(ub_2_kx, n_var_2_kx),4), np.around(np.repeat(ub_2_sy, n_var_2_sy),4)), axis = 0) 
+                           np.around(np.repeat(ub_2_kx, n_var_2_kx),4), np.around(np.repeat(ub_2_sy, n_var_2_sy),4),
+                           np.around(np.repeat(ub_3_kx, n_var_3_kx),4), np.around(np.repeat(ub_3_sy, n_var_3_sy),4),                 
+                           np.around(np.repeat(ub_4_kx, n_var_4_kx),4), np.around(np.repeat(ub_4_sy, n_var_4_sy),4)), axis = 0) 
 
 #---    Initial Sampling (Latyn Hypercube)
 class Particle:
@@ -83,8 +87,10 @@ class Particle:
 sample_scaled = get_sampling_LH(n_var, n, l_bounds, u_bounds)
 pob = Particle(sample_scaled[0],np.around(np.array([0]*(n_var)),4),10000000000)
 
-y_init = Run_WEAP_MODFLOW(path_output, str(0), initial_shape_HP, HP, pob.x, n_var_1_kx, n_var_1_sy, n_var_2_kx, n_var_2_sy, n_var, kernel_shape_1_kx, kernel_shape_1_sy, 
-                          kernel_shape_2_kx, kernel_shape_2_sy, active_matriz, path_model, path_nwt_exe, path_obs_data)
+y_init = Run_WEAP_MODFLOW(path_output, str(0), initial_shape_HP, HP, pob.x, n_var_1_kx, n_var_1_sy, n_var_2_kx, n_var_2_sy, n_var_3_kx, 
+                          n_var_3_sy, n_var_4_kx, n_var_4_sy, n_var, kernel_shape_1_kx, kernel_shape_1_sy, kernel_shape_2_kx, kernel_shape_2_sy, 
+                          kernel_shape_3_kx, kernel_shape_3_sy, kernel_shape_4_kx, kernel_shape_4_sy, active_matriz, path_model, 
+                          path_nwt_exe, path_obs_data)
 pob.y = y_init
 pob.y_best = y_init
 
@@ -111,7 +117,7 @@ w_min = 0.4                                                 # minimum value for 
 w_max = 0.9                                                 # maximum value for the inertia velocity
 vMax = np.around(np.multiply(u_bounds-l_bounds,0.8),4)      # Max velocity
 vMin = -vMax                                                # Min velocity
-
+"""
 for m in range(maxiter):
     time.sleep(1)
 
@@ -142,8 +148,10 @@ for m in range(maxiter):
         pob.x[index_pMin] = l_bounds[index_pMin]
 
     #---    Evaluate the fitnness function
-    y = Run_WEAP_MODFLOW(path_output, str(m+1), initial_shape_HP, HP, pob.x, n_var_1_kx, n_var_1_sy, n_var_2_kx, n_var_2_sy, n_var, kernel_shape_1_kx, kernel_shape_1_sy, 
-                         kernel_shape_2_kx, kernel_shape_2_sy, active_matriz, path_model, path_nwt_exe, path_obs_data)
+    y = Run_WEAP_MODFLOW(path_output, str(m+1), initial_shape_HP, HP, pob.x, n_var_1_kx, n_var_1_sy, n_var_2_kx, n_var_2_sy, n_var_3_kx, 
+                         n_var_3_sy, n_var_4_kx, n_var_4_sy, n_var, kernel_shape_1_kx, kernel_shape_1_sy, kernel_shape_2_kx, kernel_shape_2_sy, 
+                         kernel_shape_3_kx, kernel_shape_3_sy, kernel_shape_4_kx, kernel_shape_4_sy, active_matriz, path_model, path_nwt_exe, 
+                         path_obs_data)
     gbest = send_request_py(IP_SERVER_ADD, y, pob.x)
     
     if y < pob.y_best:
@@ -166,3 +174,4 @@ for m in range(maxiter):
 
     #---    Update the inertia velocity
     w = w_max - m * ((w_max-w_min)/maxiter)
+"""
