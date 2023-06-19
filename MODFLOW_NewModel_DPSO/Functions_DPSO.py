@@ -159,20 +159,20 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
 
     #---    Streamflow analysis
     df_q = pd.read_csv(os.path.join(dir_iteration, f"iter_{str(iteration)}_Streamflow_gauges.csv"), skiprows = 3)
-    print(df_q)
-    df_q_obs = pd.read_csv(os.path.join(path_obs_data, 'Wells_observed.csv'), skiprows = 3)
-    print(df_q_obs)
-    mse_q = mean_squared_error(df_q['Observed'], df_q['Modeled'])
+    df_q = df_q.set_index('Statistic')
+    df_q = df_q.set_index(pd.to_datetime(df_q.index))
+    df_q = df_q.iloc[36:,:]
+
+    df_q_obs = get_data(os.path.join(path_obs_data, 'StreamflowGauges_KPR_vf.csv'), 2)
+    
+    mse_q = mean_squared_error(df_q_obs['Observed'], df_q['Modeled'])
     rmse_q = math.sqrt(mse_q)
     print(rmse_q)
-    mse_q_corr = mean_squared_error(df_q_obs['Observed'], df_q['Modeled'])
-    rmse_q_corr = math.sqrt(mse_q_corr)
-    print(rmse_q_corr)
 
     #---    Subject to
     kx_min = 0.280
     kx_max = 67.056
-    sy_min = 0.0074
+    sy_min = 0.01
     sy_max = 0.1282
 
     for i in HP:
