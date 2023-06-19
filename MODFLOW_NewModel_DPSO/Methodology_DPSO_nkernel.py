@@ -36,10 +36,10 @@ kernel_shape_1_kx = (7,7)
 kernel_shape_1_sy = (7,7)
 kernel_shape_2_kx = (5,5)
 kernel_shape_2_sy = (5,5)
-kernel_shape_3_kx = (4,4) #
-kernel_shape_3_sy = (4,4) #
-kernel_shape_4_kx = (3,3) #
-kernel_shape_4_sy = (3,3) #
+kernel_shape_3_kx = (7,7) #
+kernel_shape_3_sy = (7,7) #
+kernel_shape_4_kx = (5,5) #
+kernel_shape_4_sy = (5,5) #
 
 n_var_1_kx = reduce(lambda x,y: x*y, kernel_shape_1_kx)
 n_var_1_sy = reduce(lambda x,y: x*y, kernel_shape_1_sy)
