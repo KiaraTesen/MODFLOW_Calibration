@@ -77,7 +77,7 @@ def get_evaluate_st_bounds(min_v, max_v, vector_modif):
 
 def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled, n_var_1_kx, n_var_1_sy, n_var_2_kx, n_var_2_sy, n_var_3_kx, 
                      n_var_3_sy, n_var_4_kx, n_var_4_sy, n_var, kernel_shape_1_kx, kernel_shape_1_sy, kernel_shape_2_kx, kernel_shape_2_sy, 
-                     kernel_shape_3_kx, kernel_shape_3_sy, kernel_shape_4_kx, kernel_shape_4_sy, active_matriz, path_model, path_nwt_exe, 
+                     kernel_shape_3_kx, kernel_shape_3_sy, kernel_shape_4_kx, kernel_shape_4_sy, active_matriz, path_init_model, path_model, path_nwt_exe, 
                      path_obs_data):
     dir_iteration = os.path.join(path_output, "iter_" + str(iteration))
     if not os.path.isdir(dir_iteration):
@@ -130,6 +130,8 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
         kernel_4_sy = sample_scaled[int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy + n_var_3_kx + n_var_3_sy + n_var_4_kx):n_var].reshape(kernel_shape_4_sy)
 
         globals()["matriz_" + str(m)] = get_HP(shape_k3_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_4_" + str(m)])
+        get_image_matriz(globals()["matriz_" + str(m)], str(m), os.path.join(dir_iteration, 'Final_' + str(m) +'.png'))
+        plt.clf()
         globals()["vector_" + str(m)] = globals()["matriz_" + str(m)].flatten()
         new_shape_HP[m] = globals()["vector_" + str(m)]
 
@@ -139,12 +141,4 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
     new_shape_HP['kz'] = matriz_kz.flatten()
     new_shape_HP['ss'] = matriz_ss.flatten()
     new_shape_HP.to_file(os.path.join(dir_iteration, 'Elements_iter_' + str(iteration) + '.shp'))
-
-    #---    Generate new native files
-    model = fpm.Modflow.load(path_model + '/SyntheticAquifer_NY.nam', version = 'mfnwt', exe_name = path_nwt_exe)
-    model.write_input()
-    model.remove_package("UPW")
-    upw = fpm.ModflowUpw(model = model, laytyp=1, layavg=0, chani=-1.0, layvka=0, laywet=0, hdry=-888, iphdry=1, hk=matriz_kx, hani=1.0, vka=matriz_kz, ss=matriz_ss, sy=matriz_sy, extension='upw')
-    upw.write_file()
-    model.run_model()
     
