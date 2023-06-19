@@ -64,7 +64,7 @@ def get_evaluate_st_bounds(min_v, max_v, vector_modif):
     return P_min + P_max
 
 def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled, n_var_1_kx, n_var_1_sy, n_var_2_kx, n_var_2_sy, n_var, kernel_shape_1_kx, kernel_shape_1_sy, 
-                     kernel_shape_2_kx, kernel_shape_2_sy, active_matriz, path_model, path_nwt_exe, path_obs_data):
+                     kernel_shape_2_kx, kernel_shape_2_sy, active_matriz, path_init_model, path_model, path_nwt_exe, path_obs_data):
     dir_iteration = os.path.join(path_output, "iter_" + str(iteration))
     if not os.path.isdir(dir_iteration):
         os.mkdir(dir_iteration)
@@ -103,7 +103,7 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
     new_shape_HP.to_file(os.path.join(dir_iteration, 'Elements_iter_' + str(iteration) + '.shp'))
     
     #---    Generate new native files
-    model = fpm.Modflow.load(path_model + '/SyntheticAquifer_NY.nam', version = 'mfnwt', exe_name = path_nwt_exe)
+    model = fpm.Modflow.load(path_init_model + '/SyntheticAquifer_NY.nam', version = 'mfnwt', exe_name = path_nwt_exe)
     model.write_input()
     model.remove_package("UPW")
     upw = fpm.ModflowUpw(model = model, laytyp=1, layavg=0, chani=-1.0, layvka=0, laywet=0, hdry=-888, iphdry=1, hk=matriz_kx, hani=1.0, vka=matriz_kz, ss=matriz_ss, sy=matriz_sy, extension='upw')
@@ -149,6 +149,7 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
     ow = obs_well.columns
 
     sim_well = get_data(os.path.join(dir_iteration, f"iter_{str(iteration)}_Wells_simulation.csv"), 3)
+    print(sim_well)
 
     srmse_well = 0
     for i in ow:
@@ -158,8 +159,15 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
 
     #---    Streamflow analysis
     df_q = pd.read_csv(os.path.join(dir_iteration, f"iter_{str(iteration)}_Streamflow_gauges.csv"), skiprows = 3)
+    print(df_q)
+    df_q_obs = pd.read_csv(os.path.join(path_obs_data, 'Wells_observed.csv'), skiprows = 3)
+    print(df_q_obs)
     mse_q = mean_squared_error(df_q['Observed'], df_q['Modeled'])
     rmse_q = math.sqrt(mse_q)
+    print(rmse_q)
+    mse_q_corr = mean_squared_error(df_q_obs['Observed'], df_q['Modeled'])
+    rmse_q_corr = math.sqrt(mse_q_corr)
+    print(rmse_q_corr)
 
     #---    Subject to
     kx_min = 0.280

@@ -19,6 +19,7 @@ IP_SERVER_ADD = sys.argv[1]
 #---    Paths
 path_WEAP = r'C:\Users\vagrant\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
 path_model = os.path.join(path_WEAP, 'MODFLOW_model')
+path_init_model = r'C:\Users\aimee\OneDrive\Escritorio\GitHub\MODFLOW_Calibration\data\MODFLOW_model\MODFLOW_model_vinit'
 path_nwt_exe = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\MODFLOW-NWT_1.2.0\bin\MODFLOW-NWT_64.exe'
 path_GIS = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\GIS'    
 path_output = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\MODFLOW_NewModel_DPSO\output'         # Need full path for WEAP Export
@@ -71,7 +72,7 @@ sample_scaled = get_sampling_LH(n_var, n, l_bounds, u_bounds)
 pob = Particle(sample_scaled[0],np.around(np.array([0]*(n_var)),4),10000000000)
 
 y_init = Run_WEAP_MODFLOW(path_output, str(0), initial_shape_HP, HP, pob.x, n_var_1_kx, n_var_1_sy, n_var_2_kx, n_var_2_sy, n_var, kernel_shape_1_kx, kernel_shape_1_sy, 
-                          kernel_shape_2_kx, kernel_shape_2_sy, active_matriz, path_model, path_nwt_exe, path_obs_data)
+                          kernel_shape_2_kx, kernel_shape_2_sy, active_matriz, path_init_model, path_model, path_nwt_exe, path_obs_data)
 pob.y = y_init
 pob.y_best = y_init
 
@@ -89,7 +90,7 @@ file_object.write(f"{'Gbest: ', gbest}\n")
 file_object.close()
 
 #---    PSO
-maxiter = 40
+maxiter = 1
 
 α = 0.8                                                    # Cognitive scaling parameter  # 0.8 # 1.49
 β = 0.8                                                    # Social scaling parameter     # 0.8 # 1.49
@@ -130,7 +131,7 @@ for m in range(maxiter):
 
     #---    Evaluate the fitnness function
     y = Run_WEAP_MODFLOW(path_output, str(m+1), initial_shape_HP, HP, pob.x, n_var_1_kx, n_var_1_sy, n_var_2_kx, n_var_2_sy, n_var, kernel_shape_1_kx, kernel_shape_1_sy, 
-                         kernel_shape_2_kx, kernel_shape_2_sy, active_matriz, path_model, path_nwt_exe, path_obs_data)
+                         kernel_shape_2_kx, kernel_shape_2_sy, active_matriz, path_init_model, path_model, path_nwt_exe, path_obs_data)
     gbest = send_request_py(IP_SERVER_ADD, y, pob.x)
     
     if y < pob.y_best:
