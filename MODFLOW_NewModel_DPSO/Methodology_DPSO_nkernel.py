@@ -94,7 +94,7 @@ y_init = Run_WEAP_MODFLOW(path_output, str(0), initial_shape_HP, HP, pob.x, n_va
 pob.y = y_init
 pob.y_best = y_init
 
-gbest = send_request_py(IP_SERVER_ADD, y_init, pob.x)           # Update global particle
+#gbest = send_request_py(IP_SERVER_ADD, y_init, pob.x)           # Update global particle
 
 #---    Save objective function value
 file_object = open("log_iteration.txt", 'a')
@@ -104,74 +104,4 @@ file_object.write(f"{'Pob.y: ', pob.y}\n")
 file_object.write(f"{'Pob.v: ', pob.v}\n")
 file_object.write(f"{'Pob.x_best: ', pob.x_best}\n")
 file_object.write(f"{'Pob.y_best: ', pob.y_best}\n")
-file_object.write(f"{'Gbest: ', gbest}\n")
 file_object.close()
-
-#---    PSO
-maxiter = 20
-
-α = 1.49                                                    # Cognitive scaling parameter
-β = 1.49                                                    # Social scaling parameter
-w = 0.5                                                     # inertia velocity
-w_min = 0.4                                                 # minimum value for the inertia velocity
-w_max = 0.9                                                 # maximum value for the inertia velocity
-vMax = np.around(np.multiply(u_bounds-l_bounds,0.8),4)      # Max velocity
-vMin = -vMax                                                # Min velocity
-"""
-for m in range(maxiter):
-    time.sleep(1)
-
-    #---    Update particle velocity
-    ϵ1,ϵ2 = np.around(np.random.uniform(),4), np.around(np.random.uniform(),4)            # [0, 1]
-
-    pob.v = np.around(np.around(w*pob.v,4) + np.around(α*ϵ1*(pob.x_best - pob.x),4) + np.around(β*ϵ2*(gbest - pob.x),4),4)
-
-    #---    Adjust particle velocity
-    index_vMax = np.where(pob.v > vMax)
-    index_vMin = np.where(pob.v < vMin)
-
-    if np.array(index_vMax).size > 0:
-        pob.v[index_vMax] = vMax[index_vMax]
-    if np.array(index_vMin).size > 0:
-        pob.v[index_vMin] = vMin[index_vMin]
-
-    #---    Update particle position
-    pob.x += pob.v
-
-    #---    Adjust particle position
-    index_pMax = np.where(pob.x > u_bounds)
-    index_pMin = np.where(pob.x < l_bounds)
-
-    if np.array(index_pMax).size > 0:
-        pob.x[index_pMax] = u_bounds[index_pMax]
-    if np.array(index_pMin).size > 0:
-        pob.x[index_pMin] = l_bounds[index_pMin]
-
-    #---    Evaluate the fitnness function
-    y = Run_WEAP_MODFLOW(path_output, str(m+1), initial_shape_HP, HP, pob.x, n_var_1_kx, n_var_1_sy, n_var_2_kx, n_var_2_sy, n_var_3_kx, 
-                         n_var_3_sy, n_var_4_kx, n_var_4_sy, n_var, kernel_shape_1_kx, kernel_shape_1_sy, kernel_shape_2_kx, kernel_shape_2_sy, 
-                         kernel_shape_3_kx, kernel_shape_3_sy, kernel_shape_4_kx, kernel_shape_4_sy, active_matriz, path_model, path_nwt_exe, 
-                         path_obs_data)
-    gbest = send_request_py(IP_SERVER_ADD, y, pob.x)
-    
-    if y < pob.y_best:
-        pob.x_best = np.copy(pob.x)
-        pob.y_best = y
-        pob.y = y
-    else:
-        pob.y = y
-
-    #---    Save objective function value
-    file_object = open("log_iteration.txt", 'a')
-    file_object.write(f"{'Iteracion: ', str(m+1)}\n")
-    file_object.write(f"{'Pob.x: ', pob.x}\n")
-    file_object.write(f"{'Pob.y: ', pob.y}\n")
-    file_object.write(f"{'Pob.v: ', pob.v}\n")
-    file_object.write(f"{'Pob.x_best: ', pob.x_best}\n")
-    file_object.write(f"{'Pob.y_best: ', pob.y_best}\n")
-    file_object.write(f"{'Gbest: ', gbest}\n")
-    file_object.close()
-
-    #---    Update the inertia velocity
-    w = w_max - m * ((w_max-w_min)/maxiter)
-"""
