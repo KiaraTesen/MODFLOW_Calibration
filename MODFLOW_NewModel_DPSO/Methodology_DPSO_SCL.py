@@ -14,7 +14,7 @@ from request_server.request_server import send_request_py
 import warnings
 warnings.filterwarnings('ignore')
 
-IP_SERVER_ADD = sys.argv[1]
+#IP_SERVER_ADD = sys.argv[1]
 
 #---    Paths
 path_WEAP = r'C:\Users\vagrant\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
@@ -66,7 +66,7 @@ print(initial_shape_HP)
 y_init = Run_WEAP_MODFLOW(path_output, str(0), initial_shape_HP, HP, pob.x, path_init_model, path_model, path_nwt_exe, path_obs_data)
 pob.y = y_init
 pob.y_best = y_init
-
+"""
 gbest = send_request_py(IP_SERVER_ADD, y_init, pob.x)           # Update global particle
 
 #---    Save objective function value
@@ -144,3 +144,4 @@ for m in range(maxiter):
 
     #---    Update the inertia velocity
     w = w_max - m * ((w_max-w_min)/maxiter)
+    """
