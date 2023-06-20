@@ -66,6 +66,8 @@ print(initial_shape_HP)
 y_init = Run_WEAP_MODFLOW(path_output, str(0), initial_shape_HP, HP, active_cells, pob.x, path_init_model, path_model, path_nwt_exe, path_obs_data)
 pob.y = y_init
 pob.y_best = y_init
+
+print(initial_shape_HP)
 """
 gbest = send_request_py(IP_SERVER_ADD, y_init, pob.x)           # Update global particle
 
