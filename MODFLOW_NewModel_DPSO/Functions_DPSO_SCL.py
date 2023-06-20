@@ -100,7 +100,7 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
     new_shape_HP['ss'] = matriz_ss.flatten()
     print(new_shape_HP)
     
-    #new_shape_HP.to_file(os.path.join(dir_iteration, 'Elements_iter_' + str(iteration) + '.shp'))
+    new_shape_HP.to_file(os.path.join(dir_iteration, 'Elements_iter_' + str(iteration) + '.shp'))
     
     #---    Generate new native files
     #model = fpm.Modflow.load(path_init_model + '/SyntheticAquifer_NY.nam', version = 'mfnwt', exe_name = path_nwt_exe)
