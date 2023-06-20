@@ -14,7 +14,7 @@ from request_server.request_server import send_request_py
 import warnings
 warnings.filterwarnings('ignore')
 
-#IP_SERVER_ADD = sys.argv[1]
+IP_SERVER_ADD = sys.argv[1]
 
 #---    Paths
 path_WEAP = r'C:\Users\vagrant\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
@@ -39,10 +39,8 @@ active_matriz = initial_shape_HP['Active'].to_numpy().reshape((84,185))         
 
 n = 1                                                           # Population size
 
-#lb_kx, ub_kx = 0.2800, 67.0560
-#lb_sy, ub_sy = 0.0100, 0.1282
-lb_kx, ub_kx = 0.01, 3.5 #19.26
-lb_sy, ub_sy = 0.0695, 0.99 #0.13
+lb_kx, ub_kx = 0.01, 3.5       #19.26      #lb_kx, ub_kx = 0.2800, 67.0560
+lb_sy, ub_sy = 0.077, 0.99     #0.13       #lb_sy, ub_sy = 0.0100, 0.1282
 
 active_cells = 7536
 
@@ -61,14 +59,10 @@ class Particle:
 sample_scaled = get_sampling_LH(active_cells * 2, n, l_bounds, u_bounds)
 pob = Particle(sample_scaled[0],np.around(np.array([0]*(active_cells)),4),10000000000)
 
-print(initial_shape_HP)
-
 y_init = Run_WEAP_MODFLOW(path_output, str(0), initial_shape_HP, HP, active_cells, pob.x, path_init_model, path_model, path_nwt_exe, path_obs_data)
 pob.y = y_init
 pob.y_best = y_init
 
-print(initial_shape_HP)
-"""
 gbest = send_request_py(IP_SERVER_ADD, y_init, pob.x)           # Update global particle
 
 #---    Save objective function value
@@ -146,4 +140,3 @@ for m in range(maxiter):
 
     #---    Update the inertia velocity
     w = w_max - m * ((w_max-w_min)/maxiter)
-    """
