@@ -70,7 +70,7 @@ def get_evaluate_st_bounds(min_v, max_v, vector_modif):
         P_max = 0
     return P_min + P_max
 
-def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled, path_init_model, path_model, path_nwt_exe, path_obs_data):
+def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells, sample_scaled, path_init_model, path_model, path_nwt_exe, path_obs_data):
     dir_iteration = os.path.join(path_output, "iter_" + str(iteration))
     if not os.path.isdir(dir_iteration):
         os.mkdir(dir_iteration)

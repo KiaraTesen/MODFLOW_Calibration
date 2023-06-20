@@ -63,7 +63,7 @@ pob = Particle(sample_scaled[0],np.around(np.array([0]*(active_cells)),4),100000
 
 print(initial_shape_HP)
 
-y_init = Run_WEAP_MODFLOW(path_output, str(0), initial_shape_HP, HP, pob.x, path_init_model, path_model, path_nwt_exe, path_obs_data)
+y_init = Run_WEAP_MODFLOW(path_output, str(0), initial_shape_HP, HP, active_cells, pob.x, path_init_model, path_model, path_nwt_exe, path_obs_data)
 pob.y = y_init
 pob.y_best = y_init
 """
@@ -121,7 +121,7 @@ for m in range(maxiter):
         pob.x[index_pMin] = l_bounds[index_pMin]
 
     #---    Evaluate the fitnness function
-    y = Run_WEAP_MODFLOW(path_output, str(m+1), initial_shape_HP, HP, pob.x, path_init_model, path_model, path_nwt_exe, path_obs_data)
+    y = Run_WEAP_MODFLOW(path_output, str(m+1), initial_shape_HP, HP, active_cells, pob.x, path_init_model, path_model, path_nwt_exe, path_obs_data)
     gbest = send_request_py(IP_SERVER_ADD, y, pob.x)
     
     if y < pob.y_best:
