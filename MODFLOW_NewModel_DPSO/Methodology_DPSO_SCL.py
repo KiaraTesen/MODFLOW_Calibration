@@ -21,7 +21,7 @@ path_WEAP = r'C:\Users\vagrant\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW
 path_model = os.path.join(path_WEAP, 'MODFLOW_model')
 path_init_model = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\MODFLOW_model\MODFLOW_model_vinit'
 path_nwt_exe = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\MODFLOW-NWT_1.2.0\bin\MODFLOW-NWT_64.exe'
-#path_GIS = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\GIS'    
+path_GIS = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\GIS'    
 path_output = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\MODFLOW_NewModel_DPSO\output'         # Need full path for WEAP Export
 path_obs_data = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\ObservedData'
 
