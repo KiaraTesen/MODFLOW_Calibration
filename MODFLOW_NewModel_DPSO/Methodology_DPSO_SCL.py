@@ -57,7 +57,7 @@ class Particle:
         self.y_best = y
 
 sample_scaled = get_sampling_LH(active_cells * 2, n, l_bounds, u_bounds)
-pob = Particle(sample_scaled[0],np.around(np.array([0]*(active_cells)),4),10000000000)
+pob = Particle(sample_scaled[0],np.around(np.array([0]*(active_cells*2)),4),10000000000)
 
 y_init = Run_WEAP_MODFLOW(path_output, str(0), initial_shape_HP, HP, active_cells, pob.x, path_init_model, path_model, path_nwt_exe, path_obs_data)
 pob.y = y_init
@@ -77,7 +77,7 @@ file_object.write(f"{'Gbest: ', gbest}\n")
 file_object.close()
 
 #---    PSO
-maxiter = 40
+maxiter = 2
 
 α = 0.8                                                    # Cognitive scaling parameter  # 0.8 # 1.49
 β = 0.8                                                    # Social scaling parameter     # 0.8 # 1.49
