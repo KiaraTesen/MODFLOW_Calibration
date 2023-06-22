@@ -34,7 +34,6 @@ with open('log_iteration.txt') as f:
 #---    Initial matriz
 HP = ['kx', 'sy'] 
 initial_shape_HP = gpd.read_file(path_GIS + '/Elements_initial_unique_value.shp')
-#print(initial_shape_HP)
 active_matriz = initial_shape_HP['Active'].to_numpy().reshape((84,185))             # Matrix of zeros and ones that allows maintaining active area
 
 n = 1                                                           # Population size
@@ -73,11 +72,10 @@ file_object.write(f"{'Pob.y: ', pob.y}\n")
 file_object.write(f"{'Pob.v: ', pob.v}\n")
 file_object.write(f"{'Pob.x_best: ', pob.x_best}\n")
 file_object.write(f"{'Pob.y_best: ', pob.y_best}\n")
-file_object.write(f"{'Gbest: ', gbest}\n")
 file_object.close()
 
 #---    PSO
-maxiter = 2
+maxiter = 200
 
 α = 0.8                                                    # Cognitive scaling parameter  # 0.8 # 1.49
 β = 0.8                                                    # Social scaling parameter     # 0.8 # 1.49
@@ -135,7 +133,6 @@ for m in range(maxiter):
     file_object.write(f"{'Pob.v: ', pob.v}\n")
     file_object.write(f"{'Pob.x_best: ', pob.x_best}\n")
     file_object.write(f"{'Pob.y_best: ', pob.y_best}\n")
-    file_object.write(f"{'Gbest: ', gbest}\n")
     file_object.close()
 
     #---    Update the inertia velocity
