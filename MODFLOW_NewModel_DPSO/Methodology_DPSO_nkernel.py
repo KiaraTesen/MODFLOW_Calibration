@@ -34,7 +34,7 @@ n = 1                                                           # Population siz
 
 k_shape_1 = (20,20)
 k_shape_2 = (5,5)
-K_shape_3 = (10,10)
+k_shape_3 = (10,10)
 k_shape_4 = (5,5)
 k_shape_5 = (10,10)
 
