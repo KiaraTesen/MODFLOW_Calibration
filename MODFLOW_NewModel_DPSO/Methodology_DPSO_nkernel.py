@@ -32,7 +32,7 @@ active_matriz = initial_shape_HP['Active'].to_numpy().reshape((84,185))         
 
 n = 1                                                           # Population size
 
-k_shape_1 = (10,10)
+k_shape_1 = (40,40)
 k_shape_2 = (5,5)
 k_shape_3 = (10,10)
 k_shape_4 = (5,5)
@@ -47,7 +47,7 @@ n_var = 2 * (n_var_1 + n_var_2 + n_var_3 + n_var_4 + n_var_5)    # Number of var
 print (n_var)
 
 lb_kx, lb_sy = 0, 0
-ub_1_kx, ub_2_kx, ub_3_kx, ub_4_kx, ub_5_kx = 0.040, 0.060, 0.040, 0.060, 0.040
+ub_1_kx, ub_2_kx, ub_3_kx, ub_4_kx, ub_5_kx = 0.005, 0.060, 0.040, 0.060, 0.040
 ub_1_sy, ub_2_sy, ub_3_sy, ub_4_sy, ub_5_sy = 0.025, 0.015, 0.050, 0.040, 0.040
 
 l_bounds = np.concatenate((np.around(np.repeat(lb_kx, n_var_1),4), np.around(np.repeat(lb_sy, n_var_1),4), np.around(np.repeat(lb_kx, n_var_2),4), 
