@@ -75,9 +75,8 @@ def get_evaluate_st_bounds(min_v, max_v, vector_modif):
         P_max = 0
     return P_min + P_max
 
-def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled, n_var_1_kx, n_var_1_sy, n_var_2_kx, n_var_2_sy, n_var_3_kx, 
-                     n_var_3_sy, n_var_4_kx, n_var_4_sy, n_var_5_kx, n_var_5_sy, n_var, kernel_shape_1_kx, kernel_shape_1_sy, kernel_shape_2_kx, kernel_shape_2_sy, 
-                     kernel_shape_3_kx, kernel_shape_3_sy, kernel_shape_4_kx, kernel_shape_4_sy, kernel_shape_5_kx, kernel_shape_5_sy, active_matriz, path_init_model, path_model, path_nwt_exe, 
+def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled, n_var_1, n_var_2, n_var_3, n_var_4, n_var_5, n_var, 
+                     k_shape_1, k_shape_2, k_shape_3, k_shape_4, k_shape_5, active_matriz, path_init_model, path_model, path_nwt_exe, 
                      path_obs_data):
     dir_iteration = os.path.join(path_output, "iter_" + str(iteration))
     if not os.path.isdir(dir_iteration):
@@ -96,9 +95,10 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
     for m in HP:
         decimals_kx = 4
         decimals_sy = 4
+
         # First kernel
-        kernel_1_kx = sample_scaled[:int(n_var_1_kx)].reshape(kernel_shape_1_kx)
-        kernel_1_sy = sample_scaled[int(n_var_1_kx):int(n_var_1_kx + n_var_1_sy)].reshape(kernel_shape_1_sy)
+        kernel_1_kx = sample_scaled[:int(n_var_1)].reshape(k_shape_1)
+        kernel_1_sy = sample_scaled[int(n_var_1):int(2 * n_var_1)].reshape(k_shape_1)
         
         globals()["matriz_1_" + str(m)] = get_HP(initial_shape_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_1_" + str(m)])
         get_image_matriz(globals()["matriz_1_" + str(m)], str(m), os.path.join(dir_iteration, '1_' + str(m) +'.png'))
@@ -107,8 +107,8 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
         shape_k1_HP[m] = globals()["vector_1_" + str(m)]
 
         # Second kernel
-        kernel_2_kx = sample_scaled[int(n_var_1_kx + n_var_1_sy):int(n_var_1_kx + n_var_1_sy + n_var_2_kx)].reshape(kernel_shape_2_kx)
-        kernel_2_sy = sample_scaled[int(n_var_1_kx + n_var_1_sy + n_var_2_kx):int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy)].reshape(kernel_shape_2_sy)
+        kernel_2_kx = sample_scaled[int(2 * n_var_1):int(2 * n_var_1 + n_var_2)].reshape(k_shape_2)
+        kernel_2_sy = sample_scaled[int(2 * n_var_1 + n_var_2):int(2 * (n_var_1 + n_var_2))].reshape(k_shape_2)
 
         globals()["matriz_2_" + str(m)] = get_HP(shape_k1_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_2_" + str(m)])
         get_image_matriz(globals()["matriz_2_" + str(m)], str(m), os.path.join(dir_iteration, '2_' + str(m) +'.png'))
@@ -117,8 +117,8 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
         shape_k2_HP[m] = globals()["vector_2_" + str(m)]
 
         # Third kernel
-        kernel_3_kx = sample_scaled[int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy):int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy + n_var_3_kx)].reshape(kernel_shape_3_kx)
-        kernel_3_sy = sample_scaled[int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy + n_var_3_kx):int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy + n_var_3_kx + n_var_3_sy)].reshape(kernel_shape_3_sy)
+        kernel_3_kx = sample_scaled[int(2 * (n_var_1 + n_var_2)):int(2 * (n_var_1 + n_var_2) + n_var_3)].reshape(k_shape_3)
+        kernel_3_sy = sample_scaled[int(2 * (n_var_1 + n_var_2) + n_var_3):int(2 * (n_var_1 + n_var_2 + n_var_3))].reshape(k_shape_3)
 
         globals()["matriz_3_" + str(m)] = get_HP(shape_k2_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_3_" + str(m)])
         get_image_matriz(globals()["matriz_3_" + str(m)], str(m), os.path.join(dir_iteration, '3_' + str(m) +'.png'))
@@ -127,8 +127,8 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
         shape_k3_HP[m] = globals()["vector_3_" + str(m)]
 
         # Fourth kernel
-        kernel_4_kx = sample_scaled[int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy + n_var_3_kx + n_var_3_sy):int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy + n_var_3_kx + n_var_3_sy + n_var_4_kx)].reshape(kernel_shape_4_kx)
-        kernel_4_sy = sample_scaled[int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy + n_var_3_kx + n_var_3_sy + n_var_4_kx):int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy + n_var_3_kx + n_var_3_sy + n_var_4_kx + n_var_4_sy)].reshape(kernel_shape_4_sy)
+        kernel_4_kx = sample_scaled[int(2 * (n_var_1 + n_var_2 + n_var_3)):int(2 * (n_var_1 + n_var_2 + n_var_3) + n_var_4)].reshape(k_shape_4)
+        kernel_4_sy = sample_scaled[int(2 * (n_var_1 + n_var_2 + n_var_3) + n_var_4):int(2 * (n_var_1 + n_var_2 + n_var_3 + n_var_4))].reshape(k_shape_4)
 
         globals()["matriz_4_" + str(m)] = get_HP(shape_k3_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_4_" + str(m)])
         get_image_matriz(globals()["matriz_4_" + str(m)], str(m), os.path.join(dir_iteration, '4_' + str(m) +'.png'))
@@ -137,8 +137,8 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
         shape_k4_HP[m] = globals()["vector_4_" + str(m)]        
 
         #Fifth kernel
-        kernel_5_kx = sample_scaled[int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy + n_var_3_kx + n_var_3_sy + n_var_4_kx + n_var_4_sy):int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy + n_var_3_kx + n_var_3_sy + n_var_4_kx + n_var_4_sy + n_var_5_kx)].reshape(kernel_shape_5_kx)
-        kernel_5_sy = sample_scaled[int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy + n_var_3_kx + n_var_3_sy + n_var_4_kx + n_var_4_sy + n_var_5_kx):n_var].reshape(kernel_shape_5_sy)
+        kernel_5_kx = sample_scaled[int(2 * (n_var_1 + n_var_2 + n_var_3 + n_var_4)):int(2 * (n_var_1 + n_var_2 + n_var_3 + n_var_4) + n_var_5)].reshape(k_shape_5)
+        kernel_5_sy = sample_scaled[int(2 * (n_var_1 + n_var_2 + n_var_3 + n_var_4) + n_var_5):n_var].reshape(k_shape_5)
 
         globals()["matriz_" + str(m)] = get_HP(shape_k4_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_5_" + str(m)])
         get_image_matriz(globals()["matriz_" + str(m)], str(m), os.path.join(dir_iteration, 'Final_' + str(m) +'.png'))
