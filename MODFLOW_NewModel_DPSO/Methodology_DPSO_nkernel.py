@@ -32,11 +32,11 @@ active_matriz = initial_shape_HP['Active'].to_numpy().reshape((84,185))         
 
 n = 1                                                           # Population size
 
-k_shape_1 = (30,30)
-k_shape_2 = (5,5)
+k_shape_1 = (40,40)
+k_shape_2 = (7,7)
 k_shape_3 = (10,10)
 k_shape_4 = (5,5)
-k_shape_5 = (10,10)
+k_shape_5 = (3,3)
 
 n_var_1 = reduce(lambda x,y: x*y, k_shape_1)
 n_var_2 = reduce(lambda x,y: x*y, k_shape_2)
