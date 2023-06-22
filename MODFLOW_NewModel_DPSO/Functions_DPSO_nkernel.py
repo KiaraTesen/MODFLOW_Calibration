@@ -134,7 +134,7 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
         get_image_matriz(globals()["matriz_4_" + str(m)], str(m), os.path.join(dir_iteration, '4_' + str(m) +'.png'))
         plt.clf()
         globals()["vector_4_" + str(m)] = globals()["matriz_4_" + str(m)].flatten()
-        shape_k3_HP[m] = globals()["vector_4_" + str(m)]        
+        shape_k4_HP[m] = globals()["vector_4_" + str(m)]        
 
         #Fifth kernel
         kernel_5_kx = sample_scaled[int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy + n_var_3_kx + n_var_3_sy + n_var_4_kx + n_var_4_sy):int(n_var_1_kx + n_var_1_sy + n_var_2_kx + n_var_2_sy + n_var_3_kx + n_var_3_sy + n_var_4_kx + n_var_4_sy + n_var_5_kx)].reshape(kernel_shape_5_kx)

@@ -43,6 +43,28 @@ kernel_shape_4_sy = (5,5) #
 kernel_shape_5_kx = (10,10) #
 kernel_shape_5_sy = (10,10) #
 
+"""
+k_shape_1 = (10,10)
+k_shape_2 = (5,5)
+K_shape_3 = (10,10)
+k_shape_4 = (5,5)
+k_shape_5 = (10,10)
+
+n_var_1 = reduce(lambda x,y: x*y, k_shape_1)
+n_var_2 = reduce(lambda x,y: x*y, k_shape_2)
+n_var_3 = reduce(lambda x,y: x*y, k_shape_3)
+n_var_4 = reduce(lambda x,y: x*y, k_shape_4)
+n_var_5 = reduce(lambda x,y: x*y, k_shape_5)
+n_var = 2 * (n_var_1 + n_var_2 + n_var_3 + n_var_4 + n_var_5)    # Number of variables
+print (n_var)
+
+lb_kx, lb_sy = 0, 0
+ub_1_kx, ub_2_kx, ub_3_kx, ub_4_kx, ub_5_kx = 0.050, 0.025, 0.040, 0.040, 0.040
+ub_1_sy, ub_2_sy, ub_3_sy, ub_4_sy, ub_5_sy = 0.025, 0.015, 0.050, 0.040, 0.040
+
+
+"""
+
 n_var_1_kx = reduce(lambda x,y: x*y, kernel_shape_1_kx)
 n_var_1_sy = reduce(lambda x,y: x*y, kernel_shape_1_sy)
 n_var_2_kx = reduce(lambda x,y: x*y, kernel_shape_2_kx)
