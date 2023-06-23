@@ -163,6 +163,7 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
     rmse_q = math.sqrt(mse_q)
     print(rmse_q)
 
+    """
     #---    Subject to
     kx_min = 0.280
     kx_max = 67.056
@@ -172,11 +173,13 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
     for i in HP:
         globals()["vector_modif_" + str(i)] = get_eliminate_zeros(globals()["vector_" + str(i)].tolist())
         globals()["P_" + str(i)] = get_evaluate_st_bounds((locals()[str(i) + "_min"]), (locals()[str(i) + "_max"]), globals()["vector_modif_" + str(i)])
-
+    """
     #---    Total Objective Function
-    g1 = 0.4
-    g2 = 0.2
-    g3 = 0.4
+    #---    There are 31 observation wells and 1 streamflow gauge (32 monitoring elements. If each of them has the same weighting factor: 1/32 = 0.03125 (3.125%))
+    g1 = 0.03125
+    g2 = 0.03125
+    #g3 = 0.4
 
-    of = g1*srmse_well + g2*rmse_q + g3*(P_kx + P_sy)
+    #of = g1*srmse_well + g2*rmse_q + g3*(P_kx + P_sy)
+    of = g1*srmse_well + g2*rmse_q
     return of

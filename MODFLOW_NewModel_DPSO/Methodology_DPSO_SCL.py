@@ -38,8 +38,8 @@ active_matriz = initial_shape_HP['Active'].to_numpy().reshape((84,185))         
 
 n = 1                                                           # Population size
 
-lb_kx, ub_kx = 0.01, 3.5       #19.26      #lb_kx, ub_kx = 0.2800, 67.0560
-lb_sy, ub_sy = 0.077, 0.99     #0.13       #lb_sy, ub_sy = 0.0100, 0.1282
+lb_kx, ub_kx = 0.0145, 3.4817      #19.26      #lb_kx, ub_kx = 0.2800, 67.0560
+lb_sy, ub_sy = 0.0770, 0.9862      #0.13       #lb_sy, ub_sy = 0.0100, 0.1282
 
 active_cells = 7536
 
@@ -75,7 +75,7 @@ file_object.write(f"{'Pob.y_best: ', pob.y_best}\n")
 file_object.close()
 
 #---    PSO
-maxiter = 50
+maxiter = 200
 
 α = 0.8                                                    # Cognitive scaling parameter  # 0.8 # 1.49
 β = 0.8                                                    # Social scaling parameter     # 0.8 # 1.49
