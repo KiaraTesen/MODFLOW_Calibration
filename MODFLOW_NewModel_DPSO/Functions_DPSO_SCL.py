@@ -176,8 +176,8 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
     """
     #---    Total Objective Function
     #---    There are 31 observation wells and 1 streamflow gauge (32 monitoring elements. If each of them has the same weighting factor: 1/32 = 0.03125 (3.125%))
-    g1 = 0.03125
-    g2 = 0.03125
+    g1 = 0.4
+    g2 = 0.2
     #g3 = 0.4
 
     #of = g1*srmse_well + g2*rmse_q + g3*(P_kx + P_sy)

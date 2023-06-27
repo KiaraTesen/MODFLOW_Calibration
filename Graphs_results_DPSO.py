@@ -7,8 +7,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 path_results_DPSO = 'results_DPSO'
-experiment = ['P1', 'P2']
-machines = range(3,23)
+experiment = ['P6-SCL']
+machines = list(range(2,10)) + list(range(11,22))
+print(machines)
 
 df = pd.DataFrame()
 df_log = pd.DataFrame()
@@ -30,8 +31,10 @@ for i in experiment:
                 #df.loc[iteration, 'y_best'] = pob_y_best_value
                 iteration += 1
 
-df['iteration'] = range(21)
+df['iteration'] = range(len(df))
 df.set_index('iteration',inplace = True)
+print(df)
+
 df['Min_values'] = df.min(axis = 1)
 df['Max_values'] = df.max(axis = 1)
 df['Mean_values'] =df.mean(axis = 1)
@@ -43,10 +46,10 @@ print(df)
 # Gráfico de áreas
 fig, ax = plt.subplots(figsize=(8, 6))
 ax.plot(df_log.iloc[:,0:-3], color = "black", linewidth = 0.25)
-ax.fill_between(x = range(21), y1 = df_log.loc[:,'Min_values'], y2 = df_log.loc[:,'Max_values'],  alpha = 0.2, color = "#1f77b4") # Polígono
-ax.plot(range(21), df_log.loc[:,'Mean_values'], color = "#1f77b4") 
+ax.fill_between(x = range(len(df)), y1 = df_log.loc[:,'Min_values'], y2 = df_log.loc[:,'Max_values'],  alpha = 0.2, color = "#1f77b4") # Polígono
+ax.plot(range(len(df)), df_log.loc[:,'Mean_values'], color = "#1f77b4") 
 
-xlim, ylim = 20, 50
+xlim, ylim = 60, 10
 plt.xticks(range(0, xlim + 1, 5), fontsize = 10)
 plt.yticks(range(0, ylim + 1, 10), fontsize = 10)
 plt.xlim(0, xlim)
@@ -74,5 +77,3 @@ df_concat = df_concat.dropna()
 fig, ax = plt.subplots(figsize=(8, 6))
 ax.boxplot(df_concat)
 plt.savefig("results_DPSO/DPSO_boxplot")
-
-
