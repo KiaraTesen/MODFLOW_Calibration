@@ -32,32 +32,25 @@ active_matriz = initial_shape_HP['Active'].to_numpy().reshape((84,185))         
 
 n = 1                                                           # Population size
 
-k_shape_1 = (40,40)
+k_shape_1 = (50,50)
 k_shape_2 = (5,5)
-k_shape_3 = (10,10)
-k_shape_4 = (5,5)
-k_shape_5 = (10,10)
+k_shape_3 = (3,3)
 
-n_var_1 = reduce(lambda x,y: x*y, k_shape_1)
-n_var_2 = reduce(lambda x,y: x*y, k_shape_2)
-n_var_3 = reduce(lambda x,y: x*y, k_shape_3)
-n_var_4 = reduce(lambda x,y: x*y, k_shape_4)
-n_var_5 = reduce(lambda x,y: x*y, k_shape_5)
-n_var = 2 * (n_var_1 + n_var_2 + n_var_3 + n_var_4 + n_var_5)    # Number of variables
+n_var = 0
+for k in range(1,4):
+    globals()['n_var_' + str(k)] = reduce(lambda x,y: x*y, globals()['k_shape_' + str(k)])
+    n_var += globals()['n_var_' + str(k)]
+n_var = 2 * n_var    # Number of variables
 print (n_var)
 
-lb_kx, lb_sy = 0, 0
-ub_1_kx, ub_2_kx, ub_3_kx, ub_4_kx, ub_5_kx = 0.005, 0.060, 0.040, 0.060, 0.040
-ub_1_sy, ub_2_sy, ub_3_sy, ub_4_sy, ub_5_sy = 0.025, 0.015, 0.050, 0.040, 0.040
+lb_kx, lb_sy = 0.0002, 0.00003
+ub_1_kx, ub_2_kx, ub_3_kx = 0.0014, 0.04, 0.12
+ub_1_sy, ub_2_sy, ub_3_sy = 0.0004, 0.04, 0.12
 
 l_bounds = np.concatenate((np.around(np.repeat(lb_kx, n_var_1),4), np.around(np.repeat(lb_sy, n_var_1),4), np.around(np.repeat(lb_kx, n_var_2),4), 
-                           np.around(np.repeat(lb_sy, n_var_2),4), np.around(np.repeat(lb_kx, n_var_3),4), np.around(np.repeat(lb_sy, n_var_3),4), 
-                           np.around(np.repeat(lb_kx, n_var_4),4), np.around(np.repeat(lb_sy, n_var_4),4), np.around(np.repeat(lb_kx, n_var_5),4), 
-                           np.around(np.repeat(lb_sy, n_var_5),4)), axis = 0)
+                           np.around(np.repeat(lb_sy, n_var_2),4), np.around(np.repeat(lb_kx, n_var_3),4), np.around(np.repeat(lb_sy, n_var_3),4)), axis = 0)
 u_bounds = np.concatenate((np.around(np.repeat(ub_1_kx, n_var_1),4), np.around(np.repeat(ub_1_sy, n_var_1),4), np.around(np.repeat(ub_2_kx, n_var_2),4), 
-                           np.around(np.repeat(ub_2_sy, n_var_2),4), np.around(np.repeat(ub_3_kx, n_var_3),4), np.around(np.repeat(ub_3_sy, n_var_3),4),                 
-                           np.around(np.repeat(ub_4_kx, n_var_4),4), np.around(np.repeat(ub_4_sy, n_var_4),4), np.around(np.repeat(ub_5_kx, n_var_5),4), 
-                           np.around(np.repeat(ub_5_sy, n_var_5),4)), axis = 0) 
+                           np.around(np.repeat(ub_2_sy, n_var_2),4), np.around(np.repeat(ub_3_kx, n_var_3),4), np.around(np.repeat(ub_3_sy, n_var_3),4)), axis = 0) 
 
 """
 k_shape_1 = (40,40)
@@ -87,6 +80,7 @@ u_bounds = np.concatenate((np.around(np.repeat(ub_1_kx, n_var_1),4), np.around(n
                            np.around(np.repeat(ub_4_kx, n_var_4),4), np.around(np.repeat(ub_4_sy, n_var_4),4), np.around(np.repeat(ub_5_kx, n_var_5),4), 
                            np.around(np.repeat(ub_5_sy, n_var_5),4)), axis = 0) 
 """
+
 #---    Initial Sampling (Latyn Hypercube)
 class Particle:
     def __init__(self,x,v,y):
@@ -99,8 +93,8 @@ class Particle:
 sample_scaled = get_sampling_LH(n_var, n, l_bounds, u_bounds)
 pob = Particle(sample_scaled[0],np.around(np.array([0]*(n_var)),4),10000000000)
 
-y_init = Run_WEAP_MODFLOW(path_output, str(0), initial_shape_HP, HP, pob.x, n_var_1, n_var_2, n_var_3, n_var_4, n_var_5, n_var, 
-                          k_shape_1, k_shape_2, k_shape_3, k_shape_4, k_shape_5, active_matriz, path_init_model, path_model, path_nwt_exe, 
+y_init = Run_WEAP_MODFLOW(path_output, str(0), initial_shape_HP, HP, pob.x, n_var_1, n_var_2, n_var_3, n_var, 
+                          k_shape_1, k_shape_2, k_shape_3, active_matriz, path_init_model, path_model, path_nwt_exe, 
                           path_obs_data)
 
 

@@ -75,8 +75,8 @@ def get_evaluate_st_bounds(min_v, max_v, vector_modif):
         P_max = 0
     return P_min + P_max
 
-def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled, n_var_1, n_var_2, n_var_3, n_var_4, n_var_5, n_var, 
-                     k_shape_1, k_shape_2, k_shape_3, k_shape_4, k_shape_5, active_matriz, path_init_model, path_model, path_nwt_exe, 
+def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled, n_var_1, n_var_2, n_var_3, n_var, 
+                     k_shape_1, k_shape_2, k_shape_3, active_matriz, path_init_model, path_model, path_nwt_exe, 
                      path_obs_data):
     dir_iteration = os.path.join(path_output, "iter_" + str(iteration))
     if not os.path.isdir(dir_iteration):
@@ -88,8 +88,8 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
     #---    Modified matriz
     shape_k1_HP = initial_shape_HP.copy()
     shape_k2_HP = initial_shape_HP.copy()
-    shape_k3_HP = initial_shape_HP.copy()
-    shape_k4_HP = initial_shape_HP.copy()
+    #shape_k3_HP = initial_shape_HP.copy()
+    #shape_k4_HP = initial_shape_HP.copy()
     new_shape_HP = initial_shape_HP.copy()
 
     for m in HP:
@@ -116,6 +116,17 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
         globals()["vector_2_" + str(m)] = globals()["matriz_2_" + str(m)].flatten()
         shape_k2_HP[m] = globals()["vector_2_" + str(m)]
 
+        # Third kernel
+        kernel_3_kx = sample_scaled[int(2 * (n_var_1 + n_var_2)):int(2 * (n_var_1 + n_var_2) + n_var_3)].reshape(k_shape_3)
+        kernel_3_sy = sample_scaled[int(2 * (n_var_1 + n_var_2) + n_var_3):n_var].reshape(k_shape_3)
+
+        globals()["matriz_" + str(m)] = get_HP(shape_k4_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_3_" + str(m)])
+        get_image_matriz(globals()["matriz_" + str(m)], str(m), os.path.join(dir_iteration, 'Final_' + str(m) +'.png'))
+        plt.clf()
+        globals()["vector_" + str(m)] = globals()["matriz_" + str(m)].flatten()
+        new_shape_HP[m] = globals()["vector_" + str(m)]
+
+        """
         # Third kernel
         kernel_3_kx = sample_scaled[int(2 * (n_var_1 + n_var_2)):int(2 * (n_var_1 + n_var_2) + n_var_3)].reshape(k_shape_3)
         kernel_3_sy = sample_scaled[int(2 * (n_var_1 + n_var_2) + n_var_3):int(2 * (n_var_1 + n_var_2 + n_var_3))].reshape(k_shape_3)
@@ -145,7 +156,7 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
         plt.clf()
         globals()["vector_" + str(m)] = globals()["matriz_" + str(m)].flatten()
         new_shape_HP[m] = globals()["vector_" + str(m)]
-
+        """
     #---    Other variables that MODFLOW require
     matriz_kz = matriz_kx/10
     matriz_ss = matriz_sy/100
