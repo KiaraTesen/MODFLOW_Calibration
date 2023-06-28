@@ -1,7 +1,7 @@
 param($p1, $p2)
-#param($p1, $p2)
 
-$total_iteration = [int]($p1)
+$iteration = [int]($p1)
+$total_iteration = [int]($p2)
 #$IP = []($p2)
 <#
 foreach($iteration in 11..$total_iteration){
@@ -12,11 +12,11 @@ foreach($iteration in 11..$total_iteration){
       Get-Date -Format "dddd MM/dd/yyyy HH:mm K"
 }
 #>
-$iteration = [int]($p2)
+
 while($iteration -ne $total_iteration){
       #Write-Host "Run experiment : "$iteration
       #Get-Date -Format "dddd MM/dd/yyyy HH:mm K"
-        python Methodology_DPSO_SCL 10.0.0.11 $iteration
+        python Methodology_DPSO_SCL 10.0.0.11 $iteration $total_iteration
         if($error.count -eq 0){
             $iteration++
             $error.clear()
@@ -24,7 +24,6 @@ while($iteration -ne $total_iteration){
         else{
             Write-Host "Fallo ejecucion : "$iteration
         }
-        
       #Write-Host "Experiment "$iteration " finished"
       #Get-Date -Format "dddd MM/dd/yyyy HH:mm K"
 }

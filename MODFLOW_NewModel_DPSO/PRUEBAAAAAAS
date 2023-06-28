@@ -1,0 +1,18 @@
+
+import h5py
+import numpy as np
+
+ITERATION = 0
+TOTAL_ITERATION = 20
+active_cells = 5
+
+class Particle:
+    def __init__(self, x, v, y):
+        self.x = x                      # X represents the kernels
+        self.v = v                    # initial velocity = zeros
+        self.y = y
+        self.x_best = np.copy(x)                 
+        self.y_best = y
+
+pob = Particle(np.random.rand(active_cells * 2) , np.random.rand(active_cells * 2) , 10000000000)
+print(pob.x)
