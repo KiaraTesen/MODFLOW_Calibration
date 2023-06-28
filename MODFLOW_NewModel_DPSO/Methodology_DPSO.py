@@ -153,4 +153,4 @@ for m in range(maxiter):
     file_object.close()
 
     #---    Update the inertia velocity
-    w = w_max - m * ((w_max-w_min)/maxiter)
+    w = w_max - (m+1) * ((w_max-w_min)/maxiter)

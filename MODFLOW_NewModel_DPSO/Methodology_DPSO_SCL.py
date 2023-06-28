@@ -15,6 +15,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 IP_SERVER_ADD = sys.argv[1]
+ITERATION = sys.argv[2]
 
 #---    Paths
 path_WEAP = r'C:\Users\vagrant\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
@@ -58,34 +59,43 @@ class Particle:
 sample_scaled = get_sampling_LH(active_cells * 2, n, l_bounds, u_bounds)
 pob = Particle(sample_scaled[0],np.around(np.array([0]*(active_cells*2)),4),10000000000)
 
-y_init = Run_WEAP_MODFLOW(path_output, str(0), initial_shape_HP, HP, active_cells, pob.x, path_init_model, path_model, path_nwt_exe, path_obs_data)
-pob.y = y_init
-pob.y_best = y_init
+if ITERATION == 0:
+    y_init = Run_WEAP_MODFLOW(path_output, str(0), initial_shape_HP, HP, active_cells, pob.x, path_init_model, path_model, path_nwt_exe, path_obs_data)
+    pob.y = y_init
+    pob.y_best = y_init
 
-gbest = send_request_py(IP_SERVER_ADD, y_init, pob.x)           # Update global particle
+    gbest = send_request_py(IP_SERVER_ADD, y_init, pob.x)           # Update global particle
 
-#---    Save objective function value
-file_object = open("log_iteration.txt", 'a')
-file_object.write(f"{'Iteracion inicial: 0'}\n")
-file_object.write(f"{'Pob.x: ', pob.x}\n")
-file_object.write(f"{'Pob.y: ', pob.y}\n")
-file_object.write(f"{'Pob.v: ', pob.v}\n")
-file_object.write(f"{'Pob.x_best: ', pob.x_best}\n")
-file_object.write(f"{'Pob.y_best: ', pob.y_best}\n")
-file_object.close()
+    #---    Save objective function value
+    file_object = open("log_iteration.txt", 'a')
+    file_object.write(f"{'Iteracion inicial: 0'}\n")
+    file_object.write(f"{'Pob.x: ', pob.x}\n")
+    file_object.write(f"{'Pob.y: ', pob.y}\n")
+    file_object.write(f"{'Pob.v: ', pob.v}\n")
+    file_object.write(f"{'Pob.x_best: ', pob.x_best}\n")
+    file_object.write(f"{'Pob.y_best: ', pob.y_best}\n")
+    W(ITER = 0) = 0.5
+    file_object.close()
+else:
+    ## PEDIR NUEVO GBEST NO LEER ANTERIOR
 
-#---    PSO
-maxiter = 200
+    ### ADEMAS GUARDAR W
+    #---    PSO
+    maxiter = 200
 
-α = 0.8                                                    # Cognitive scaling parameter  # 0.8 # 1.49
-β = 0.8                                                    # Social scaling parameter     # 0.8 # 1.49
-w = 0.5                                                     # inertia velocity
-w_min = 0.4                                                 # minimum value for the inertia velocity
-w_max = 0.9                                                 # maximum value for the inertia velocity
-vMax = np.around(np.multiply(u_bounds-l_bounds,0.8),4)      # Max velocity # De 0.8 a 0.4
-vMin = -vMax                                                # Min velocity
+    α = 0.8                                                    # Cognitive scaling parameter  # 0.8 # 1.49
+    β = 0.8                                                    # Social scaling parameter     # 0.8 # 1.49
+    w = 0.5                                                     # inertia velocity
+    w_min = 0.4                                                 # minimum value for the inertia velocity
+    w_max = 0.9                                                 # maximum value for the inertia velocity
+    vMax = np.around(np.multiply(u_bounds-l_bounds,0.8),4)      # Max velocity # De 0.8 a 0.4
+    vMin = -vMax                                                # Min velocity
 
-for m in range(maxiter):
+    with h5py.File('pso_historial.h5', 'r') as file:
+        pob.x = file['best_vector'][int(ITERATION) - 1]
+        pob.v
+        
+    ##########################
     time.sleep(1)
 
     #---    Update particle velocity
@@ -136,4 +146,4 @@ for m in range(maxiter):
     file_object.close()
 
     #---    Update the inertia velocity
-    w = w_max - m * ((w_max-w_min)/maxiter)
+    w = w_max - (m+1) * ((w_max-w_min)/maxiter)
