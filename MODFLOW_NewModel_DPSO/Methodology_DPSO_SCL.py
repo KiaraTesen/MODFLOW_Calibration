@@ -52,23 +52,23 @@ class Particle:
         self.x_best = np.copy(x)                 
         self.y_best = y
 
-if ITERATION == 0:
+if int(ITERATION) == 0:
     #---    Create iteration register file
     with h5py.File('pso_historial.h5', 'w') as file:
-        iter_h5py = file.create_dataset("iteration", (TOTAL_ITERATION, 1))
-        pob_x_h5py = file.create_dataset("pob_x", (TOTAL_ITERATION, active_cells*2))
-        pob_y_h5py = file.create_dataset("pob_y", (TOTAL_ITERATION, 1))
-        pob_v_h5py = file.create_dataset("pob_v", (TOTAL_ITERATION, active_cells*2))
-        pob_x_best_h5py = file.create_dataset("pob_x_best", (TOTAL_ITERATION, active_cells*2))
-        pob_y_best_h5py = file.create_dataset("pob_y_best", (TOTAL_ITERATION, 1))
-        pob_w_h5py = file.create_dataset("w", (TOTAL_ITERATION, 1))
+        iter_h5py = file.create_dataset("iteration", (int(TOTAL_ITERATION), 1))
+        pob_x_h5py = file.create_dataset("pob_x", (int(TOTAL_ITERATION), active_cells*2))
+        pob_y_h5py = file.create_dataset("pob_y", (int(TOTAL_ITERATION), 1))
+        pob_v_h5py = file.create_dataset("pob_v", (int(TOTAL_ITERATION), active_cells*2))
+        pob_x_best_h5py = file.create_dataset("pob_x_best", (int(TOTAL_ITERATION), active_cells*2))
+        pob_y_best_h5py = file.create_dataset("pob_y_best", (int(TOTAL_ITERATION), 1))
+        pob_w_h5py = file.create_dataset("w", (int(TOTAL_ITERATION), 1))
     file.close()
 
     #---    Initial Sampling - Pob(0)
     sample_scaled = get_sampling_LH(active_cells * 2, n, l_bounds, u_bounds)
     pob = Particle(sample_scaled[0],np.around(np.array([0]*(active_cells*2)),4),10000000000)
 
-    y_init = Run_WEAP_MODFLOW(path_output, str(0), initial_shape_HP, HP, active_cells, pob.x, path_init_model, path_model, path_nwt_exe, path_obs_data)
+    y_init = Run_WEAP_MODFLOW(path_output, str(ITERATION), initial_shape_HP, HP, active_cells, pob.x, path_init_model, path_model, path_nwt_exe, path_obs_data)
     pob.y = y_init
     pob.y_best = y_init
 
@@ -146,7 +146,7 @@ else:
         pob.y = y
 
     #---    Update the inertia velocity
-    w = w_max - (ITERATION) * ((w_max-w_min)/TOTAL_ITERATION)
+    w = w_max - (int(ITERATION)) * ((w_max-w_min)/int(TOTAL_ITERATION))
 
     #---    Iteration register
     with h5py.File('pso_historial.h5', 'a') as file:
