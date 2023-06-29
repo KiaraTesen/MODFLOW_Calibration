@@ -20,6 +20,10 @@ ITERATION = int(sys.argv[2])
 TOTAL_ITERATION = int(sys.argv[3])
 FINAL_ITERATION = int(sys.argv[4])
 
+print(FINAL_ITERATION)
+
+"""
+
 #---    Paths
 path_WEAP = r'C:\Users\vagrant\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
 path_model = os.path.join(path_WEAP, 'MODFLOW_model')
@@ -81,6 +85,8 @@ if ITERATION == 0:
         pob_x_best_h5py[0] = np.copy(pob.x_best)
         pob_y_best_h5py[0] = pob.y_best
         pob_w_h5py[0] = 0.5
+
+    """
     """
     with h5py.File('pso_historial.h5', 'a') as file:
         file["iteration"][int(ITERATION)] = int(ITERATION)
@@ -91,6 +97,7 @@ if ITERATION == 0:
         file["pob_y_best"][int(ITERATION)] = pob.y_best
 
         file["w"][int(ITERATION)] = 0.5
+    """
     """
     f.close()
 
@@ -169,3 +176,4 @@ else:
 
         f["w"][ITERATION] = w
     f.close()
+    """
