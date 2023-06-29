@@ -63,14 +63,14 @@ if ITERATION == 0:
     pob.y_best = y_init
 
     #---    Create iteration register file
-    with h5py.File('pso_historial.h5', 'w') as file:
-        iter_h5py = file.create_dataset("iteration", (FINAL_ITERATION, 1))
-        pob_x_h5py = file.create_dataset("pob_x", (FINAL_ITERATION, active_cells*2))
-        pob_y_h5py = file.create_dataset("pob_y", (FINAL_ITERATION, 1))
-        pob_v_h5py = file.create_dataset("pob_v", (FINAL_ITERATION, active_cells*2))
-        pob_x_best_h5py = file.create_dataset("pob_x_best", (FINAL_ITERATION, active_cells*2))
-        pob_y_best_h5py = file.create_dataset("pob_y_best", (FINAL_ITERATION, 1))
-        pob_w_h5py = file.create_dataset("w", (FINAL_ITERATION, 1))
+    with h5py.File('pso_historial.h5', 'w') as f:
+        iter_h5py = f.create_dataset("iteration", (FINAL_ITERATION, 1))
+        pob_x_h5py = f.create_dataset("pob_x", (FINAL_ITERATION, active_cells*2))
+        pob_y_h5py = f.create_dataset("pob_y", (FINAL_ITERATION, 1))
+        pob_v_h5py = f.create_dataset("pob_v", (FINAL_ITERATION, active_cells*2))
+        pob_x_best_h5py = f.create_dataset("pob_x_best", (FINAL_ITERATION, active_cells*2))
+        pob_y_best_h5py = f.create_dataset("pob_y_best", (FINAL_ITERATION, 1))
+        pob_w_h5py = f.create_dataset("w", (FINAL_ITERATION, 1))
     #file.close()
 
     #---    Iteration register
@@ -92,7 +92,7 @@ if ITERATION == 0:
 
         file["w"][int(ITERATION)] = 0.5
     """
-    file.close()
+    f.close()
 
 else:
     #---    PSO
@@ -104,15 +104,15 @@ else:
     vMax = np.around(np.multiply(u_bounds-l_bounds,0.8),4)      # Max velocity # De 0.8 a 0.4
     vMin = -vMax                                                # Min velocity
 
-    with h5py.File('pso_historial.h5', 'r') as file:
-        pob.x = np.copy(file["pob_x"][ITERATION - 1])
-        pob.y = file["pob_y"][ITERATION - 1]
-        pob.v = np.copy(file["pob_v"][ITERATION - 1])
-        pob.x_best = np.copy(file["pob_x_best"][ITERATION - 1])
-        pob.y_best = file["pob_y_best"][ITERATION - 1]
+    with h5py.File('pso_historial.h5', 'r') as f:
+        pob.x = np.copy(f["pob_x"][ITERATION - 1])
+        pob.y = f["pob_y"][ITERATION - 1]
+        pob.v = np.copy(f["pob_v"][ITERATION - 1])
+        pob.x_best = np.copy(f["pob_x_best"][ITERATION - 1])
+        pob.y_best = f["pob_y_best"][ITERATION - 1]
 
-        w = file["w"][ITERATION - 1]
-    file.close()
+        w = f["w"][ITERATION - 1]
+    f.close()
     
     gbest = send_request_py(IP_SERVER_ADD, pob.y, pob.x)           # Update global particle
     
@@ -159,13 +159,13 @@ else:
     w = w_max - (ITERATION) * ((w_max-w_min)/FINAL_ITERATION)
 
     #---    Iteration register
-    with h5py.File('pso_historial.h5', 'a') as file:
-        file["iteration"][ITERATION] = ITERATION
-        file["pob_x"][ITERATION] = np.copy(pob.x)
-        file["pob_y"][ITERATION] = pob.y
-        file["pob_v"][ITERATION] = np.copy(pob.v)
-        file["pob_x_best"][ITERATION] = np.copy(pob.x_best)
-        file["pob_y_best"][ITERATION] = pob.y_best
+    with h5py.File('pso_historial.h5', 'a') as f:
+        f["iteration"][ITERATION] = ITERATION
+        f["pob_x"][ITERATION] = np.copy(pob.x)
+        f["pob_y"][ITERATION] = pob.y
+        f["pob_v"][ITERATION] = np.copy(pob.v)
+        f["pob_x_best"][ITERATION] = np.copy(pob.x_best)
+        f["pob_y_best"][ITERATION] = pob.y_best
 
-        file["w"][ITERATION] = w
-    file.close()
+        f["w"][ITERATION] = w
+    f.close()
