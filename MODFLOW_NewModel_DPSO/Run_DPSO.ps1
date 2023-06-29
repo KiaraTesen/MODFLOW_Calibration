@@ -16,7 +16,7 @@ foreach($iteration in 11..$total_iteration){
 while($iteration -ne $total_iteration){
       #Write-Host "Run experiment : "$iteration
       #Get-Date -Format "dddd MM/dd/yyyy HH:mm K"
-        python Methodology_DPSO_SCL 10.0.0.11 $iteration $total_iteration
+        python Methodology_DPSO_SCL.py 10.0.0.11 $iteration $total_iteration
         if($error.count -eq 0){
             $iteration++
             $error.clear()
