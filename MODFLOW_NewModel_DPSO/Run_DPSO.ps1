@@ -17,15 +17,15 @@ foreach($iteration in 11..$total_iteration){
 while($iteration -ne $total_iteration){
       #Write-Host "Run experiment : "$iteration
       #Get-Date -Format "dddd MM/dd/yyyy HH:mm K"
-        python Methodology_DPSO_SCL.py 10.0.0.11 $iteration $total_iteration $final_iteration
-        print($iteration)
-        if($error.count -eq 0){
-            $iteration++
-            $error.clear()
-        }
-        else{
-            Write-Host "Fallo ejecucion : "$iteration
-        }
+      python Methodology_DPSO_SCL.py 10.0.0.11:8888 $iteration $total_iteration $final_iteration
+      print($iteration)
+      if($error.count -eq 0){
+          $iteration++
+          $error.clear()
+      }
+      else{
+          Write-Host "Fallo ejecucion : "$iteration
+      }
       #Write-Host "Experiment "$iteration " finished"
       #Get-Date -Format "dddd MM/dd/yyyy HH:mm K"
 }
