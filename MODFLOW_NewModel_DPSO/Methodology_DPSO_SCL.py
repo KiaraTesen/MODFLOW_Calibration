@@ -53,11 +53,11 @@ class Particle:
         self.x_best = np.copy(x)                 
         self.y_best = y
 
+sample_scaled = get_sampling_LH(active_cells * 2, n, l_bounds, u_bounds)
+pob = Particle(sample_scaled[0],np.around(np.array([0]*(active_cells*2)),4),10000000000)
+
 if ITERATION == 0:
     #---    Initial Sampling - Pob(0)
-    sample_scaled = get_sampling_LH(active_cells * 2, n, l_bounds, u_bounds)
-    pob = Particle(sample_scaled[0],np.around(np.array([0]*(active_cells*2)),4),10000000000)
-
     y_init = Run_WEAP_MODFLOW(path_output, str(ITERATION), initial_shape_HP, HP, active_cells, pob.x, path_init_model, path_model, path_nwt_exe, path_obs_data)
     pob.y = y_init
     pob.y_best = y_init
@@ -71,7 +71,6 @@ if ITERATION == 0:
         pob_x_best_h5py = f.create_dataset("pob_x_best", (FINAL_ITERATION, active_cells*2))
         pob_y_best_h5py = f.create_dataset("pob_y_best", (FINAL_ITERATION, 1))
         pob_w_h5py = f.create_dataset("w", (FINAL_ITERATION, 1))
-    #file.close()
 
     #---    Iteration register
         iter_h5py[0] = ITERATION
@@ -81,17 +80,6 @@ if ITERATION == 0:
         pob_x_best_h5py[0] = np.copy(pob.x_best)
         pob_y_best_h5py[0] = pob.y_best
         pob_w_h5py[0] = 0.5
-    """
-    with h5py.File('pso_historial.h5', 'a') as file:
-        file["iteration"][int(ITERATION)] = int(ITERATION)
-        file["pob_x"][int(ITERATION)] = np.copy(pob.x)
-        file["pob_y"][int(ITERATION)] = pob.y
-        file["pob_v"][int(ITERATION)] = np.copy(pob.v)
-        file["pob_x_best"][int(ITERATION)] = np.copy(pob.x_best)
-        file["pob_y_best"][int(ITERATION)] = pob.y_best
-
-        file["w"][int(ITERATION)] = 0.5
-    """
     f.close()
 
 else:
