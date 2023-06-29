@@ -18,6 +18,7 @@ warnings.filterwarnings('ignore')
 IP_SERVER_ADD = sys.argv[1]
 ITERATION = sys.argv[2]
 TOTAL_ITERATION = sys.argv[3]
+FINAL_ITERATION = sys.argv[4]
 
 #---    Paths
 path_WEAP = r'C:\Users\vagrant\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
@@ -55,13 +56,13 @@ class Particle:
 if int(ITERATION) == 0:
     #---    Create iteration register file
     with h5py.File('pso_historial.h5', 'w') as file:
-        iter_h5py = file.create_dataset("iteration", (int(TOTAL_ITERATION), 1))
-        pob_x_h5py = file.create_dataset("pob_x", (int(TOTAL_ITERATION), active_cells*2))
-        pob_y_h5py = file.create_dataset("pob_y", (int(TOTAL_ITERATION), 1))
-        pob_v_h5py = file.create_dataset("pob_v", (int(TOTAL_ITERATION), active_cells*2))
-        pob_x_best_h5py = file.create_dataset("pob_x_best", (int(TOTAL_ITERATION), active_cells*2))
-        pob_y_best_h5py = file.create_dataset("pob_y_best", (int(TOTAL_ITERATION), 1))
-        pob_w_h5py = file.create_dataset("w", (int(TOTAL_ITERATION), 1))
+        iter_h5py = file.create_dataset("iteration", (int(FINAL_ITERATION), 1))
+        pob_x_h5py = file.create_dataset("pob_x", (int(FINAL_ITERATION), active_cells*2))
+        pob_y_h5py = file.create_dataset("pob_y", (int(FINAL_ITERATION), 1))
+        pob_v_h5py = file.create_dataset("pob_v", (int(FINAL_ITERATION), active_cells*2))
+        pob_x_best_h5py = file.create_dataset("pob_x_best", (int(FINAL_ITERATION), active_cells*2))
+        pob_y_best_h5py = file.create_dataset("pob_y_best", (int(FINAL_ITERATION), 1))
+        pob_w_h5py = file.create_dataset("w", (int(FINAL_ITERATION), 1))
     file.close()
 
     #---    Initial Sampling - Pob(0)
@@ -146,7 +147,7 @@ else:
         pob.y = y
 
     #---    Update the inertia velocity
-    w = w_max - (int(ITERATION)) * ((w_max-w_min)/int(TOTAL_ITERATION))
+    w = w_max - (int(ITERATION)) * ((w_max-w_min)/int(FINAL_ITERATION))
 
     #---    Iteration register
     with h5py.File('pso_historial.h5', 'a') as file:
