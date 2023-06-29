@@ -75,7 +75,7 @@ if int(ITERATION) == 0:
 
     #---    Iteration register
     with h5py.File('pso_historial.h5', 'a') as file:
-        file["iteration"][int(ITERATION)] = str(ITERATION)
+        file["iteration"][int(ITERATION)] = int(ITERATION)
         file["pob_x"][int(ITERATION)] = np.copy(pob.x)
         file["pob_y"][int(ITERATION)] = pob.y
         file["pob_v"][int(ITERATION)] = np.copy(pob.v)
@@ -151,7 +151,7 @@ else:
 
     #---    Iteration register
     with h5py.File('pso_historial.h5', 'a') as file:
-        file["iteration"][int(ITERATION)] = str(ITERATION)
+        file["iteration"][int(ITERATION)] = int(ITERATION)
         file["pob_x"][int(ITERATION)] = np.copy(pob.x)
         file["pob_y"][int(ITERATION)] = pob.y
         file["pob_v"][int(ITERATION)] = np.copy(pob.v)
