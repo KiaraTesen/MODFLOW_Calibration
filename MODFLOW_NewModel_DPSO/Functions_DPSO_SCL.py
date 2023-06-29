@@ -150,6 +150,7 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
         mse_well = mean_squared_error(obs_well[i], sim_well[i])
         rmse_well = math.sqrt(mse_well)
         srmse_well += rmse_well
+    print(srmse_well)
 
     #---    Streamflow analysis
     df_q = pd.read_csv(os.path.join(dir_iteration, f"iter_{str(iteration)}_Streamflow_gauges.csv"), skiprows = 3)
