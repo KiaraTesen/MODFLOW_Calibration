@@ -16,9 +16,9 @@ import warnings
 warnings.filterwarnings('ignore')
 
 IP_SERVER_ADD = sys.argv[1]
-ITERATION = sys.argv[2]
-TOTAL_ITERATION = sys.argv[3]
-FINAL_ITERATION = sys.argv[4]
+ITERATION = int(sys.argv[2])
+TOTAL_ITERATION = int(sys.argv[3])
+FINAL_ITERATION = int(sys.argv[4])
 
 #---    Paths
 path_WEAP = r'C:\Users\vagrant\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
@@ -53,7 +53,7 @@ class Particle:
         self.x_best = np.copy(x)                 
         self.y_best = y
 
-if int(ITERATION) == 0:
+if ITERATION == 0:
     #---    Initial Sampling - Pob(0)
     sample_scaled = get_sampling_LH(active_cells * 2, n, l_bounds, u_bounds)
     pob = Particle(sample_scaled[0],np.around(np.array([0]*(active_cells*2)),4),10000000000)
@@ -64,17 +64,17 @@ if int(ITERATION) == 0:
 
     #---    Create iteration register file
     with h5py.File('pso_historial.h5', 'w') as file:
-        iter_h5py = file.create_dataset("iteration", (int(FINAL_ITERATION), 1))
-        pob_x_h5py = file.create_dataset("pob_x", (int(FINAL_ITERATION), active_cells*2))
-        pob_y_h5py = file.create_dataset("pob_y", (int(FINAL_ITERATION), 1))
-        pob_v_h5py = file.create_dataset("pob_v", (int(FINAL_ITERATION), active_cells*2))
-        pob_x_best_h5py = file.create_dataset("pob_x_best", (int(FINAL_ITERATION), active_cells*2))
-        pob_y_best_h5py = file.create_dataset("pob_y_best", (int(FINAL_ITERATION), 1))
-        pob_w_h5py = file.create_dataset("w", (int(FINAL_ITERATION), 1))
+        iter_h5py = file.create_dataset("iteration", (FINAL_ITERATION, 1))
+        pob_x_h5py = file.create_dataset("pob_x", (FINAL_ITERATION, active_cells*2))
+        pob_y_h5py = file.create_dataset("pob_y", (FINAL_ITERATION, 1))
+        pob_v_h5py = file.create_dataset("pob_v", (FINAL_ITERATION, active_cells*2))
+        pob_x_best_h5py = file.create_dataset("pob_x_best", (FINAL_ITERATION, active_cells*2))
+        pob_y_best_h5py = file.create_dataset("pob_y_best", (FINAL_ITERATION, 1))
+        pob_w_h5py = file.create_dataset("w", (FINAL_ITERATION, 1))
     #file.close()
 
     #---    Iteration register
-        iter_h5py[0] = int(ITERATION)
+        iter_h5py[0] = ITERATION
         pob_x_h5py[0] = np.copy(pob.x)
         pob_y_h5py[0] = pob.y
         pob_v_h5py[0] = np.copy(pob.v)
@@ -105,13 +105,13 @@ else:
     vMin = -vMax                                                # Min velocity
 
     with h5py.File('pso_historial.h5', 'r') as file:
-        pob.x = np.copy(file["pob_x"][int(ITERATION) - 1])
-        pob.y = file["pob_y"][int(ITERATION) - 1]
-        pob.v = np.copy(file["pob_v"][int(ITERATION) - 1])
-        pob.x_best = np.copy(file["pob_x_best"][int(ITERATION) - 1])
-        pob.y_best = file["pob_y_best"][int(ITERATION) - 1]
+        pob.x = np.copy(file["pob_x"][ITERATION - 1])
+        pob.y = file["pob_y"][ITERATION - 1]
+        pob.v = np.copy(file["pob_v"][ITERATION - 1])
+        pob.x_best = np.copy(file["pob_x_best"][ITERATION - 1])
+        pob.y_best = file["pob_y_best"][ITERATION - 1]
 
-        w = file["w"][int(ITERATION) - 1]
+        w = file["w"][ITERATION - 1]
     file.close()
     
     gbest = send_request_py(IP_SERVER_ADD, pob.y, pob.x)           # Update global particle
@@ -156,16 +156,16 @@ else:
         pob.y = y
 
     #---    Update the inertia velocity
-    w = w_max - (int(ITERATION)) * ((w_max-w_min)/int(FINAL_ITERATION))
+    w = w_max - (ITERATION) * ((w_max-w_min)/FINAL_ITERATION)
 
     #---    Iteration register
     with h5py.File('pso_historial.h5', 'a') as file:
-        file["iteration"][int(ITERATION)] = int(ITERATION)
-        file["pob_x"][int(ITERATION)] = np.copy(pob.x)
-        file["pob_y"][int(ITERATION)] = pob.y
-        file["pob_v"][int(ITERATION)] = np.copy(pob.v)
-        file["pob_x_best"][int(ITERATION)] = np.copy(pob.x_best)
-        file["pob_y_best"][int(ITERATION)] = pob.y_best
+        file["iteration"][ITERATION] = ITERATION
+        file["pob_x"][ITERATION] = np.copy(pob.x)
+        file["pob_y"][ITERATION] = pob.y
+        file["pob_v"][ITERATION] = np.copy(pob.v)
+        file["pob_x_best"][ITERATION] = np.copy(pob.x_best)
+        file["pob_y_best"][ITERATION] = pob.y_best
 
-        file["w"][int(ITERATION)] = w
+        file["w"][ITERATION] = w
     file.close()
