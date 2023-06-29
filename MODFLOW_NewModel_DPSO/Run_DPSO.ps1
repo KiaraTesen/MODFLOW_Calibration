@@ -1,4 +1,4 @@
-param($p1, $p2)
+param($p1, $p2, $p3)
 
 $iteration = [int]($p1)
 $total_iteration = [int]($p2)

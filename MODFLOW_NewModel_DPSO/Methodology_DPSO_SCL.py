@@ -21,4 +21,3 @@ TOTAL_ITERATION = int(sys.argv[3])
 FINAL_ITERATION = int(sys.argv[4])
 
 print(FINAL_ITERATION)
-
