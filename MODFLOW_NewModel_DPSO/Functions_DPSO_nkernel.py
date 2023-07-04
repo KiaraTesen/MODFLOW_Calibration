@@ -120,7 +120,7 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
         kernel_3_kx = sample_scaled[int(2 * (n_var_1 + n_var_2)):int(2 * (n_var_1 + n_var_2) + n_var_3)].reshape(k_shape_3)
         kernel_3_sy = sample_scaled[int(2 * (n_var_1 + n_var_2) + n_var_3):n_var].reshape(k_shape_3)
 
-        globals()["matriz_" + str(m)] = get_HP(shape_k4_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_3_" + str(m)])
+        globals()["matriz_" + str(m)] = get_HP(shape_k2_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_3_" + str(m)])
         get_image_matriz(globals()["matriz_" + str(m)], str(m), os.path.join(dir_iteration, 'Final_' + str(m) +'.png'))
         plt.clf()
         globals()["vector_" + str(m)] = globals()["matriz_" + str(m)].flatten()
