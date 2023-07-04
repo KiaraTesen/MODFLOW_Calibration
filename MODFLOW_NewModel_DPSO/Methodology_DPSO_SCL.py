@@ -63,7 +63,7 @@ if ITERATION == 0:
     pob.y_best = y_init
 
     #---    Create iteration register file
-    with h5py.File('pso_historial.h5', 'w') as f:
+    with h5py.File('DPSO_historial.h5', 'w') as f:
         iter_h5py = f.create_dataset("iteration", (FINAL_ITERATION, 1))
         pob_x_h5py = f.create_dataset("pob_x", (FINAL_ITERATION, active_cells*2))
         pob_y_h5py = f.create_dataset("pob_y", (FINAL_ITERATION, 1))
@@ -92,7 +92,7 @@ else:
     vMax = np.around(np.multiply(u_bounds-l_bounds,0.8),4)      # Max velocity # De 0.8 a 0.4
     vMin = -vMax                                                # Min velocity
 
-    with h5py.File('pso_historial.h5', 'r') as f:
+    with h5py.File('DPSO_historial.h5', 'r') as f:
         pob.x = np.copy(f["pob_x"][ITERATION - 1])
         pob.y = f["pob_y"][ITERATION - 1]
         pob.v = np.copy(f["pob_v"][ITERATION - 1])
@@ -147,7 +147,7 @@ else:
     w = w_max - (ITERATION) * ((w_max-w_min)/FINAL_ITERATION)
 
     #---    Iteration register
-    with h5py.File('pso_historial.h5', 'a') as f:
+    with h5py.File('DPSO_historial.h5', 'a') as f:
         f["iteration"][ITERATION] = ITERATION
         f["pob_x"][ITERATION] = np.copy(pob.x)
         f["pob_y"][ITERATION] = pob.y

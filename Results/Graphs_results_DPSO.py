@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 path_results_DPSO = 'results_DPSO'
-experiment = ['P6-SCL']
-machines = list(range(2,10)) + list(range(11,22))
+experiment = ['P8-SCL-ps1']
+machines = list(range(2,7))
 print(machines)
 
 df = pd.DataFrame()
