@@ -152,22 +152,25 @@ r2_q = r2_score(DF_q['Observed'], DF_q['Modeled'])
 #---    Graph
 fig = plt.subplots(figsize=(10, 6))
 plt.plot(DF_q['Observed'], label = 'Obs', color = "black", linewidth = 0.25)
-plt.plot(DF_q['Modeled'], label = 'Sim', color = "red", linewidth = 0.25)
+plt.plot(DF_q['Modeled'], label = 'DPSO', color = "red", linewidth = 0.25)
 
-ymax = max(DF_q['Modeled'].to_numpy().max(),DF_q['Observed'].to_numpy().max()) + 0.25
+ymin = min(DF_q['Modeled'].to_numpy().min(),DF_q['Observed'].to_numpy().min())
+ymax = max(DF_q['Modeled'].to_numpy().max(),DF_q['Observed'].to_numpy().max())
+dif_v = ymax - ymin
 
-plt.ylim(0, ymax)
-plt.ylabel('Caudal ($m^{3}/s$)', fontsize = 12)
+plt.ylim(0, ymax + dif_v)
+plt.ylabel('Streamflow ($m^{3}/s$)', fontsize = 12)
+plt.xlabel('Years', fontsize = 12)
 plt.legend(bbox_to_anchor=(1.0, 1.0), loc='upper left')
-plt.title('Streamflow gauge comparison', fontsize = 16)
+plt.title('Streamflow gauge', fontsize = 16, fontweight='bold')
 
 fs_text = 8
-plt.text(13200, ymax - 0.055, 'NSE:   ' + str(round(nse_q[0],3)), fontsize = fs_text)
-plt.text(13200, ymax - 0.115, 'KGE:   ' + str(round(kge_q[0],3)), fontsize = fs_text)
-plt.text(13200, ymax - 0.175, 'PBIAS: ' + str(round(pbias_q[0],3)), fontsize = fs_text)
-plt.text(13200, ymax - 0.235, 'RMSE: ' + str(round(rmse_q[0],3)) + ' $m^{3}/s$', fontsize = fs_text)
-plt.text(13200, ymax - 0.295, 'MAE:   ' + str(round(mae_q,3)) + ' $m^{3}/s$', fontsize = fs_text)
-plt.text(13200, ymax - 0.360, '$R^{2}$:   ' + str(round(r2_q,3)), fontsize = fs_text)
+plt.text(13200, ymax + dif_v - dif_v/8, 'NSE:    ' + str(round(nse_q[0],3)), fontsize = fs_text)
+plt.text(13200, ymax + dif_v - 2*(dif_v/8), 'KGE:    ' + str(round(kge_q[0],3)), fontsize = fs_text)
+plt.text(13200, ymax + dif_v - 3*(dif_v/8), 'PBIAS: ' + str(round(pbias_q[0],3)), fontsize = fs_text)
+plt.text(13200, ymax + dif_v - 4*(dif_v/8), 'RMSE: ' + str(round(rmse_q[0],3)) + ' $m^{3}/s$', fontsize = fs_text)
+plt.text(13200, ymax + dif_v - 5*(dif_v/8), 'MAE:   ' + str(round(mae_q,3)) + ' $m^{3}/s$', fontsize = fs_text)
+plt.text(13200, ymax + dif_v - 6*(dif_v/8), '$R^{2}$:      ' + str(round(r2_q,3)), fontsize = fs_text)
 
 plt.savefig(os.path.join(path_results, 'Q_' + methodology + '.png'))
 plt.clf()
@@ -195,22 +198,25 @@ for p in ow[1:]:
     #---    Graph
     fig = plt.subplots(figsize=(10, 6))
     plt.plot(obs_well[p], label = 'Obs', color = "black", linewidth = 0.25)
-    plt.plot(sim_well[p], label = 'Sim', color = "red", linewidth = 0.25)
+    plt.plot(sim_well[p], label = 'DPSO', color = "red", linewidth = 0.25)
 
-    ymax = max(obs_well[p].to_numpy().max(),sim_well[p].to_numpy().max()) + 0.25
+    ymin = min(obs_well[p].to_numpy().min(),sim_well[p].to_numpy().min())
+    ymax = max(obs_well[p].to_numpy().max(),sim_well[p].to_numpy().max())
+    dif_v = ymax - ymin
 
-    #plt.ylim(0, ymax)
-    plt.ylabel('NAS (m)', fontsize = 12)
+    plt.ylim(ymin - (dif_v/10), ymax + dif_v)
+    plt.ylabel('Groundwater table (m)', fontsize = 12)
+    plt.xlabel('Years', fontsize = 12)
     plt.legend(bbox_to_anchor=(1.0, 1.0), loc='upper left')
-    plt.title('Well Comparison - ' + str(p), fontsize = 16)
+    plt.title('Observation well - ' + str(p), fontsize = 16, fontweight='bold')
 
     fs_text = 8
-    plt.text(13200, ymax - 0.055, 'NSE:   ' + str(round(nse_w[0],3)), fontsize = fs_text)
-    plt.text(13200, ymax - 0.115, 'KGE:   ' + str(round(kge_w[0],3)), fontsize = fs_text)
-    plt.text(13200, ymax - 0.175, 'PBIAS: ' + str(round(pbias_w[0],3)), fontsize = fs_text)
-    plt.text(13200, ymax - 0.235, 'RMSE: ' + str(round(rmse_w[0],3)) + ' $m^{3}/s$', fontsize = fs_text)
-    plt.text(13200, ymax - 0.295, 'MAE:   ' + str(round(mae_w,3)) + ' $m^{3}/s$', fontsize = fs_text)
-    plt.text(13200, ymax - 0.360, '$R^{2}$:   ' + str(round(r2_w,3)), fontsize = fs_text)
+    plt.text(13200, ymax + dif_v - dif_v/8, 'NSE:    ' + str(round(nse_w[0],3)), fontsize = fs_text)
+    plt.text(13200, ymax + dif_v - 2*(dif_v/8), 'KGE:    ' + str(round(kge_w[0],3)), fontsize = fs_text)
+    plt.text(13200, ymax + dif_v - 3*(dif_v/8), 'PBIAS: ' + str(round(pbias_w[0],3)), fontsize = fs_text)
+    plt.text(13200, ymax + dif_v - 4*(dif_v/8), 'RMSE: ' + str(round(rmse_w[0],3)) + ' $m^{3}/s$', fontsize = fs_text)
+    plt.text(13200, ymax + dif_v - 5*(dif_v/8), 'MAE:   ' + str(round(mae_w,3)) + ' $m^{3}/s$', fontsize = fs_text)
+    plt.text(13200, ymax + dif_v - 6*(dif_v/8), '$R^{2}$:      ' + str(round(r2_w,3)), fontsize = fs_text)
 
     plt.savefig(os.path.join(path_results, 'Obs_well_' + str(p) + '_' + methodology + '.png'))
     plt.clf()
