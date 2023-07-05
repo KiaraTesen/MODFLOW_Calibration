@@ -17,16 +17,16 @@ warnings.filterwarnings('ignore')
 
 
 #---    Initial information
-experiments = ['P8-SCL-ps1']
-machines = list(range(2,7))         #22
-iterations = list(range(20))        #201
+experiments = ['P9-SCL-ps1']
+machines = list(range(2,6)) + list(range(7,22))        #22
+iterations = list(range(201))        #201
 
 methodology = 'DPSO'                #'DDE'
 path_results = r'..\results_' + methodology   #r'..\results_DDE'
 
-best_experiment = 'P8-SCL-ps1'
-best_result = 'vm6'
-best_iteration = 19
+best_experiment = 'P9-SCL-ps1'
+best_result = 'vm11'
+best_iteration = 200
 
 best_shape = 'Elements_iter_' + str(best_iteration) + '.shp'
 best_q = 'iter_' + str(best_iteration) + '_Streamflow_gauges.csv'
@@ -63,19 +63,19 @@ df_y['Mean_values'] =df_y.mean(axis = 1)
 df_y_log = np.log(df_y)
 
 #---    Gráfico de áreas
-df = df_y                       # Depende como se desea presentar resultados
+df = df_y   #df_y                       # Depende como se desea presentar resultados
 #print(df)
 df.to_csv(os.path.join(path_results, 'df_' + methodology + '.csv'))
-fig, ax = plt.subplots(figsize=(8, 6))
+fig, ax = plt.subplots(figsize=(16, 8))
 ax.plot(df.iloc[:,0:-3], color = "black", linewidth = 0.25)
 ax.fill_between(x = range(len(df)), y1 = df.loc[:,'Min_values'], y2 = df.loc[:,'Max_values'],  alpha = 0.2, color = "#1f77b4") # Polígono
 ax.plot(range(len(df_y)), df.loc[:,'Mean_values'], color = "#1f77b4") 
 
 xlim, ylim = len(iterations), round(df['Max_values'].max(axis = 0)) + 5
-plt.xticks(range(0, xlim + 1, 5), fontsize = 10)
-plt.yticks(range(0, ylim + 1, 10), fontsize = 10)
+plt.xticks(range(0, xlim + 1, 10), fontsize = 10)
+plt.yticks(range(0, ylim + 1, 1), fontsize = 10)
 plt.xlim(0, xlim)
-plt.ylim(0, ylim)
+plt.ylim(3, 12)
 
 plt.title("n = 20", fontsize = 14, weight = "bold")
 plt.xlabel("Iterations", fontsize = 10)
