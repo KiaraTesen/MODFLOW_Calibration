@@ -31,17 +31,17 @@ path_obs_data = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\ObservedDa
 
 #---    Initial matriz
 HP = ['kx', 'sy'] 
-initial_shape_HP = gpd.read_file(path_GIS + '/Elements_initial_unique_value.shp')
+initial_shape_HP = gpd.read_file(path_GIS + '/Elements_initial_unique_value.shp')   # /Elements_initial_zones_reduced.shp
 active_matriz = initial_shape_HP['Active'].to_numpy().reshape((84,185))             # Matrix of zeros and ones that allows maintaining active area
 
 n = 1                                                           # Population size
 
-lb_kx, ub_kx = 0.0145, 3.4817      #19.26      #lb_kx, ub_kx = 0.2800, 67.0560
-lb_sy, ub_sy = 0.0770, 0.9862      #0.13       #lb_sy, ub_sy = 0.0100, 0.1282
+lb_kx, ub_kx = 0.0145, 3.4817                                                       #lb_kx, ub_kx = 0.182, 2
+lb_sy, ub_sy = 0.0770, 0.9862                                                       #lb_sy, ub_sy = 0.5, 1.5
 
 active_cells = 7536
 
-l_bounds = np.concatenate((np.around(np.repeat(lb_kx, active_cells),4), np.around(np.repeat(lb_sy, active_cells),4)), axis = 0)           # Second and fourth block: Sy
+l_bounds = np.concatenate((np.around(np.repeat(lb_kx, active_cells),4), np.around(np.repeat(lb_sy, active_cells),4)), axis = 0)
 u_bounds = np.concatenate((np.around(np.repeat(ub_kx, active_cells),4), np.around(np.repeat(ub_sy, active_cells),4)), axis = 0) 
 
 #---    Initial Sampling (Latyn Hypercube)
@@ -86,7 +86,7 @@ else:
     #---    PSO
     α = 0.8                                                    # Cognitive scaling parameter  # 0.8 # 1.49
     β = 0.8                                                    # Social scaling parameter     # 0.8 # 1.49
-    #w = 0.5                                                     # inertia velocity
+    #w = 0.5                                                    # inertia velocity
     w_min = 0.4                                                 # minimum value for the inertia velocity
     w_max = 0.9                                                 # maximum value for the inertia velocity
     vMax = np.around(np.multiply(u_bounds-l_bounds,0.8),4)      # Max velocity # De 0.8 a 0.4

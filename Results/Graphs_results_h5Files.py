@@ -17,16 +17,16 @@ warnings.filterwarnings('ignore')
 
 
 #---    Initial information
-experiments = ['P9-SCL-ps1']
-machines = list(range(2,6)) + list(range(7,22))        #22
+experiments = ['P10-SCL-ps1']
+machines = list(range(2,22))        #22
 iterations = list(range(201))        #201
 
 methodology = 'DPSO'                #'DDE'
 path_results = r'..\results_' + methodology   #r'..\results_DDE'
 
-best_experiment = 'P9-SCL-ps1'
-best_result = 'vm11'
-best_iteration = 200
+best_experiment = 'P10-SCL-ps1'
+best_result = 'vm21'
+best_iteration = 174
 
 best_shape = 'Elements_iter_' + str(best_iteration) + '.shp'
 best_q = 'iter_' + str(best_iteration) + '_Streamflow_gauges.csv'
@@ -73,9 +73,9 @@ ax.plot(range(len(df_y)), df.loc[:,'Mean_values'], color = "#1f77b4")
 
 xlim, ylim = len(iterations), round(df['Max_values'].max(axis = 0)) + 5
 plt.xticks(range(0, xlim + 1, 10), fontsize = 10)
-plt.yticks(range(0, ylim + 1, 1), fontsize = 10)
+plt.yticks(range(0, ylim + 1, 5), fontsize = 10)
 plt.xlim(0, xlim)
-plt.ylim(3, 12)
+plt.ylim(55, ylim)
 
 plt.title("n = 20", fontsize = 14, weight = "bold")
 plt.xlabel("Iterations", fontsize = 10)
@@ -125,6 +125,21 @@ for n in variables:
     plt.ylabel('Row')
     
     plt.savefig(os.path.join(path_results, 'Error_relativo_' + n + '_' + methodology + '.png'))
+    plt.clf()
+
+    #---    Graph 2
+    plt.figure(figsize = (16,8))
+    plt.imshow(globals()['matriz_error_' + n], cmap = 'viridis')
+
+    im_ratio = globals()['matriz_error_' + n].shape[0]/globals()['matriz_error_' + n].shape[1]
+    plt.colorbar(fraction=0.047*im_ratio, extend='max')
+    plt.clim(0, 1000)
+
+    plt.title('Relative error (%) - ' + n)
+    plt.xlabel('Column')
+    plt.ylabel('Row')
+    
+    plt.savefig(os.path.join(path_results, 'Error_relativo_2_' + n + '_' + methodology + '.png'))
     plt.clf()
 
 #---    Streamflow analysis

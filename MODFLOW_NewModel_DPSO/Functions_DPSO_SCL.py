@@ -142,14 +142,26 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
     #---    Well analysis
     obs_well = get_data(os.path.join(path_obs_data, 'Wells_observed.csv'), 3)
     ow = obs_well.columns
+    print(ow)
 
     sim_well = get_data(os.path.join(dir_iteration, f"iter_{str(iteration)}_Wells_simulation.csv"), 3)
 
+    g_srmse_well = 0
     srmse_well = 0
     for i in ow:
+        if i == "OW51" or i == "OW87" or i == "OW97" or i == "OW100" or i == "OW157" or i == "OW167" or i == "OW181" or i == "OW188" or i == "OW233" or i == "OW234" or i == "OW235":
+            g = 0.8
+            print(i, g)
+        else:
+            g = 0.6
+            print(i, g) 
+
         mse_well = mean_squared_error(obs_well[i], sim_well[i])
         rmse_well = math.sqrt(mse_well)
+        g_rmse_well = g * rmse_well
+
         srmse_well += rmse_well
+        g_srmse_well += g_rmse_well
     print(srmse_well)
 
     #---    Streamflow analysis
@@ -177,10 +189,11 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
     """
     #---    Total Objective Function
     #---    There are 31 observation wells and 1 streamflow gauge (32 monitoring elements. If each of them has the same weighting factor: 1/32 = 0.03125 (3.125%))
-    g1 = 0.6
-    g2 = 0.4
+    #g1 = 0.6
+    g2 = 0.6
     #g3 = 0.4
 
     #of = g1*srmse_well + g2*rmse_q + g3*(P_kx + P_sy)
-    of = g1*srmse_well + g2*rmse_q
+    #of = g1*srmse_well + g2*rmse_q
+    of = g_srmse_well + g2*rmse_q
     return of
