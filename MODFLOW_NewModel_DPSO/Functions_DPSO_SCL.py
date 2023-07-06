@@ -142,7 +142,7 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
     #---    Well analysis
     obs_well = get_data(os.path.join(path_obs_data, 'Wells_observed.csv'), 3)
     ow = obs_well.columns
-    print(ow)
+    #print(ow)
 
     sim_well = get_data(os.path.join(dir_iteration, f"iter_{str(iteration)}_Wells_simulation.csv"), 3)
 
@@ -151,10 +151,10 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
     for i in ow:
         if i == "OW51" or i == "OW87" or i == "OW97" or i == "OW100" or i == "OW157" or i == "OW167" or i == "OW181" or i == "OW188" or i == "OW233" or i == "OW234" or i == "OW235":
             g = 0.8
-            print(i, g)
+            #print(i, g)
         else:
             g = 0.6
-            print(i, g) 
+            #print(i, g) 
 
         mse_well = mean_squared_error(obs_well[i], sim_well[i])
         rmse_well = math.sqrt(mse_well)
@@ -162,7 +162,7 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
 
         srmse_well += rmse_well
         g_srmse_well += g_rmse_well
-    print(srmse_well)
+    #print(srmse_well)
 
     #---    Streamflow analysis
     df_q = pd.read_csv(os.path.join(dir_iteration, f"iter_{str(iteration)}_Streamflow_gauges.csv"), skiprows = 3)
@@ -174,7 +174,8 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
     
     mse_q = mean_squared_error(df_q_obs['Observed'], df_q['Modeled'])
     rmse_q = math.sqrt(mse_q)
-    print(rmse_q)
+    
+    #print(rmse_q)
 
     """
     #---    Subject to
