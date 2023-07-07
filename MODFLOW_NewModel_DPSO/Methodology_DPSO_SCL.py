@@ -31,13 +31,13 @@ path_obs_data = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\ObservedDa
 
 #---    Initial matriz
 HP = ['kx', 'sy'] 
-initial_shape_HP = gpd.read_file(path_GIS + '/Elements_initial_unique_value.shp')   # /Elements_initial_zones_reduced.shp
+initial_shape_HP = gpd.read_file(path_GIS + '/Elements_initial_zones_reduced.shp')   #    /Elements_initial_unique_value.shp
 active_matriz = initial_shape_HP['Active'].to_numpy().reshape((84,185))             # Matrix of zeros and ones that allows maintaining active area
 
 n = 1                                                           # Population size
 
-lb_kx, ub_kx = 0.0145, 3.4817                                                       #lb_kx, ub_kx = 0.182, 2
-lb_sy, ub_sy = 0.0770, 0.9862                                                       #lb_sy, ub_sy = 0.5, 1.5
+lb_kx, ub_kx = 0.182, 2.0                                                       #lb_kx, ub_kx = 0.182, 2
+lb_sy, ub_sy = 0.500, 1.5                                                       #lb_sy, ub_sy = 0.5, 1.5
 
 active_cells = 7536
 

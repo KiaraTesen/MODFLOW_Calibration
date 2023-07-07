@@ -17,16 +17,16 @@ warnings.filterwarnings('ignore')
 
 
 #---    Initial information
-experiments = ['P10-SCL-ps1']
-machines = list(range(2,22))        #22
+experiments = ['P11-SCL-ps1']
+machines = list(range(2,12)) + list(range(13,22))       #22
 iterations = list(range(201))        #201
 
 methodology = 'DPSO'                #'DDE'
 path_results = r'..\results_' + methodology   #r'..\results_DDE'
 
-best_experiment = 'P10-SCL-ps1'
-best_result = 'vm21'
-best_iteration = 174
+best_experiment = 'P11-SCL-ps1'
+best_result = 'vm9'
+best_iteration = 185
 
 best_shape = 'Elements_iter_' + str(best_iteration) + '.shp'
 best_q = 'iter_' + str(best_iteration) + '_Streamflow_gauges.csv'
@@ -73,7 +73,7 @@ ax.plot(range(len(df_y)), df.loc[:,'Mean_values'], color = "#1f77b4")
 
 xlim, ylim = len(iterations), round(df['Max_values'].max(axis = 0)) + 5
 plt.xticks(range(0, xlim + 1, 10), fontsize = 10)
-plt.yticks(range(0, ylim + 1, 5), fontsize = 10)
+#plt.yticks(range(0, ylim + 1, 5), fontsize = 10)
 plt.xlim(0, xlim)
 plt.ylim(55, ylim)
 
