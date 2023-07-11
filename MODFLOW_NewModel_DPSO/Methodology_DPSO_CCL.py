@@ -46,8 +46,8 @@ for k in range(1,3):
 n_var = 2 * n_var    # Number of variables
 print (n_var)
 
-lb_kx, lb_sy = 0.014, 0.03   #0.02
-ub_1_kx, ub_2_kx = 1.5, 0.11
+lb_kx, lb_sy = 0.014, 0.04   #0.02, 0.03
+ub_1_kx, ub_2_kx = 1, 0.11
 ub_1_sy, ub_2_sy = 0.19, 0.11
 
 l_bounds = np.concatenate((np.around(np.repeat(lb_kx, n_var_1),4), np.around(np.repeat(lb_sy, n_var_1),4), np.around(np.repeat(lb_kx, n_var_2),4), 
