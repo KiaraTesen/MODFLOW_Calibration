@@ -49,7 +49,7 @@ print (n_var)
 lb_1_kx, lb_1_sy = 1.5, 0.005   #0.02, 0.03
 lb_2_kx, lb_2_sy = 0.00014, 0.04   #0.02, 0.03
 ub_1_kx, ub_1_sy = 2, 0.01
-ub_2_kx, ub_2_sy = 0.005, 0.05
+ub_2_kx, ub_2_sy = 0.001, 0.05
 
 l_bounds = np.concatenate((np.around(np.repeat(lb_1_kx, n_var_1),4), np.around(np.repeat(lb_1_sy, n_var_1),4), np.around(np.repeat(lb_2_kx, n_var_2),4), 
                            np.around(np.repeat(lb_2_sy, n_var_2),4)), axis = 0)
