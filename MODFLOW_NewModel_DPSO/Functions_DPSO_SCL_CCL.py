@@ -115,16 +115,12 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
         if m == "kx":
             begin = 0
             end = active_cells
-            print("pre: kx = ", begin, end)
         elif m == "sy":
             begin = active_cells
             end = active_cells * 2
-            print("pre: sy = ", begin, end)
         globals()["matriz_pre_" + str(m)] = get_pre_HP(initial_shape_HP, pre_shape_HP, str(m), sample_scaled, begin, end)
         get_image_matriz(globals()["matriz_pre_" + str(m)], str(m), os.path.join(dir_iteration, 'Pre_' + str(m) +'.png'))
         plt.clf
-
-        #globals()["vector_pre" + str(m)] = globals()["matriz_pre" + str(m)].flatten()
 
         # CONVOLUTIONAL LAYERS
         decimals_kx = 4
@@ -133,8 +129,6 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
         # First kernel
         kernel_1_kx = sample_scaled[int(active_cells * 2):int(active_cells * 2 + n_var_1)].reshape(k_shape_1)
         kernel_1_sy = sample_scaled[int(active_cells * 2 + n_var_1):int(2 * (active_cells + n_var_1))].reshape(k_shape_1)
-        print("k_1: kx = ", int(active_cells * 2), int(active_cells * 2 + n_var_1))
-        print("k_1: sy = ", int(active_cells * 2 + n_var_1), int(2 * (active_cells + n_var_1)))
 
         globals()["matriz_1_" + str(m)] = get_HP(pre_shape_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_1_" + str(m)])
         get_image_matriz(globals()["matriz_1_" + str(m)], str(m), os.path.join(dir_iteration, '1_' + str(m) +'.png'))
@@ -145,9 +139,7 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
         # Second kernel
         kernel_2_kx = sample_scaled[int(2 * (active_cells + n_var_1)):int(2 * (active_cells + n_var_1) + n_var_2)].reshape(k_shape_2)
         kernel_2_sy = sample_scaled[int(2 * (active_cells + n_var_1) + n_var_2):int(2 * (active_cells + n_var_1 + n_var_2))].reshape(k_shape_2)
-        print("k_2: kx = ", int(2 * (active_cells + n_var_1)), int(2 * (active_cells + n_var_1) + n_var_2))
-        print("k_2: sy = ", int(2 * (active_cells + n_var_1) + n_var_2), int(2 * (active_cells + n_var_1 + n_var_2)))
-
+        
         globals()["matriz_" + str(m)] = get_HP(shape_k1_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_2_" + str(m)])
         get_image_matriz(globals()["matriz_" + str(m)], str(m), os.path.join(dir_iteration, 'Final_' + str(m) +'.png'))
         plt.clf()
@@ -160,3 +152,5 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
     new_shape_HP['kz'] = matriz_kz.flatten()
     new_shape_HP['ss'] = matriz_ss.flatten()
     new_shape_HP.to_file(os.path.join(dir_iteration, 'Elements_iter_' + str(iteration) + '.shp'))
+    print(new_shape_HP)
+    print(initial_shape_HP)
