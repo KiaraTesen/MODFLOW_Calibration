@@ -49,11 +49,11 @@ n_var = 2 * n_var    # Number of variables
 print (n_var)
 
 #---    Bounds
-lb_kx, ub_kx = 0.001, 3.5
+lb_kx, ub_kx = 0.0005, 3.75
 lb_sy, ub_sy = 0.5, 3.5
 
-lb_1_kx, lb_1_sy = 0.001, 0.02   #0.02, 0.03
-lb_2_kx, lb_2_sy = 0.002, 0.09   #0.004
+lb_1_kx, lb_1_sy = 0.001, 0.03   #0.02, 0.03
+lb_2_kx, lb_2_sy = 0.002, 0.1   #0.004
 ub_1_kx, ub_1_sy = 0.075, 0.07
 ub_2_kx, ub_2_sy = 0.35, 0.22
 
