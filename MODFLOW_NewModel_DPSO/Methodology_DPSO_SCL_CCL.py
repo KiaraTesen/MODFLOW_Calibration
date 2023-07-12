@@ -50,7 +50,7 @@ print (n_var)
 
 #---    Bounds
 lb_kx, ub_kx = 0.0005, 3.75
-lb_sy, ub_sy = 0.5, 3.5
+lb_sy, ub_sy = 0.75, 3.5
 
 lb_1_kx, lb_1_sy = 0.0005, 0.05   #0.02, 0.03
 lb_2_kx, lb_2_sy = 0.0005, 0.1   #0.004
