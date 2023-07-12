@@ -53,8 +53,8 @@ lb_kx, ub_kx = 0.001, 3.9
 lb_sy, ub_sy = 1, 3.5
 
 lb_1_kx, lb_1_sy = 0.001, 0.075   #0.02, 0.03
-lb_2_kx, lb_2_sy = 0.002, 0.1   #0.004
-ub_1_kx, ub_1_sy = 0.01, 0.1
+lb_2_kx, lb_2_sy = 0.004, 0.1   #0.004
+ub_1_kx, ub_1_sy = 0.1, 0.1
 ub_2_kx, ub_2_sy = 0.3, 0.22
 
 l_bounds = np.concatenate((np.around(np.repeat(lb_kx, active_cells),4), np.around(np.repeat(lb_sy, active_cells),4), 
