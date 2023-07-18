@@ -47,10 +47,10 @@ n_var = 2 * n_var    # Number of variables
 print (n_var)
 
 #---    Bounds
-lb_1_kx, lb_1_sy = 0.0003, 0.113       #0.001, 0.075   
-lb_2_kx, lb_2_sy = 0.0003, 0.163   
-ub_1_kx, ub_1_sy = 0.125, 0.1145         #0.1, 0.1
-ub_2_kx, ub_2_sy = 0.3, 0.1645
+lb_1_kx, lb_1_sy = 0.007, 0.02       #0.001, 0.075   
+lb_2_kx, lb_2_sy = 0.11, 0.11   
+ub_1_kx, ub_1_sy = 0.088, 0.06         #0.1, 0.1
+ub_2_kx, ub_2_sy = 0.12, 0.12
 
 l_bounds = np.concatenate((np.around(np.repeat(lb_1_kx, n_var_1),4), np.around(np.repeat(lb_1_sy, n_var_1),4), 
                            np.around(np.repeat(lb_2_kx, n_var_2),4), np.around(np.repeat(lb_2_sy, n_var_2),4)), axis = 0)
