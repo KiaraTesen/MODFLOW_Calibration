@@ -4,6 +4,7 @@
 #import matplotlib as mpl
 import os
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 import geopandas as gpd
 from sklearn.metrics import mean_absolute_error
@@ -16,10 +17,11 @@ warnings.filterwarnings('ignore')
 #---    Initial information
 methodology = 'DPSO'                #'DDE'
 path_results = r'..\results_' + methodology   #r'..\results_DDE'
+elements_init = 'Elements_initial_unique_value_v2'
 
-best_experiment = 'P11-SCL-ps1'
-best_result = 'vm9'
-best_iteration = 185
+best_experiment = 'P14-CCL-ps1'
+best_result = 'vm21'
+best_iteration = 173
 
 best_shape = 'Elements_iter_' + str(best_iteration) + '.shp'
 best_q = 'iter_' + str(best_iteration) + '_Streamflow_gauges.csv'
@@ -53,9 +55,9 @@ for n in variables:
     plt.xlabel('Column')
     plt.ylabel('Row')
     
-    plt.savefig(os.path.join(path_results, 'Error_relativo_' + n + '_' + methodology + '.png'))
+    plt.savefig(os.path.join(path_results, best_experiment, 'Graficas', 'Error_relativo_' + n + '_' + methodology + '_' + best_experiment + '.png'))
     plt.clf()
-
+    
     #---    Graph 2
     plt.figure(figsize = (16,8))
     plt.imshow(globals()['matriz_error_' + n], cmap = 'viridis')
@@ -68,7 +70,7 @@ for n in variables:
     plt.xlabel('Column')
     plt.ylabel('Row')
     
-    plt.savefig(os.path.join(path_results, 'Error_relativo_2_' + n + '_' + methodology + '.png'))
+    plt.savefig(os.path.join(path_results, best_experiment, 'Graficas', 'Error_relativo_2_' + n + '_' + methodology + '_' + best_experiment + '.png'))
     plt.clf()
 
 #---    Streamflow analysis
@@ -79,10 +81,18 @@ df_q = df_q.iloc[36:,:]
 
 df_q_obs = pd.read_csv(r'..\data\ObservedData\StreamflowGauges_KPR_vf.csv', skiprows = 2)
 df_q_obs = df_q_obs.iloc[36:,:]
+#print(df_q_obs)
+
+df_q_init = pd.read_csv(os.path.join(r'..\results_base', elements_init, 'Streamflow_gauges.csv'), skiprows = 3)
+df_q_init = df_q_init.set_index('Statistic')
+df_q_init = df_q_init.set_index(pd.to_datetime(df_q_init.index))
+df_q_init = df_q_init.iloc[36:,:]
+#print(df_q_init)
 
 DF_q = pd.DataFrame()
 DF_q['Modeled'] = np.array(df_q['Modeled'])
 DF_q['Observed'] = np.array(df_q_obs['Observed'])
+DF_q['Initial value'] = np.array(df_q_init['Modeled'])
 DF_q = DF_q.set_index(pd.to_datetime(df_q.index))
 
 #---    Metrics
@@ -97,9 +107,10 @@ r2_q = r2_score(DF_q['Observed'], DF_q['Modeled'])
 fig = plt.subplots(figsize=(10, 6))
 plt.plot(DF_q['Observed'], label = 'Obs', color = "black", linewidth = 0.25)
 plt.plot(DF_q['Modeled'], label = 'DPSO', color = "red", linewidth = 0.25)
+plt.plot(DF_q['Initial value'], label = 'Init', color = "blue", linewidth = 0.25)
 
-ymin = min(DF_q['Modeled'].to_numpy().min(),DF_q['Observed'].to_numpy().min())
-ymax = max(DF_q['Modeled'].to_numpy().max(),DF_q['Observed'].to_numpy().max())
+ymin = min(DF_q['Modeled'].to_numpy().min(), DF_q['Observed'].to_numpy().min(), DF_q['Initial value'].to_numpy().min())
+ymax = max(DF_q['Modeled'].to_numpy().max(), DF_q['Observed'].to_numpy().max(), DF_q['Initial value'].to_numpy().max())
 dif_v = ymax - ymin
 
 plt.ylim(0, ymax + dif_v)
@@ -116,19 +127,26 @@ plt.text(13200, ymax + dif_v - 4*(dif_v/8), 'RMSE: ' + str(round(rmse_q[0],3)) +
 plt.text(13200, ymax + dif_v - 5*(dif_v/8), 'MAE:   ' + str(round(mae_q,3)) + ' $m^{3}/s$', fontsize = fs_text)
 plt.text(13200, ymax + dif_v - 6*(dif_v/8), '$R^{2}$:      ' + str(round(r2_q,3)), fontsize = fs_text)
 
-plt.savefig(os.path.join(path_results, 'Q_' + methodology + '.png'))
+plt.savefig(os.path.join(path_results, best_experiment, 'Graficas', 'Q_' + methodology + '_' + best_experiment + '.png'))
 plt.clf()
 
 #---    Observation wells
 obs_well = pd.read_csv(r'..\data\ObservedData\Wells_observed.csv', skiprows = 3)
 obs_well = obs_well.iloc[36:,:]
 obs_well = obs_well.set_index(pd.to_datetime(df_q.index))
+#print(obs_well)
 
 ow = obs_well.columns
 
 sim_well = pd.read_csv(os.path.join(path_results, best_experiment, best_result, 'iter_' + str(best_iteration), best_w), skiprows = 3)
 sim_well = sim_well.iloc[36:,:]
 sim_well = sim_well.set_index(pd.to_datetime(df_q.index))
+#print(sim_well)
+
+init_well = pd.read_csv(os.path.join(r'..\results_base', elements_init, 'Wells_simulation.csv'), skiprows = 3)
+init_well = init_well.iloc[36:,:]
+init_well = init_well.set_index(pd.to_datetime(df_q.index))
+#print(init_well)
 
 for p in ow[1:]:
     #---    Metrics
@@ -143,9 +161,10 @@ for p in ow[1:]:
     fig = plt.subplots(figsize=(10, 6))
     plt.plot(obs_well[p], label = 'Obs', color = "black", linewidth = 0.25)
     plt.plot(sim_well[p], label = 'DPSO', color = "red", linewidth = 0.25)
+    plt.plot(init_well[p], label = 'Init', color = "blue", linewidth = 0.25)
 
-    ymin = min(obs_well[p].to_numpy().min(),sim_well[p].to_numpy().min())
-    ymax = max(obs_well[p].to_numpy().max(),sim_well[p].to_numpy().max())
+    ymin = min(obs_well[p].to_numpy().min(), sim_well[p].to_numpy().min(), init_well[p].to_numpy().min())
+    ymax = max(obs_well[p].to_numpy().max(), sim_well[p].to_numpy().max(), init_well[p].to_numpy().max())
     dif_v = ymax - ymin
 
     plt.ylim(ymin - (dif_v/10), ymax + dif_v)
@@ -162,6 +181,5 @@ for p in ow[1:]:
     plt.text(13200, ymax + dif_v - 5*(dif_v/8), 'MAE:   ' + str(round(mae_w,3)) + ' $m^{3}/s$', fontsize = fs_text)
     plt.text(13200, ymax + dif_v - 6*(dif_v/8), '$R^{2}$:      ' + str(round(r2_w,3)), fontsize = fs_text)
 
-    plt.savefig(os.path.join(path_results, 'Obs_well_' + str(p) + '_' + methodology + '.png'))
+    plt.savefig(os.path.join(path_results, best_experiment, 'Graficas', 'Obs_well_' + str(p) + '_' + methodology + '_' + best_experiment + '.png'))
     plt.clf()
-
