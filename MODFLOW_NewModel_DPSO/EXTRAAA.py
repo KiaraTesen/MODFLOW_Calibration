@@ -75,7 +75,7 @@ else:
         pob.x[index_pMin] = l_bounds[index_pMin]
 
     #---    Evaluate the fitnness function
-    y = Run_WEAP_MODFLOW(path_output, str(ITERATION), initial_shape_HP, HP, pob.x, n_var_1, n_var_2, n_var, 
+    y = Run_WEAP_MODFLOW(path_output, str(ITERATION), initial_shape_HP, HP, active_cells, pob.x, n_var_1, n_var_2, n_var, 
                          k_shape_1, k_shape_2, active_matriz, path_init_model, path_model, path_nwt_exe, 
                          path_obs_data)
     #gbest = send_request_py(IP_SERVER_ADD, y, pob.x)
@@ -105,8 +105,6 @@ else:
 ##############################################
 ################## DE FUNCTIONS ##############
 ##############################################
-
-
     #---    Generate new native files
     model = fpm.Modflow.load(path_init_model + '/SyntheticAquifer_NY.nam', version = 'mfnwt', exe_name = path_nwt_exe)
     model.write_input()
@@ -160,10 +158,10 @@ else:
     srmse_well = 0
     for i in ow:
         if i == "OW51" or i == "OW87" or i == "OW97" or i == "OW100" or i == "OW157" or i == "OW167" or i == "OW181" or i == "OW188" or i == "OW233" or i == "OW234" or i == "OW235":
-            g = 0.6 # 0.8
+            g = 0.8 # 0.8
             #print(i, g)
         else:
-            g = 0.6
+            g = 0.8
             #print(i, g) 
 
         mse_well = mean_squared_error(obs_well[i], sim_well[i])
@@ -199,7 +197,7 @@ else:
     #---    Total Objective Function
     #---    There are 31 observation wells and 1 streamflow gauge (32 monitoring elements. If each of them has the same weighting factor: 1/32 = 0.03125 (3.125%))
     #g1 = 0.6
-    g2 = 0.4
+    g2 = 0.6
     g3 = 0.6
 
     #of = g1*srmse_well + g2*rmse_q + g3*(P_kx + P_sy)
