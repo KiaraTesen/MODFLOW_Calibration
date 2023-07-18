@@ -91,13 +91,14 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
     new_shape_HP = initial_shape_HP.copy()
 
     for m in HP:
+        # CONVOLUTIONAL LAYERS
         decimals_kx = 4
         decimals_sy = 4
 
         # First kernel
         kernel_1_kx = sample_scaled[:int(n_var_1)].reshape(k_shape_1)
         kernel_1_sy = sample_scaled[int(n_var_1):int(2 * n_var_1)].reshape(k_shape_1)
-        
+
         globals()["matriz_1_" + str(m)] = get_HP(initial_shape_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_1_" + str(m)])
         get_image_matriz(globals()["matriz_1_" + str(m)], str(m), os.path.join(dir_iteration, '1_' + str(m) +'.png'))
         plt.clf()
@@ -107,7 +108,7 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, sample_scaled
         # Second kernel
         kernel_2_kx = sample_scaled[int(2 * n_var_1):int(2 * n_var_1 + n_var_2)].reshape(k_shape_2)
         kernel_2_sy = sample_scaled[int(2 * n_var_1 + n_var_2):int(n_var)].reshape(k_shape_2)
-
+        
         globals()["matriz_" + str(m)] = get_HP(shape_k1_HP, str(m), active_matriz, locals()["decimals_" + str(m)], locals()["kernel_2_" + str(m)])
         get_image_matriz(globals()["matriz_" + str(m)], str(m), os.path.join(dir_iteration, 'Final_' + str(m) +'.png'))
         plt.clf()

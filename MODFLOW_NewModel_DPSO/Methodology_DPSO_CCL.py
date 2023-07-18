@@ -31,13 +31,13 @@ path_obs_data = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\ObservedDa
 
 #---    Initial matriz
 HP = ['kx', 'sy'] 
-initial_shape_HP = gpd.read_file(path_GIS + '/Elements_initial_zones_monitoring.shp')   # /Elements_initial_unique_value.shp, /Elements_initial_zones_reduced.shp
+initial_shape_HP = gpd.read_file(path_GIS + '/Elements_initial_zones_reduced.shp')   # /Elements_initial_unique_value.shp, /Elements_initial_zones_reduced.shp
 active_matriz = initial_shape_HP['Active'].to_numpy().reshape((84,185))             # Matrix of zeros and ones that allows maintaining active area
 
 n = 1                                                           # Population size
 
-k_shape_1 = (10,10)
-k_shape_2 = (5,5)
+k_shape_1 = (5,5)
+k_shape_2 = (3,3)
 
 n_var = 0
 for k in range(1,3):
@@ -46,15 +46,16 @@ for k in range(1,3):
 n_var = 2 * n_var    # Number of variables
 print (n_var)
 
-lb_1_kx, lb_1_sy = 1.5, 0.005   #0.02, 0.03
-lb_2_kx, lb_2_sy = 0.00014, 0.04   #0.02, 0.03
-ub_1_kx, ub_1_sy = 2, 0.01
-ub_2_kx, ub_2_sy = 0.001, 0.05
+#---    Bounds
+lb_1_kx, lb_1_sy = 0.0004, 0.0038       #0.001, 0.075   
+lb_2_kx, lb_2_sy = 0.004, 0.1   
+ub_1_kx, ub_1_sy = 1.78, 0.2564         #0.1, 0.1
+ub_2_kx, ub_2_sy = 0.3, 0.22
 
-l_bounds = np.concatenate((np.around(np.repeat(lb_1_kx, n_var_1),4), np.around(np.repeat(lb_1_sy, n_var_1),4), np.around(np.repeat(lb_2_kx, n_var_2),4), 
-                           np.around(np.repeat(lb_2_sy, n_var_2),4)), axis = 0)
-u_bounds = np.concatenate((np.around(np.repeat(ub_1_kx, n_var_1),4), np.around(np.repeat(ub_1_sy, n_var_1),4), np.around(np.repeat(ub_2_kx, n_var_2),4), 
-                           np.around(np.repeat(ub_2_sy, n_var_2),4)), axis = 0) 
+l_bounds = np.concatenate((np.around(np.repeat(lb_1_kx, n_var_1),4), np.around(np.repeat(lb_1_sy, n_var_1),4), 
+                           np.around(np.repeat(lb_2_kx, n_var_2),4), np.around(np.repeat(lb_2_sy, n_var_2),4)), axis = 0)
+u_bounds = np.concatenate((np.around(np.repeat(ub_1_kx, n_var_1),4), np.around(np.repeat(ub_1_sy, n_var_1),4), 
+                           np.around(np.repeat(ub_2_kx, n_var_2),4), np.around(np.repeat(ub_2_sy, n_var_2),4)), axis = 0) 
 
 #---    Initial Sampling (Latyn Hypercube)
 class Particle:
@@ -67,7 +68,7 @@ class Particle:
 
 sample_scaled = get_sampling_LH(n_var, n, l_bounds, u_bounds)
 pob = Particle(sample_scaled[0],np.around(np.array([0]*(n_var)),4),10000000000)
-######################
+
 if ITERATION == 0:
     #---    Initial Sampling - Pob(0)
     y_init = Run_WEAP_MODFLOW(path_output, str(ITERATION), initial_shape_HP, HP, pob.x, n_var_1, n_var_2, n_var, 
