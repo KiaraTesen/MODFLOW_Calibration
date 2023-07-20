@@ -11,7 +11,7 @@ warnings.filterwarnings('ignore')
 
 #---    Initial information
 experiments = ['P16-pre']
-machines = list(range(2,22))
+machines = list(range(2,7))
 iterations = list(range(201))
 
 methodology = 'DDE'                #'DDE'
@@ -28,6 +28,7 @@ for i in experiments:
         with h5py.File(path_experiment, 'r') as f:
             x = f["pob_x"][:]
             y = f["pob_y"][:]
+        print(x)
 
         for k in iterations:
             df_y.loc[k,"Y-vm" + str(j) + '-' + str(i)] = y[k, 0]
@@ -41,9 +42,9 @@ df_y.set_index('iteration',inplace = True)
 
 df_x['iteration'] = range(len(df_x))
 df_x.set_index('iteration',inplace = True)
-print(df_x)
+#print(df_x)
 
 df_y['Min_values'] = df_y.min(axis = 1)
 df_y['Max_values'] = df_y.max(axis = 1)
 df_y['Mean_values'] =df_y.mean(axis = 1)
-print(df_y)
+#print(df_y)

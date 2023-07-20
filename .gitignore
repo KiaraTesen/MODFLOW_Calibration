@@ -42,5 +42,6 @@ MODFLOW_NewModel_DDE/SyntheticAquifer_NY.upw
 MODFLOW_NewModel_DDE/UPW.chk
 
 results_DPSO
+results_DDE
 
 vagrant
