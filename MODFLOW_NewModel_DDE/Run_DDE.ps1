@@ -5,7 +5,7 @@ $total_iteration = [int]($p2)
 $final_iteration = [int]($p3)
 
 $vms = [int]($p4)
-$vm = [int]((hostname) -replace '\D+(\d+)','$1') - 1
+$vm = [int]((hostname) -replace '\D+(\d+)','$1')
 
 while($iteration -ne $total_iteration){
       #Write-Host "Run experiment : "$iteration
