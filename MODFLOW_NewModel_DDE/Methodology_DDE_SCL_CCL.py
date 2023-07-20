@@ -28,8 +28,8 @@ FINAL_ITERATION = int(sys.argv[4])
 VMS = int(sys.argv[5])
 #---
 vms = VMS       # Number of VMs we use for the experiment
-#IP_POOL = [f"10.0.0.{12+i}" for i in range(vms)]    # vm1 is the server  machine
-IP_POOL = [f"10.0.0.{11+i}" for i in range(vms)]    # vm1 is the server  machine
+IP_POOL = [f"10.0.0.{12+i}" for i in range(vms)]    # vm1 is the server  machine
+#IP_POOL = [f"10.0.0.{11+i}" for i in range(vms)]    # vm1 is the server  machine
 IP_POOL.remove(MY_IP)
 
 IP_PORT_POOL = [f"{ip}:8888" for ip in IP_POOL]
@@ -128,9 +128,13 @@ else:
     # Randomly pick 3 candidate solution using indexes ids_vms
     xa_ip_port , xb_ip_port , xc_ip_port = np.random.choice(IP_PORT_POOL, 3)
     
-    V1 = np.array(send_request_py(xa_ip_port, 0, []))
-    V2 = np.array(send_request_py(xb_ip_port, 0, []))
-    Vb = np.array(send_request_py(xc_ip_port, 0, []))
+    #V1 = np.array(send_request_py(xa_ip_port, 0, []))
+    #V2 = np.array(send_request_py(xb_ip_port, 0, []))
+    #Vb = np.array(send_request_py(xc_ip_port, 0, []))
+
+    V1 = np.copy(send_request_py(xa_ip_port, 0, []))
+    V2 = np.copy(send_request_py(xb_ip_port, 0, []))
+    Vb = np.copy(send_request_py(xc_ip_port, 0, []))
 
     Vd = V1 - V2                                # The difference vector        
     Vm = Vb + α*Vd                              # The mutant vector         
