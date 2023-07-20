@@ -16,18 +16,25 @@ import warnings
 warnings.filterwarnings('ignore')
 
 #---    Configure IP and PORT
-MY_IP = sys.argv[1]  
-MY_PORT = sys.argv[2]
-MY_IP_PORT = f"{MY_IP}:{MY_PORT}"
+#MY_IP = sys.argv[1]  
+#MY_PORT = sys.argv[2]
+VM = int(sys.argv[1])
+print(VM)
 
-ITERATION = int(sys.argv[3])
-TOTAL_ITERATION = int(sys.argv[4])
-FINAL_ITERATION = int(sys.argv[5])
+MY_IP = f"10.0.0.{10+VM}"
+print(MY_IP)
+MY_IP_PORT = f"{MY_IP}:8888"
 
-VM = int(sys.argv[6])
+ITERATION = int(sys.argv[2])
+TOTAL_ITERATION = int(sys.argv[3])
+FINAL_ITERATION = int(sys.argv[4])
 
+VMS = int(sys.argv[5])
+
+
+"""
 #---
-vms = VM       # Number of VMs we use for the experiment
+vms = VMS       # Number of VMs we use for the experiment
 IP_POOL = [f"10.0.0.{12+i}" for i in range(vms)]    # vm1 is the server  machine
 IP_POOL.remove(MY_IP)
 
@@ -97,7 +104,7 @@ if ITERATION == 0:
     send_request_py(MY_IP_PORT, 1, pob.x)
     time.sleep(60)
 
-    file = open(f"ind_{MY_IP}_{MY_PORT}.txt", "w")
+    file = open(f"ind_{MY_IP}_8888.txt", "w")
     file.write(f"{ITERATION},{pob.y}\n")
     file.close()
 
@@ -157,13 +164,14 @@ else:
         # Send xi to the server
         send_request_py(MY_IP_PORT, 1, pob.x)
 
-    file = open(f"ind_{MY_IP}_{MY_PORT}.txt", "a")
+    file = open(f"ind_{MY_IP}_8888.txt", "a")
     file.write(f"{ITERATION},{pob.y}\n")
     file.close()
 
     #---    Iteration register
-    with h5py.File('DPSO_historial.h5', 'a') as f:
+    with h5py.File('DDE_historial.h5', 'a') as f:
         f["iteration"][ITERATION] = ITERATION
         f["pob_x"][ITERATION] = np.copy(pob.x)
         f["pob_y"][ITERATION] = pob.y
     f.close()
+    """
