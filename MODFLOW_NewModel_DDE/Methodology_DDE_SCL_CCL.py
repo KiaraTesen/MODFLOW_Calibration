@@ -28,7 +28,8 @@ FINAL_ITERATION = int(sys.argv[4])
 VMS = int(sys.argv[5])
 #---
 vms = VMS       # Number of VMs we use for the experiment
-IP_POOL = [f"10.0.0.{12+i}" for i in range(vms)]    # vm1 is the server  machine
+#IP_POOL = [f"10.0.0.{12+i}" for i in range(vms)]    # vm1 is the server  machine
+IP_POOL = [f"10.0.0.{11+i}" for i in range(vms)]    # vm1 is the server  machine
 IP_POOL.remove(MY_IP)
 
 IP_PORT_POOL = [f"{ip}:8888" for ip in IP_POOL]
