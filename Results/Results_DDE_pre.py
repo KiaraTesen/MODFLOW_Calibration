@@ -28,7 +28,7 @@ for i in experiments:
         with h5py.File(path_experiment, 'r') as f:
             x = f["pob_x"][:]
             y = f["pob_y"][:]
-        print(x[14])
+        print(x[0])
 
         for k in iterations:
             df_y.loc[k,"Y-vm" + str(j) + '-' + str(i)] = y[k, 0]
