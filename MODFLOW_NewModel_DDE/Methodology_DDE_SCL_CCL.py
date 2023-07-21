@@ -29,11 +29,9 @@ VMS = int(sys.argv[5])
 #---
 vms = VMS       # Number of VMs we use for the experiment
 IP_POOL = [f"10.0.0.{12+i}" for i in range(vms)]    # vm1 is the server  machine
-#IP_POOL = [f"10.0.0.{11+i}" for i in range(vms)]    # vm1 is the server  machine
 IP_POOL.remove(MY_IP)
 
 IP_PORT_POOL = [f"{ip}:8888" for ip in IP_POOL]
-print(IP_PORT_POOL)
 
 #---    Paths
 path_WEAP = r'C:\Users\vagrant\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
@@ -61,7 +59,6 @@ for k in range(1,3):
     globals()['n_var_' + str(k)] = reduce(lambda x,y: x*y, globals()['k_shape_' + str(k)])
     n_var += globals()['n_var_' + str(k)]
 n_var = 2 * n_var    # Number of variables
-print (n_var)
 
 #---    Bounds
 lb_kx, ub_kx = 0.0005, 3.8
@@ -102,6 +99,9 @@ if ITERATION == 0:
     file = open(f"ind_{MY_IP}_8888.txt", "w")
     file.write(f"{ITERATION},{pob.y}\n")
     file.close()
+
+    filename = open(f"ind_{MY_IP}_relation.txt", "w")
+    filename.close()
 
     #---    Create iteration register file
     with h5py.File('DDE_historial.h5', 'w') as f:
@@ -166,6 +166,12 @@ else:
     file = open(f"ind_{MY_IP}_8888.txt", "a")
     file.write(f"{ITERATION},{pob.y}\n")
     file.close()
+
+    filename = open(f"ind_{MY_IP}_relation.txt", "a")
+    filename.write(f"{ITERATION},{xa_ip_port},{np.copy(V1)}\n")
+    filename.write(f"{ITERATION},{xb_ip_port},{np.copy(V2)}\n")
+    filename.write(f"{ITERATION},{xc_ip_port},{np.copy(Vb)}\n")
+    filename.close()
 
     #---    Iteration register
     with h5py.File('DDE_historial.h5', 'a') as f:
