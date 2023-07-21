@@ -43,7 +43,7 @@ k_shape_2 = (3,3)   #SY_1
 k_shape_3 = (3,3)   #HK_2
 k_shape_4 = (2,2)   #SY_2
 
-n_var = active_cells
+n_var = active_cells * 2
 for k in range(1,5):
     globals()['n_var_' + str(k)] = reduce(lambda x,y: x*y, globals()['k_shape_' + str(k)])
     n_var += globals()['n_var_' + str(k)]
