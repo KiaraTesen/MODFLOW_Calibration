@@ -85,6 +85,7 @@ class Particle:
 sample_scaled = get_sampling_LH(n_var, n, l_bounds, u_bounds)
 pob = Particle(sample_scaled[0])
 
+print(ITERATION)
 if ITERATION == 0:
     #---    Initial Sampling - Pob(0)
     y_init = Run_WEAP_MODFLOW(path_output, str(ITERATION), initial_shape_HP, HP, active_cells, pob.x, n_var_1, n_var_2, n_var, 
