@@ -70,16 +70,18 @@ def get_HP(Shape_HP, variable, active_matriz, decimals, kernel):
     matriz = np.zeros((rows,columns))
     for i in range(0,len(Shape_HP['ROW'])):
         matriz[Shape_HP['ROW'][i]-1][Shape_HP['COLUMN'][i]-1] = Shape_HP[variable][i] 
+    print(matriz)
 
-        #---    Convolution
-        new_matriz = signal.convolve2d(matriz, kernel, boundary = 'symm', mode = 'same')
-        new_matriz = np.around(new_matriz * active_matriz, decimals = decimals)
-        print("Antes del reemplazo numpy: ", new_matriz)
-        if variable == "sy":
-            new_matriz = np.where(new_matriz == 0, 0.01, new_matriz)
-        else:
-            new_matriz = np.where(new_matriz == 0, 0.000001728, new_matriz)
-        print("Después del reemplazo numpy: ", new_matriz)
+    #---    Convolution
+    new_matriz = signal.convolve2d(matriz, kernel, boundary = 'symm', mode = 'same')
+    new_matriz = np.around(new_matriz * active_matriz, decimals = decimals)
+    print("Antes del reemplazo numpy: ", new_matriz)
+    if variable == "sy":
+        new_matriz = np.where(new_matriz == 0, 0.01, new_matriz)
+    else:
+        new_matriz = np.where(new_matriz == 0, 0.000001728, new_matriz)
+    print("Después del reemplazo numpy: ", new_matriz)
+
     return new_matriz
 
 #---    Order data
