@@ -35,7 +35,6 @@ def get_sampling_LH(n_var, n, l_bounds, u_bounds):
 def get_pre_HP(Shape_HP, new_Shape, variable, particle, begin, end):
     count = 0
     x = particle[begin : end]
-    print(new_Shape)
 
     for i in range(len(new_Shape)):    
         if variable == "sy":
@@ -75,7 +74,12 @@ def get_HP(Shape_HP, variable, active_matriz, decimals, kernel):
         #---    Convolution
         new_matriz = signal.convolve2d(matriz, kernel, boundary = 'symm', mode = 'same')
         new_matriz = np.around(new_matriz * active_matriz, decimals = decimals)
-
+        print("Antes del reemplazo numpy: ", new_matriz)
+        if variable == "sy":
+            new_matriz = np.where(new_matriz == 0, 0.01, new_matriz)
+        else:
+            new_matriz = np.where(new_matriz == 0, 0.000001728, new_matriz)
+        print("Después del reemplazo numpy: ", new_matriz)
     return new_matriz
 
 #---    Order data
@@ -135,12 +139,13 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
         globals()["matriz_pre_" + str(m)] = get_pre_HP(initial_shape_HP, pre_shape_HP, str(m), sample_scaled, begin, end)
         get_image_matriz(globals()["matriz_pre_" + str(m)], str(m), os.path.join(dir_iteration, 'Pre_' + str(m) +'.png'))
         plt.clf
-        print(initial_shape_HP)
+
         # CONVOLUTIONAL LAYERS
         decimals_kx = 4
         decimals_sy = 4
 
         # First kernel
+        print('FIRST')
         kernel_1_kx = sample_scaled[int(active_cells * 2):int(active_cells * 2 + n_var_1)].reshape(k_shape_1)
         kernel_1_sy = sample_scaled[int(active_cells * 2 + n_var_1):int(active_cells * 2 + n_var_1 + n_var_2)].reshape(k_shape_2)
 
@@ -151,6 +156,7 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
         shape_k1_HP[m] = globals()["vector_1_" + str(m)]
 
         # Second kernel
+        print('FINAL')
         kernel_2_kx = sample_scaled[int(active_cells * 2 + n_var_1 + n_var_2):int(active_cells * 2 + n_var_1 + n_var_2 + n_var_3)].reshape(k_shape_3)
         kernel_2_sy = sample_scaled[int(active_cells * 2 + n_var_1 + n_var_2 + n_var_3):int(n_var)].reshape(k_shape_4)
         
@@ -166,5 +172,6 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
     new_shape_HP['kz'] = matriz_kz.flatten()
     new_shape_HP['ss'] = matriz_ss.flatten()
     new_shape_HP.to_file(os.path.join(dir_iteration, 'Elements_iter_' + str(iteration) + '.shp'))
-
+    print(new_shape_HP)
+    print(initial_shape_HP)
 #### PRUEBA!!
