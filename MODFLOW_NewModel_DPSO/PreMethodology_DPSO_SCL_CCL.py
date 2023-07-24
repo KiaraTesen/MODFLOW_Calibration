@@ -87,6 +87,6 @@ print(sample_scaled)
 
 #---    Iteration register
 for i in range(n):
-    with h5py.File('DPSO_historial.h5', 'a') as f:
+    with h5py.File('Pre_DPSO_historial.h5', 'a') as f:
         f["pob_x"][i] = np.copy(sample_scaled[i])
     f.close()
