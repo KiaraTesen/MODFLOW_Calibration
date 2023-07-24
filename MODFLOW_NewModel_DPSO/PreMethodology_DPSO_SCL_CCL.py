@@ -32,17 +32,12 @@ path_GIS = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\GIS'
 path_output = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\MODFLOW_NewModel_DPSO\output'         # Need full path for WEAP Export
 path_obs_data = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\ObservedData'
 
-#---    Create iteration register file
-with h5py.File('PRE_DPSO_historial.h5', 'w') as f:
-    iter_h5py = f.create_dataset("iteration", (FINAL_ITERATION, 1))
-    pob_x_h5py = f.create_dataset("pob_x", (FINAL_ITERATION, n_var))
-
 #---    Initial matriz
 HP = ['kx', 'sy'] 
 initial_shape_HP = gpd.read_file(path_GIS + '/Elements_initial_unique_value_v2.shp')   # /Elements_initial_unique_value.shp, /Elements_initial_zones_reduced.shp
 active_matriz = initial_shape_HP['Active'].to_numpy().reshape((84,185))             # Matrix of zeros and ones that allows maintaining active area
 
-n = VMS                                                           # Population size
+n = 20                                                           # Population size
 
 active_cells = 7536
 
@@ -57,6 +52,10 @@ for k in range(1,5):
     n_var += globals()['n_var_' + str(k)]
 n_var = n_var    # Number of variables
 print (n_var)
+
+#---    Create iteration register file
+with h5py.File('PRE_DPSO_historial.h5', 'w') as f:
+    pob_x_h5py = f.create_dataset("pob_x", (n, n_var))
 
 #---    Bounds
 lb_kx, ub_kx = 0.015, 3.8
@@ -85,3 +84,9 @@ class Particle:
 
 sample_scaled = get_sampling_LH(n_var, n, l_bounds, u_bounds)
 print(sample_scaled)
+
+#---    Iteration register
+for i in n:
+    with h5py.File('DPSO_historial.h5', 'a') as f:
+        f["pob_x"][i] = np.copy(sample_scaled[i])
+    f.close()
