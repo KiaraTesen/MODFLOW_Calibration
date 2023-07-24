@@ -37,7 +37,7 @@ HP = ['kx', 'sy']
 initial_shape_HP = gpd.read_file(path_GIS + '/Elements_initial_unique_value_v2.shp')   # /Elements_initial_unique_value.shp, /Elements_initial_zones_reduced.shp
 active_matriz = initial_shape_HP['Active'].to_numpy().reshape((84,185))             # Matrix of zeros and ones that allows maintaining active area
 
-n = VMS                                                           # Population size
+#n = VMS                                                           # Population size
 
 active_cells = 7536
 
@@ -78,10 +78,16 @@ class Particle:
         self.x_best = np.copy(x)                 
         self.y_best = y
 
-sample_scaled = get_sampling_LH(n_var, n, l_bounds, u_bounds)
-pob = Particle(sample_scaled[VM - 1],np.around(np.array([0]*(n_var)),4),10000000000)
+pob = Particle(np.around(np.array([0]*(n_var)),4),np.around(np.array([0]*(n_var)),4),10000000000)
+print(pob.x)
 
 if ITERATION == 0:
+    #sample_scaled = get_sampling_LH(n_var, n, l_bounds, u_bounds)
+    with h5py.File('Pre_DPSO_historial.h5', 'r') as f:
+        pob.x = np.copy(f["pob_x"][VM-1])
+    f.close()
+    print(pob.x)
+
     #---    Initial Sampling - Pob(0)
     y_init = Run_WEAP_MODFLOW(path_output, str(ITERATION), initial_shape_HP, HP, active_cells, pob.x, n_var_1, n_var_2, n_var_3, n_var, 
                               k_shape_1, k_shape_2, k_shape_3, k_shape_4, active_matriz, path_init_model, path_model, path_nwt_exe, 
