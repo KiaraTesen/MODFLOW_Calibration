@@ -57,7 +57,7 @@ lb_sy, ub_sy = 0.278, 3.57           # P15 - P18: 1.25, 3.45
 lb_1_kx, ub_1_kx = 0.001, 0.1
 lb_1_sy, ub_1_sy = 0.355, 0.45
 lb_2_kx, ub_2_kx = 0.002, 0.3
-lb_2_sy, ub_2_sy = 0.11, 0.15
+lb_2_sy, ub_2_sy = 0.115, 0.15
 
 l_bounds = np.concatenate((np.around(np.repeat(lb_kx, active_cells),4), np.around(np.repeat(lb_sy, active_cells),4), 
                            np.around(np.repeat(lb_1_kx, n_var_1),4), np.around(np.repeat(lb_1_sy, n_var_2),4), 
