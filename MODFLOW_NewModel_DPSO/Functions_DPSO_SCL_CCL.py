@@ -35,16 +35,28 @@ def get_sampling_LH(n_var, n, l_bounds, u_bounds):
 def get_pre_HP(Shape_HP, new_Shape, variable, particle, begin, end):
     count = 0
     x = particle[begin : end]
-    for i in range(len(new_Shape)):
-         if new_Shape[variable][i] == 0:
-             pass
-         else:
-            #print(count, x[count], Shape_HP[variable][i])
-            new_Shape[variable][i] = round(x[count] * Shape_HP[variable][i],4)
-            count += 1
+    print(new_Shape)
+
+    for i in range(len(new_Shape)):    
+        if variable == "sy":
+            if new_Shape[variable][i] == 0:
+                new_Shape[variable][i] = 0.01
+            else:
+                #print(count, x[count], Shape_HP[variable][i])
+                new_Shape[variable][i] = round(x[count] * Shape_HP[variable][i],4)
+                count += 1
+        else:
+            if new_Shape[variable][i] == 0:
+                new_Shape[variable][i] = 0.000001728
+            else:
+                #print(count, x[count], Shape_HP[variable][i])
+                new_Shape[variable][i] = round(x[count] * Shape_HP[variable][i],4)
+                count += 1
         
     rows = new_Shape["ROW"].max()
     columns = new_Shape["COLUMN"].max()
+
+    print(new_Shape)
 
     matriz = np.zeros((rows,columns))
     for i in range(0,len(new_Shape['ROW'])):
@@ -63,6 +75,7 @@ def get_HP(Shape_HP, variable, active_matriz, decimals, kernel):
         #---    Convolution
         new_matriz = signal.convolve2d(matriz, kernel, boundary = 'symm', mode = 'same')
         new_matriz = np.around(new_matriz * active_matriz, decimals = decimals)
+
     return new_matriz
 
 #---    Order data
@@ -112,6 +125,7 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
     new_shape_HP = initial_shape_HP.copy()
 
     for m in HP:
+        print("PREEE")
         if m == "kx":
             begin = 0
             end = active_cells
