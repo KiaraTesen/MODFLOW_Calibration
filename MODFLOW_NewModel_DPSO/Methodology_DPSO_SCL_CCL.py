@@ -20,6 +20,9 @@ ITERATION = int(sys.argv[2])
 TOTAL_ITERATION = int(sys.argv[3])
 FINAL_ITERATION = int(sys.argv[4])
 
+VMS = int(sys.argv[5])
+VM = int(sys.argv[6])
+
 #---    Paths
 path_WEAP = r'C:\Users\vagrant\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
 path_model = os.path.join(path_WEAP, 'MODFLOW_model')
@@ -34,7 +37,7 @@ HP = ['kx', 'sy']
 initial_shape_HP = gpd.read_file(path_GIS + '/Elements_initial_unique_value_v2.shp')   # /Elements_initial_unique_value.shp, /Elements_initial_zones_reduced.shp
 active_matriz = initial_shape_HP['Active'].to_numpy().reshape((84,185))             # Matrix of zeros and ones that allows maintaining active area
 
-n = 1                                                           # Population size
+n = VMS                                                           # Population size
 
 active_cells = 7536
 
@@ -51,13 +54,13 @@ n_var = n_var    # Number of variables
 print (n_var)
 
 #---    Bounds
-lb_kx, ub_kx = 0.015, 3.8                 # P15 - P18: 0.0005, 3.8  
-lb_sy, ub_sy = 0.278, 3.57           # P15 - P18: 1.25, 3.45
+lb_kx, ub_kx = 0.015, 3.8
+lb_sy, ub_sy = 0.278, 3.57
 
 lb_1_kx, ub_1_kx = 0.001, 0.1
-lb_1_sy, ub_1_sy = 0.36, 0.45
+lb_1_sy, ub_1_sy = 0.3625, 0.45
 lb_2_kx, ub_2_kx = 0.002, 0.3
-lb_2_sy, ub_2_sy = 0.12, 0.15
+lb_2_sy, ub_2_sy = 0.1225, 0.15
 
 l_bounds = np.concatenate((np.around(np.repeat(lb_kx, active_cells),4), np.around(np.repeat(lb_sy, active_cells),4), 
                            np.around(np.repeat(lb_1_kx, n_var_1),4), np.around(np.repeat(lb_1_sy, n_var_2),4), 
@@ -76,7 +79,7 @@ class Particle:
         self.y_best = y
 
 sample_scaled = get_sampling_LH(n_var, n, l_bounds, u_bounds)
-pob = Particle(sample_scaled[0],np.around(np.array([0]*(n_var)),4),10000000000)
+pob = Particle(sample_scaled[VM - 1],np.around(np.array([0]*(n_var)),4),10000000000)
 
 if ITERATION == 0:
     #---    Initial Sampling - Pob(0)
