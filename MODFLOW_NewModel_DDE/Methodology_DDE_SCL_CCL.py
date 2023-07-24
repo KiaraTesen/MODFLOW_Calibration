@@ -128,6 +128,12 @@ else:
     # Randomly pick 3 candidate solution using indexes ids_vms
     xa_ip_port , xb_ip_port , xc_ip_port = np.random.choice(IP_PORT_POOL, 3)
     
+    filename = open(f"ind_{MY_IP}_relation.txt", "a")
+    filename.write(f"{ITERATION},{xa_ip_port}\n")
+    filename.write(f"{ITERATION},{xb_ip_port}\n")
+    filename.write(f"{ITERATION},{xc_ip_port}\n")
+    filename.close()
+    
     #V1 = np.array(send_request_py(xa_ip_port, 0, []))
     #V2 = np.array(send_request_py(xb_ip_port, 0, []))
     #Vb = np.array(send_request_py(xc_ip_port, 0, []))
@@ -166,12 +172,6 @@ else:
     file = open(f"ind_{MY_IP}_8888.txt", "a")
     file.write(f"{ITERATION},{pob.y}\n")
     file.close()
-
-    filename = open(f"ind_{MY_IP}_relation.txt", "a")
-    filename.write(f"{ITERATION},{xa_ip_port},{np.copy(V1)}\n")
-    filename.write(f"{ITERATION},{xb_ip_port},{np.copy(V2)}\n")
-    filename.write(f"{ITERATION},{xc_ip_port},{np.copy(Vb)}\n")
-    filename.close()
 
     #---    Iteration register
     with h5py.File('DDE_historial.h5', 'a') as f:
