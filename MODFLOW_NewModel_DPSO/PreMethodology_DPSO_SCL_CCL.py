@@ -86,7 +86,7 @@ sample_scaled = get_sampling_LH(n_var, n, l_bounds, u_bounds)
 print(sample_scaled)
 
 #---    Iteration register
-for i in n:
+for i in range(n):
     with h5py.File('DPSO_historial.h5', 'a') as f:
         f["pob_x"][i] = np.copy(sample_scaled[i])
     f.close()
