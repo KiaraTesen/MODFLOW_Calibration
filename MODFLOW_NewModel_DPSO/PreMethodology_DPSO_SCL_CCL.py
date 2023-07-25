@@ -11,7 +11,7 @@ import os
 from functools import reduce
 import time
 import sys
-from request_server.request_server import send_request_py
+#from request_server.request_server import send_request_py
 import warnings
 warnings.filterwarnings('ignore')
 

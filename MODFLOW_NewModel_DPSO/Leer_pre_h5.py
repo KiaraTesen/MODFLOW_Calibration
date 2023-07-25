@@ -14,4 +14,4 @@ path = 'PRE_DPSO_historial.h5'
 with h5py.File(path, 'r') as f:
     x = f["pob_x"][:]
 
-print(x[19])
+print(x[34])
