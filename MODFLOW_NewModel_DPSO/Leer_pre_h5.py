@@ -9,7 +9,7 @@ import numpy as np
 import warnings
 warnings.filterwarnings('ignore')
 
-path = r'C:\Users\aimee\OneDrive\Escritorio\Github\MODFLOW_Calibration\MODFLOW_NewModel_DPSO\PRE_DPSO_historial.h5'
+path = 'PRE_DPSO_historial.h5'
 
 with h5py.File(path, 'r') as f:
     x = f["pob_x"][:]

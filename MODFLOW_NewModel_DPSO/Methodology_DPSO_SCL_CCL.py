@@ -36,8 +36,6 @@ HP = ['kx', 'sy']
 initial_shape_HP = gpd.read_file(path_GIS + '/Elements_initial_unique_value_v2.shp')   # /Elements_initial_unique_value.shp, /Elements_initial_zones_reduced.shp
 active_matriz = initial_shape_HP['Active'].to_numpy().reshape((84,185))             # Matrix of zeros and ones that allows maintaining active area
 
-#n = VMS                                                           # Population size
-
 active_cells = 7536
 
 k_shape_1 = (5,5)   #HK_1
@@ -78,13 +76,12 @@ class Particle:
         self.y_best = y
 
 pob = Particle(np.around(np.array([0]*(n_var)),4),np.around(np.array([0]*(n_var)),4),10000000000)
-print(ITERATION)
+
 if ITERATION == 0:
-    #sample_scaled = get_sampling_LH(n_var, n, l_bounds, u_bounds)
     with h5py.File('Pre_DPSO_historial.h5', 'r') as f:
         pob.x = np.copy(f["pob_x"][VM-2])
     f.close()
-    print(pob.x)
+
     #---    Initial Sampling - Pob(0)
     y_init = Run_WEAP_MODFLOW(path_output, str(ITERATION), initial_shape_HP, HP, active_cells, pob.x, n_var_1, n_var_2, n_var_3, n_var, 
                               k_shape_1, k_shape_2, k_shape_3, k_shape_4, active_matriz, path_init_model, path_model, path_nwt_exe, 
@@ -115,8 +112,7 @@ if ITERATION == 0:
 else:
     #---    PSO
     α = 0.8                                                    # Cognitive scaling parameter  # 0.8 # 1.49
-    β = 0.8                                                    # Social scaling parameter     # 0.8 # 1.49
-    #w = 0.5                                                    # inertia velocity
+    β = 0.8                                                    # Social scaling parameter     # 0.8 # 1.49                       
     w_min = 0.4                                                 # minimum value for the inertia velocity
     w_max = 0.9                                                 # maximum value for the inertia velocity
     vMax = np.around(np.multiply(u_bounds-l_bounds,0.8),4)      # Max velocity # De 0.8 a 0.4
@@ -129,9 +125,9 @@ else:
         pob.x_best = np.copy(f["pob_x_best"][ITERATION - 1])
         pob.y_best = f["pob_y_best"][ITERATION - 1]
 
-        w = f["w"][ITERATION - 1]
+        w = f["w"][ITERATION - 1]                               # inertia velocity
     f.close()
-    print(pob.x)
+
     gbest = send_request_py(IP_SERVER_ADD, pob.y, pob.x)           # Update global particle
     
     time.sleep(1)
@@ -166,7 +162,6 @@ else:
     y = Run_WEAP_MODFLOW(path_output, str(ITERATION), initial_shape_HP, HP, active_cells, pob.x, n_var_1, n_var_2, n_var_3, n_var, 
                          k_shape_1, k_shape_2, k_shape_3, k_shape_4, active_matriz, path_init_model, path_model, path_nwt_exe, 
                          path_obs_data)
-    #gbest = send_request_py(IP_SERVER_ADD, y, pob.x)
     
     if y < pob.y_best:
         pob.x_best = np.copy(pob.x)

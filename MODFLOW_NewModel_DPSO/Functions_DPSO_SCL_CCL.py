@@ -126,7 +126,6 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
     new_shape_HP = initial_shape_HP.copy()
 
     for m in HP:
-        print("PREEE")
         if m == "kx":
             begin = 0
             end = active_cells
@@ -142,7 +141,6 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
         decimals_sy = 4
 
         # First kernel
-        print('FIRST')
         kernel_1_kx = sample_scaled[int(active_cells * 2):int(active_cells * 2 + n_var_1)].reshape(k_shape_1)
         kernel_1_sy = sample_scaled[int(active_cells * 2 + n_var_1):int(active_cells * 2 + n_var_1 + n_var_2)].reshape(k_shape_2)
 
@@ -153,7 +151,6 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
         shape_k1_HP[m] = globals()["vector_1_" + str(m)]
 
         # Second kernel
-        print('FINAL')
         kernel_2_kx = sample_scaled[int(active_cells * 2 + n_var_1 + n_var_2):int(active_cells * 2 + n_var_1 + n_var_2 + n_var_3)].reshape(k_shape_3)
         kernel_2_sy = sample_scaled[int(active_cells * 2 + n_var_1 + n_var_2 + n_var_3):int(n_var)].reshape(k_shape_4)
         
@@ -191,7 +188,7 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
 
     #---    Move new files
     for h in get_new_files:
-        if h.endswith('.py') or h == '__pycache__' or h == 'sp' or h.endswith('.txt') or h == 'output' or h.endswith('.ps1') or h.endswith('.h5') or h == 'PRUEBAAAAAAS':
+        if h.endswith('.py') or h == '__pycache__' or h == 'sp' or h.endswith('.txt') or h == 'output' or h.endswith('.ps1') or h.endswith('.h5'):
             pass 
         else:
             shutil.move(os.path.join(os.getcwd(), h), os.path.join(path_model, h))
@@ -215,7 +212,6 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
     #---    Well analysis
     obs_well = get_data(os.path.join(path_obs_data, 'Wells_observed.csv'), 3)
     ow = obs_well.columns
-    #print(ow)
 
     sim_well = get_data(os.path.join(dir_iteration, f"iter_{str(iteration)}_Wells_simulation.csv"), 3)
 
@@ -223,11 +219,9 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
     srmse_well = 0
     for i in ow:
         if i == "OW51" or i == "OW87" or i == "OW97" or i == "OW100" or i == "OW157" or i == "OW167" or i == "OW181" or i == "OW188" or i == "OW233" or i == "OW234" or i == "OW235":
-            g = 0.8 # 0.8
-            #print(i, g)
+            g = 0.8
         else:
             g = 0.8
-            #print(i, g) 
 
         mse_well = mean_squared_error(obs_well[i], sim_well[i])
         rmse_well = math.sqrt(mse_well)
@@ -235,7 +229,6 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
 
         srmse_well += rmse_well
         g_srmse_well += g_rmse_well
-    #print(srmse_well)
 
     #---    Streamflow analysis
     df_q = pd.read_csv(os.path.join(dir_iteration, f"iter_{str(iteration)}_Streamflow_gauges.csv"), skiprows = 3)
@@ -247,7 +240,6 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
     
     mse_q = mean_squared_error(df_q_obs['Observed'], df_q['Modeled'])
     rmse_q = math.sqrt(mse_q)
-    #print(rmse_q)
 
     #---    Subject to
     kx_min = 0.280
@@ -260,12 +252,8 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
         globals()["P_" + str(i)] = get_evaluate_st_bounds((locals()[str(i) + "_min"]), (locals()[str(i) + "_max"]), globals()["vector_modif_" + str(i)])
 
     #---    Total Objective Function
-    #---    There are 31 observation wells and 1 streamflow gauge (32 monitoring elements. If each of them has the same weighting factor: 1/32 = 0.03125 (3.125%))
-    #g1 = 0.6
     g2 = 0.6
     g3 = 0.6
 
-    #of = g1*srmse_well + g2*rmse_q + g3*(P_kx + P_sy)
-    #of = g1*srmse_well + g2*rmse_q
     of = g_srmse_well + g2*rmse_q + g3*(P_kx + P_sy)
     return of
