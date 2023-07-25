@@ -10,12 +10,13 @@ import warnings
 warnings.filterwarnings('ignore')
 
 #---    Initial information
-experiments = ['P14-SCL-ps1']
+configuration = 'n=20'
+experiments = ['E1-DPSO']
 machines = list(range(2,22))
 iterations = list(range(201))
 
 methodology = 'DPSO'                #'DDE'
-path_results = r'..\results_' + methodology   #r'..\results_DDE'
+path_results = os.path.join(r'D:\1_PaperI\Results_' + methodology, configuration) 
 
 #---    Lectura archivos h5
 df_y = pd.DataFrame()
