@@ -26,12 +26,6 @@ TOTAL_ITERATION = int(sys.argv[3])
 FINAL_ITERATION = int(sys.argv[4])
 
 VMS = int(sys.argv[5])
-#---
-vms = VMS       # Number of VMs we use for the experiment
-IP_POOL = [f"10.0.0.{12+i}" for i in range(vms)]    # vm1 is the server  machine
-IP_POOL.remove(MY_IP)
-
-IP_PORT_POOL = [f"{ip}:8888" for ip in IP_POOL]
 
 #---    Paths
 path_WEAP = r'C:\Users\vagrant\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
@@ -47,34 +41,35 @@ HP = ['kx', 'sy']
 initial_shape_HP = gpd.read_file(path_GIS + '/Elements_initial_unique_value_v2.shp')
 active_matriz = initial_shape_HP['Active'].to_numpy().reshape((84,185))             # Matrix of zeros and ones that allows maintaining active area
 
-n = 1                                                           # Population size
-
 active_cells = 7536
 
-k_shape_1 = (5,5)
-k_shape_2 = (3,3)
+k_shape_1 = (5,5)   #HK_1
+k_shape_2 = (3,3)   #SY_1
+k_shape_3 = (3,3)   #HK_2
+k_shape_4 = (2,2)   #SY_2
 
-n_var = active_cells
-for k in range(1,3):
+n_var = active_cells * 2
+for k in range(1,5):
     globals()['n_var_' + str(k)] = reduce(lambda x,y: x*y, globals()['k_shape_' + str(k)])
     n_var += globals()['n_var_' + str(k)]
-n_var = 2 * n_var    # Number of variables
+n_var = n_var    # Number of variables
+print (n_var)
 
 #---    Bounds
-lb_kx, ub_kx = 0.0005, 3.8
-lb_sy, ub_sy = 1.25, 3.45
+lb_kx, ub_kx = 0.015, 3.8
+lb_sy, ub_sy = 0.278, 3.57
 
-lb_1_kx, lb_1_sy = 0.001, 0.075   #0.02, 0.03
-lb_2_kx, lb_2_sy = 0.004, 0.1   #0.004
-ub_1_kx, ub_1_sy = 0.1, 0.1
-ub_2_kx, ub_2_sy = 0.3, 0.22
+lb_1_kx, ub_1_kx = 0.001, 0.1
+lb_1_sy, ub_1_sy = 0.365, 0.45
+lb_2_kx, ub_2_kx = 0.002, 0.3
+lb_2_sy, ub_2_sy = 0.125, 0.15
 
 l_bounds = np.concatenate((np.around(np.repeat(lb_kx, active_cells),4), np.around(np.repeat(lb_sy, active_cells),4), 
-                           np.around(np.repeat(lb_1_kx, n_var_1),4), np.around(np.repeat(lb_1_sy, n_var_1),4), 
-                           np.around(np.repeat(lb_2_kx, n_var_2),4), np.around(np.repeat(lb_2_sy, n_var_2),4)), axis = 0)
+                           np.around(np.repeat(lb_1_kx, n_var_1),4), np.around(np.repeat(lb_1_sy, n_var_2),4), 
+                           np.around(np.repeat(lb_2_kx, n_var_3),4), np.around(np.repeat(lb_2_sy, n_var_4),4)), axis = 0)
 u_bounds = np.concatenate((np.around(np.repeat(ub_kx, active_cells),4), np.around(np.repeat(ub_sy, active_cells),4), 
-                           np.around(np.repeat(ub_1_kx, n_var_1),4), np.around(np.repeat(ub_1_sy, n_var_1),4), 
-                           np.around(np.repeat(ub_2_kx, n_var_2),4), np.around(np.repeat(ub_2_sy, n_var_2),4)), axis = 0) 
+                           np.around(np.repeat(ub_1_kx, n_var_1),4), np.around(np.repeat(ub_1_sy, n_var_2),4), 
+                           np.around(np.repeat(ub_2_kx, n_var_3),4), np.around(np.repeat(ub_2_sy, n_var_4),4)), axis = 0) 
 
 #---    Initial Sampling (Latyn Hypercube)
 class Particle:
@@ -82,14 +77,16 @@ class Particle:
         self.x = x                      # X represents the kernels
         self.y = 1000000000
 
-sample_scaled = get_sampling_LH(n_var, n, l_bounds, u_bounds)
-pob = Particle(sample_scaled[0])
+pob = Particle(np.around(np.array([0]*(n_var)),4))
 
-print(ITERATION)
 if ITERATION == 0:
+    with h5py.File('Pre_DDE_historial.h5', 'r') as f:
+        pob.x = np.copy(f["pob_x"][VM-2])
+    f.close()
+
     #---    Initial Sampling - Pob(0)
-    y_init = Run_WEAP_MODFLOW(path_output, str(ITERATION), initial_shape_HP, HP, active_cells, pob.x, n_var_1, n_var_2, n_var, 
-                              k_shape_1, k_shape_2, active_matriz, path_init_model, path_model, path_nwt_exe, 
+    y_init = Run_WEAP_MODFLOW(path_output, str(ITERATION), initial_shape_HP, HP, active_cells, pob.x, n_var_1, n_var_2, n_var_3, n_var, 
+                              k_shape_1, k_shape_2, k_shape_3, k_shape_4, active_matriz, path_init_model, path_model, path_nwt_exe, 
                               path_obs_data)
     pob.y = y_init
 
@@ -126,18 +123,27 @@ else:
         pob.y = f["pob_y"][ITERATION - 1]
     f.close()
     
-    # Randomly pick 3 candidate solution using indexes ids_vms
-    xa_ip_port , xb_ip_port , xc_ip_port = np.random.choice(IP_PORT_POOL, 3)
+    #---    Randomly pick 3 candidate solution using indexes ids_vms
+    # Generate IP_PORT_POOL
+    IP_POOL = [f"10.0.0.{12+i}" for i in range(VMS)]    # vm1 is the server  machine
+    IP_POOL.remove(MY_IP)
+
+    IP_PORT_POOL = [f"{ip}:8888" for ip in IP_POOL]
     
+    xa_ip_port = np.random.choice(IP_PORT_POOL, 1)
+    IP_PORT_POOL.remove(xa_ip_port)
+
+    xb_ip_port = np.random.choice(IP_PORT_POOL, 1)
+    IP_PORT_POOL.remove(xb_ip_port)
+
+    xc_ip_port = np.random.choice(IP_PORT_POOL, 1)
+    
+    # Register
     filename = open(f"ind_{MY_IP}_relation.txt", "a")
     filename.write(f"{ITERATION},{xa_ip_port}\n")
     filename.write(f"{ITERATION},{xb_ip_port}\n")
     filename.write(f"{ITERATION},{xc_ip_port}\n")
     filename.close()
-    
-    #V1 = np.array(send_request_py(xa_ip_port, 0, []))
-    #V2 = np.array(send_request_py(xb_ip_port, 0, []))
-    #Vb = np.array(send_request_py(xc_ip_port, 0, []))
 
     V1 = np.copy(send_request_py(xa_ip_port, 0, []))
     V2 = np.copy(send_request_py(xb_ip_port, 0, []))
@@ -158,8 +164,8 @@ else:
             Vt[id_dim] = pob.x[id_dim]             # copy from Vb
     
     # Obtain the OF of the trial vector
-    vt_of = Run_WEAP_MODFLOW(path_output, str(ITERATION), initial_shape_HP, HP, active_cells, Vt, n_var_1, n_var_2, n_var, 
-                             k_shape_1, k_shape_2, active_matriz, path_init_model, path_model, path_nwt_exe, 
+    vt_of = Run_WEAP_MODFLOW(path_output, str(ITERATION), initial_shape_HP, HP, active_cells, Vt, n_var_1, n_var_2, n_var_3, n_var, 
+                             k_shape_1, k_shape_2, k_shape_3, k_shape_4, active_matriz, path_init_model, path_model, path_nwt_exe, 
                              path_obs_data)
     
     # Select the id_pop individual for the next generation
