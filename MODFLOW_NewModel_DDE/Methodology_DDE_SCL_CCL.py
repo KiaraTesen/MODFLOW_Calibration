@@ -137,17 +137,10 @@ else:
     IP_PORT_POOL.remove(xb_ip_port)
 
     xc_ip_port = np.random.choice(IP_PORT_POOL, 1)
-    
-    # Register
-    filename = open(f"ind_{MY_IP}_relation.txt", "a")
-    filename.write(f"{ITERATION},{xa_ip_port}\n")
-    filename.write(f"{ITERATION},{xb_ip_port}\n")
-    filename.write(f"{ITERATION},{xc_ip_port}\n")
-    filename.close()
 
-    V1 = np.copy(send_request_py(xa_ip_port, 0, []))
-    V2 = np.copy(send_request_py(xb_ip_port, 0, []))
-    Vb = np.copy(send_request_py(xc_ip_port, 0, []))
+    V1 = np.array(send_request_py(xa_ip_port, 0, []))
+    V2 = np.array(send_request_py(xb_ip_port, 0, []))
+    Vb = np.array(send_request_py(xc_ip_port, 0, []))
 
     Vd = V1 - V2                                # The difference vector        
     Vm = Vb + α*Vd                              # The mutant vector         
@@ -176,6 +169,13 @@ else:
         # Send xi to the server
         send_request_py(MY_IP_PORT, 1, pob.x)
 
+    # Register
+    filename = open(f"ind_{MY_IP}_relation.txt", "a")
+    filename.write(f"{ITERATION},{xa_ip_port}\n")
+    filename.write(f"{ITERATION},{xb_ip_port}\n")
+    filename.write(f"{ITERATION},{xc_ip_port}\n")
+    filename.close()
+    
     file = open(f"ind_{MY_IP}_8888.txt", "a")
     file.write(f"{ITERATION},{pob.y}\n")
     file.close()
