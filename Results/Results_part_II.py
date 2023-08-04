@@ -16,12 +16,13 @@ warnings.filterwarnings('ignore')
 
 #---    Initial information
 methodology = 'DPSO'                #'DDE'
-path_results = r'..\results_' + methodology   #r'..\results_DDE'
+configuration = 'n=35'
+path_results = os.path.join(r'D:\1_PaperI', methodology, configuration) 
 elements_init = 'Elements_initial_unique_value_v2'
 
-best_experiment = 'P14-CCL-ps1'
-best_result = 'vm21'
-best_iteration = 173
+best_experiment = 'E1'
+best_result = 'vm27'
+best_iteration = 200
 
 best_shape = 'Elements_iter_' + str(best_iteration) + '.shp'
 best_q = 'iter_' + str(best_iteration) + '_Streamflow_gauges.csv'

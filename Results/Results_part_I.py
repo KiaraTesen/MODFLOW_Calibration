@@ -10,13 +10,13 @@ import warnings
 warnings.filterwarnings('ignore')
 
 #---    Initial information
-configuration = 'n=20'
-experiments = ['E1-DPSO']
-machines = list(range(2,22))
+configuration = 'n=50'
+experiments = ['E1']
+machines = list(range(2,36))
 iterations = list(range(201))
 
 methodology = 'DPSO'                #'DDE'
-path_results = os.path.join(r'D:\1_PaperI\Results_' + methodology, configuration) 
+path_results = os.path.join(r'D:\1_PaperI', methodology, configuration) 
 
 #---    Lectura archivos h5
 df_y = pd.DataFrame()
@@ -66,7 +66,7 @@ plt.xticks(range(0, xlim + 1, 10), fontsize = 10)
 plt.xlim(0, xlim)
 #plt.ylim(55, ylim)
 
-plt.title("n = 20", fontsize = 14, weight = "bold")
+plt.title("n = 35", fontsize = 14, weight = "bold")
 plt.xlabel("Iterations", fontsize = 10)
 plt.ylabel("E", fontsize = 10)
 
