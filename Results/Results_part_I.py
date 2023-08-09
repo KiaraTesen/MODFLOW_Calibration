@@ -11,8 +11,8 @@ warnings.filterwarnings('ignore')
 
 #---    Initial information
 configuration = 'n=50'
-experiments = ['E1']
-machines = list(range(2,36))
+experiments = ['E1', 'E2', 'E3', 'E4']
+machines = list(range(2,51))
 iterations = list(range(201))
 
 methodology = 'DPSO'                #'DDE'
@@ -22,6 +22,7 @@ path_results = os.path.join(r'D:\1_PaperI', methodology, configuration)
 df_y = pd.DataFrame()
 df_y_log = pd.DataFrame()
 for i in experiments:
+    df_y_exp = pd.DataFrame()
     for j in machines:
         path_experiment = os.path.join(path_results, i, methodology + '_historial_vm' + str(j) + '.h5')
 
@@ -36,7 +37,12 @@ for i in experiments:
         for k in iterations:
             df_y.loc[k,"Y-vm" + str(j) + '-' + str(i)] = y[k, 0]
             df_y.loc[df_y["Y-vm" + str(j) + '-' + str(i)] == 0, "Y-vm" + str(j) + '-' + str(i)] = np.nan
-    df_y.to_csv(os.path.join(path_results, i, 'df_y_' + methodology + '_' + i + '.csv'))
+    
+            df_y_exp.loc[k,"Y-vm" + str(j) + '-' + str(i)] = y[k, 0]
+            df_y_exp.loc[df_y["Y-vm" + str(j) + '-' + str(i)] == 0, "Y-vm" + str(j) + '-' + str(i)] = np.nan
+
+    df_y_exp.to_csv(os.path.join(path_results, i, 'df_y' + methodology + '_' + i + '.csv'))
+df_y.to_csv(os.path.join(path_results, 'df_y_' + methodology + '_' + configuration + '.csv'))
 
 df_y['iteration'] = range(len(df_y))
 df_y.set_index('iteration',inplace = True)
@@ -44,12 +50,12 @@ df_y.set_index('iteration',inplace = True)
 df_y['Min_values'] = df_y.min(axis = 1)
 df_y['Max_values'] = df_y.max(axis = 1)
 df_y['Mean_values'] =df_y.mean(axis = 1)
-print(df_y)
+#print(df_y)
 
 #---    Resultados en escala logarítmica
 df_y_log = np.log(df_y)
-print(df_y_log)
-df_y_log.to_csv(os.path.join(path_results, i, 'Graficas', 'df_y_log_' + methodology + '_' + i + '.csv'))        ## GENERAL
+#print(df_y_log)
+df_y_log.to_csv(os.path.join(path_results, 'Graficas', 'df_y_log_' + methodology + '_' + configuration + '.csv'))        ## GENERAL
 
 #---    Gráfico de áreas
 df = df_y_log   #df_y - Depende como se desea presentar resultados
