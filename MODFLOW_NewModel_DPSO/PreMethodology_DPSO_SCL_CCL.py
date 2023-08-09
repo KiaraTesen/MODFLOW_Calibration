@@ -68,3 +68,4 @@ for i in range(n):
 with h5py.File('Pre_DPSO_historial.h5', 'r') as f:
     x = f["pob_x"][:]
 print(x[0])
+print(len(x))
