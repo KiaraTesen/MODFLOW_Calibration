@@ -4,6 +4,7 @@
 from Functions_DDE_SCL_CCL import *
 import geopandas as gpd
 import pandas as pd
+import sys
 
 ITERATION = int(sys.argv[2])
 
