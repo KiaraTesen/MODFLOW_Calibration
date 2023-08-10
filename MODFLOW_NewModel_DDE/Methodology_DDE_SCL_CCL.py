@@ -4,6 +4,9 @@
 from Functions_DDE_SCL_CCL import *
 import geopandas as gpd
 import pandas as pd
+
+ITERATION = int(sys.argv[2])
+
 import numpy as np
 import h5py
 import matplotlib.pyplot as plt
