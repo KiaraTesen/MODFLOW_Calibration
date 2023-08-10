@@ -7,6 +7,9 @@ $final_iteration = [int]($p3)
 $vms = [int]($p4)
 $vm = [int]((hostname) -replace '\D+(\d+)','$1')
 
+$iteration = 0
+$total_iteration = 10
+
 while($iteration -ne $total_iteration){
       #Write-Host "Run experiment : "$iteration
       #Get-Date -Format "dddd MM/dd/yyyy HH:mm K"
@@ -20,7 +23,6 @@ while($iteration -ne $total_iteration){
       else{
           print($iteration)
           Write-Host "Fallo ejecucion : "$iteration
-          $iteration = $iteration - 1 ###LINEA NUEVA
       }
       #Write-Host "Experiment "$iteration " finished"
       #Get-Date -Format "dddd MM/dd/yyyy HH:mm K"
