@@ -126,6 +126,12 @@ else:
     with h5py.File('DDE_historial.h5', 'r') as f:
         pob.x = np.copy(f["pob_x"][ITERATION - 1])
         pob.y = f["pob_y"][ITERATION - 1]
+
+        id_iter = 2
+        while pob.y == 0:
+            pob.x = np.copy(f["pob_x"][ITERATION - id_iter])
+            pob.y = f["pob_y"][ITERATION - id_iter]
+            id_iter += 1
     f.close()
     
     #---    Randomly pick 3 candidate solution using indexes ids_vms
@@ -143,8 +149,11 @@ else:
 
     xc_ip_port = np.random.choice(IP_PORT_POOL, 1)
 
-    V1 = np.copy(send_request_py(xa_ip_port[0], 0, []))
+    time.sleep(np.random.randint(10,30,size = 1)[0])
+    V1 = np.copy(send_request_py(xa_ip_port[0], 0, [])) 
+    time.sleep(np.random.randint(10,30,size = 1)[0])   
     V2 = np.copy(send_request_py(xb_ip_port[0], 0, []))
+    time.sleep(np.random.randint(10,30,size = 1)[0])
     Vb = np.copy(send_request_py(xc_ip_port[0], 0, []))
 
     Vd = V1 - V2                                # The difference vector        
