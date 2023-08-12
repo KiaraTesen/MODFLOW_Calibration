@@ -10,9 +10,10 @@ import warnings
 warnings.filterwarnings('ignore')
 
 #---    Initial information
-configuration = 'n=50'
-experiments = ['E1', 'E2', 'E3', 'E4']
-machines = list(range(2,51))
+configuration = 'n=20'
+title = 'n = 20'
+experiments = ['E1', 'E2']
+machines = list(range(2,22))
 iterations = list(range(201))
 
 methodology = 'DPSO'                #'DDE'
@@ -39,9 +40,43 @@ for i in experiments:
             df_y.loc[df_y["Y-vm" + str(j) + '-' + str(i)] == 0, "Y-vm" + str(j) + '-' + str(i)] = np.nan
     
             df_y_exp.loc[k,"Y-vm" + str(j) + '-' + str(i)] = y[k, 0]
-            df_y_exp.loc[df_y["Y-vm" + str(j) + '-' + str(i)] == 0, "Y-vm" + str(j) + '-' + str(i)] = np.nan
+            df_y_exp.loc[df_y_exp["Y-vm" + str(j) + '-' + str(i)] == 0, "Y-vm" + str(j) + '-' + str(i)] = np.nan
 
-    df_y_exp.to_csv(os.path.join(path_results, i, 'df_y' + methodology + '_' + i + '.csv'))
+    df_y_exp['iteration'] = range(len(df_y_exp))
+    df_y_exp.set_index('iteration',inplace = True)
+
+    df_y_exp['Min_values'] = df_y_exp.min(axis = 1)
+    df_y_exp['Max_values'] = df_y_exp.max(axis = 1)
+    df_y_exp['Mean_values'] =df_y_exp.mean(axis = 1)
+
+    df_y_exp.to_csv(os.path.join(path_results, i, 'df_y_exp_' + methodology + '_' + i + '.csv'))
+
+    #---    Resultados en escala logarítmica
+    df_y_exp_log = np.log(df_y_exp)
+    df_y_exp_log.to_csv(os.path.join(path_results, i, 'Graficas', 'df_y_exp_log_' + methodology + '_' + i + '.csv'))        ## GENERAL
+
+    #---    Gráfico de áreas
+    df_exp = df_y_exp_log   #df_y - Depende como se desea presentar resultados
+    outlier_bound = 5
+
+    fig, ax = plt.subplots(figsize=(16, 8))
+    ax.plot(df_exp.iloc[:,0:-3], color = "black", linewidth = 0.25)
+    ax.fill_between(x = range(len(df_exp)), y1 = df_exp.loc[:,'Min_values'], y2 = df_exp.loc[:,'Max_values'],  alpha = 0.2, color = "#1f77b4") # Polígono
+    ax.plot(range(len(df_y)), df_exp.loc[:,'Mean_values'], color = "#1f77b4") 
+
+    xlim, ylim = len(iterations), round(df_exp['Max_values'].max(axis = 0)) + 5
+    plt.xticks(range(0, xlim + 1, 10), fontsize = 10)
+    #plt.yticks(range(0, ylim + 1, 5), fontsize = 10)
+    plt.xlim(0, xlim)
+    #plt.ylim(55, ylim)
+
+    plt.title(str(title), fontsize = 14, weight = "bold")
+    plt.xlabel("Iterations", fontsize = 10)
+    plt.ylabel("log E", fontsize = 10)
+
+    plt.savefig(os.path.join(path_results, i, 'Graficas', 'error_vs_iteration_' + methodology + '_' + i + '.png'))  ## GENERAL
+    plt.clf()
+
 df_y.to_csv(os.path.join(path_results, 'df_y_' + methodology + '_' + configuration + '.csv'))
 
 df_y['iteration'] = range(len(df_y))
@@ -54,7 +89,6 @@ df_y['Mean_values'] =df_y.mean(axis = 1)
 
 #---    Resultados en escala logarítmica
 df_y_log = np.log(df_y)
-#print(df_y_log)
 df_y_log.to_csv(os.path.join(path_results, 'Graficas', 'df_y_log_' + methodology + '_' + configuration + '.csv'))        ## GENERAL
 
 #---    Gráfico de áreas
@@ -72,11 +106,11 @@ plt.xticks(range(0, xlim + 1, 10), fontsize = 10)
 plt.xlim(0, xlim)
 #plt.ylim(55, ylim)
 
-plt.title("n = 35", fontsize = 14, weight = "bold")
+plt.title(str(configuration), fontsize = 14, weight = "bold")
 plt.xlabel("Iterations", fontsize = 10)
 plt.ylabel("E", fontsize = 10)
 
-plt.savefig(os.path.join(path_results, i, 'Graficas', 'error_vs_iteration_' + methodology + '_' + i + '.png'))  ## GENERAL
+plt.savefig(os.path.join(path_results, 'Graficas', 'error_vs_iteration_' + methodology + '_' + i + '.png'))  ## GENERAL
 plt.clf()
 
 #---    BOXPLOT
@@ -90,5 +124,5 @@ df_concat = df_concat.dropna()
 
 fig, ax = plt.subplots(figsize=(8, 6))
 ax.boxplot(df_concat)
-plt.savefig(os.path.join(path_results, i, 'Graficas', 'Boxplot_error_' + methodology + '_' + i + '.png'))       ## GENERAL
+plt.savefig(os.path.join(path_results, 'Graficas', 'Boxplot_error_' + methodology + '_' + i + '.png'))       ## GENERAL
 plt.clf()
