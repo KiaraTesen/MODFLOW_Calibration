@@ -145,11 +145,11 @@ else:
 
     xc_ip_port = np.random.choice(IP_PORT_POOL, 1)
 
-    time.sleep(np.random.randint(10,30,size = 1)[0])
+    time.sleep(np.random.randint(30,50,size = 1)[0])
     V1 = np.copy(send_request_py(xa_ip_port[0], 0, [])) 
-    time.sleep(np.random.randint(10,30,size = 1)[0])   
+    time.sleep(np.random.randint(30,50,size = 1)[0])   
     V2 = np.copy(send_request_py(xb_ip_port[0], 0, []))
-    time.sleep(np.random.randint(10,30,size = 1)[0])
+    time.sleep(np.random.randint(30,50,size = 1)[0])
     Vb = np.copy(send_request_py(xc_ip_port[0], 0, []))
 
     Vd = V1 - V2                                # The difference vector        
