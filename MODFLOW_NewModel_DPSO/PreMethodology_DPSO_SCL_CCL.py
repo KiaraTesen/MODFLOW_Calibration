@@ -10,7 +10,7 @@ import warnings
 warnings.filterwarnings('ignore')
 
 #---    Initial matriz
-n = 35                                                    # Population size: 20, 35, 50
+n = 50                                                    # Population size: 20, 35, 50
 
 active_cells = 7536
 
@@ -27,7 +27,7 @@ n_var = n_var    # Number of variables
 print (n_var)
 
 #---    Create iteration register file
-with h5py.File('PRE_DPSO_historial.h5', 'w') as f:
+with h5py.File('Pre_DPSO_historial.h5', 'w') as f:
     pob_x_h5py = f.create_dataset("pob_x", (n, n_var))
 
 #---    Bounds
