@@ -10,10 +10,10 @@ import warnings
 warnings.filterwarnings('ignore')
 
 #---    Initial information
-configuration = 'n = 20'
-title = 'n = 20'
-experiments = ['E1', 'E2']
-machines = list(range(2,22))
+configuration = 'n = 50'
+title = 'n = 50'
+experiments = ['E1']
+machines = list(range(2,52))
 iterations = list(range(201))
 
 methodology = 'DDE'                #'DDE'
@@ -29,11 +29,7 @@ for i in experiments:
 
         with h5py.File(path_experiment, 'r') as f:
             x = f["pob_x"][:]
-            v = f["pob_v"][:]
             y = f["pob_y"][:]
-            x_best = f["pob_x_best"][:]
-            y_best = f["pob_y_best"][:]
-            w = f["w"][:]
 
         for k in iterations:
             df_y.loc[k,"Y-vm" + str(j) + '-' + str(i)] = y[k, 0]
