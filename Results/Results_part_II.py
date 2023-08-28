@@ -15,14 +15,14 @@ import warnings
 warnings.filterwarnings('ignore')
 
 #---    Initial information
-methodology = 'DDE'                #'DDE'
-configuration = 'n = 20'
+methodology = 'DPSO'                #'DDE'
+configuration = 'n = 50'
 path_results = os.path.join(r'D:\1_PaperI', methodology, configuration) 
 elements_init = 'Elements_initial_unique_value_v2'
 
-best_experiment = 'E1'
-best_result = 'vm18'
-best_iteration = 182
+best_experiment = 'E2'
+best_result = 'vm41'
+best_iteration = 199
 
 best_shape = 'Elements_iter_' + str(best_iteration) + '.shp'
 best_q = 'iter_' + str(best_iteration) + '_Streamflow_gauges.csv'
