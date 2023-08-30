@@ -12,94 +12,122 @@ import warnings
 warnings.filterwarnings('ignore')
 
 #---    Initial information
-methodology = 'DDE'                #'DDE'
-configuration = 'n = 50'
-title = 'n = 50'
-experiments = ['E1']
-machines = list(range(2,52))
+methodology = ['DPSO', 'DDE']                #'DDE'
+configuration = ['n = 20', 'n = 35', 'n = 50']
+experiments = ['E1'] #, 'E2', 'E3', 'E4', 'E5'
 iterations = list(range(201))
 
-path_results = os.path.join(r'D:\1_PaperI', methodology, configuration) 
+path_results = os.path.join(r'D:\1_PaperI') 
 
-alpha_value = 90
+alpha_value = [90, 95, 99]
 
-#---    Lectura archivos h5
-df_y = pd.DataFrame()
+df_mean = pd.DataFrame()
 
-for i in experiments:
-#    df_y_exp = pd.DataFrame()
-    for j in machines:
-        path_experiment = os.path.join(path_results, i, methodology + '_historial_vm' + str(j) + '.h5')
+fs_title = 20
+fs_others = 16
 
-        with h5py.File(path_experiment, 'r') as f:
-            x = f["pob_x"][:]
-            #v = f["pob_v"][:]
-            y = f["pob_y"][:]
-            #x_best = f["pob_x_best"][:]
-            #y_best = f["pob_y_best"][:]
-            #w = f["w"][:]
+for a in methodology:
+    for b in configuration: 
+        if b == 'n = 20':
+            machines = list(range(2,22))
+        elif b == 'n = 35':
+            machines = list(range(2,37))
+        elif b == 'n = 50':
+            machines = list(range(2,52))
+        
+        df_y = pd.DataFrame()
 
-        for k in iterations:
-            df_y.loc[k,"Y-vm" + str(j) + '-' + str(i)] = y[k, 0]
-            df_y.loc[df_y["Y-vm" + str(j) + '-' + str(i)] == 0, "Y-vm" + str(j) + '-' + str(i)] = np.nan
+        for i in experiments:
+            for j in machines:
+                path_experiment = os.path.join(path_results, a, b, i, str(a) + '_historial_vm' + str(j) + '.h5')
 
-#---    Resultados en escala logarítmica
-df_y_log = np.log(df_y)
+                #---    Lectura archivos h5
+                with h5py.File(path_experiment, 'r') as f:
+                    x = f["pob_x"][:]
+                    #v = f["pob_v"][:]
+                    y = f["pob_y"][:]
+                    #x_best = f["pob_x_best"][:]
+                    #y_best = f["pob_y_best"][:]
+                    #w = f["w"][:]
 
-#---    Transpose to reorder
-df_y_T = df_y.transpose()
-df_y_log_T = df_y_log.transpose()
+                for k in iterations:
+                    df_y.loc[k,"Y-vm" + str(j) + '-' + str(i)] = y[k, 0]
+                    df_y.loc[df_y["Y-vm" + str(j) + '-' + str(i)] == 0, "Y-vm" + str(j) + '-' + str(i)] = np.nan
 
-#print(df_y_T)
-#print(df_y_log['Y-vm6-E2'].dropna())
-
-#---    Confidence Intervals
-df_register = pd.DataFrame(index = ['Upper CI - ' + str(alpha_value) + '%', 'Lower CI - ' + str(alpha_value) + '%', 'Mean'])
-
-for m in iterations:
-    df_value = df_y_log_T.iloc[:,m]
-    df_value = df_value.dropna()
-
-    CI = st.norm.interval(alpha = alpha_value/100, loc = np.mean(df_value), scale = st.sem(df_value))
-    mean_value = np.mean(df_value)
-    #print(m, mean_value, CI, df_value.size)
-
-    Lower_CI, Upper_CI = CI[0], CI[1]
+        #---    Resultados en escala logarítmica
+        df_y_log = np.log(df_y)
+        df_y_log.to_csv(os.path.join(path_results, 'Graphs', 'df_y_log_' + str(a) + '_' + str(b) + '.csv'))
     
-    df_register.loc['Upper CI - ' + str(alpha_value) + '%', str(m)] = Upper_CI
-    df_register.loc['Lower CI - ' + str(alpha_value) + '%', str(m)] = Lower_CI
-    df_register.loc['Mean', str(m)] = mean_value
+        #---    Transpose to reorder
+        df_y_log_T = df_y_log.transpose()
 
-df_register_T = df_register.transpose()
-print(df_register_T)
+        for c in alpha_value:
+            #---    Confidence Intervals
+            df_register = pd.DataFrame(index = ['Upper CI - ' + str(c) + '%', 'Lower CI - ' + str(c) + '%', 'Mean'])
 
-#---    Graph 1
-Lower_bound = 3.5
-Upper_bound = 6.0
+            for m in iterations:
+                df_value = df_y_log_T.iloc[:,m]
+                df_value = df_value.dropna()
 
-fig, ax = plt.subplots(figsize=(16, 8))
-ax.plot(range(len(df_register_T)), df_register_T.loc[:,'Upper CI - ' + str(alpha_value) + '%'], color = "black", linewidth = 0.5, linestyle = 'dashed', label = 'Upper CI - ' + str(alpha_value) + '%')
-ax.plot(range(len(df_register_T)), df_register_T.loc[:,'Lower CI - ' + str(alpha_value) + '%'], color = "black", linewidth = 0.5, linestyle = 'dotted', label = 'Lower CI - ' + str(alpha_value) + '%')
-ax.plot(range(len(df_register_T)), df_register_T.loc[:,'Mean'], color = "#A52A2A", linewidth = 0.5, linestyle = 'solid', label = 'Mean')
-#ax.fill_between(x = range(len(df_register_T)), y1 = df_register_T.loc[:,'Upper CI - ' + str(alpha_value) + '%'], y2 =  df_register_T.loc[:,'Lower CI - ' + str(alpha_value) + '%'],  alpha = 0.2, color = "#1f77b4") # Polígono
+                CI = st.norm.interval(alpha = c/100, loc = np.mean(df_value), scale = st.sem(df_value))
+                mean_value = np.mean(df_value)
+                #print(m, mean_value, CI, df_value.size)
 
-xlim = len(iterations)
-plt.xticks(range(0, xlim, 10), fontsize = 10)
+                Lower_CI, Upper_CI = CI[0], CI[1]
+                
+                df_register.loc['Upper CI - ' + str(c) + '%', str(m)] = Upper_CI
+                df_register.loc['Lower CI - ' + str(c) + '%', str(m)] = Lower_CI
+                df_register.loc['Mean', str(m)] = mean_value
+
+            df_register_T = df_register.transpose()
+            print(df_register_T)
+
+            df_mean[str(a) + '; ' + str(b)] = df_register_T['Mean']
+
+            #---    Graph 1
+            Lower_bound = 3.5
+            Upper_bound = 6.0
+
+            fig, ax = plt.subplots(figsize=(16, 8))
+            ax.plot(range(len(df_register_T)), df_register_T.loc[:,'Upper CI - ' + str(c) + '%'], color = "black", linewidth = 0.75, linestyle = 'dashed', label = 'Upper CI - ' + str(c) + '%')
+            ax.plot(range(len(df_register_T)), df_register_T.loc[:,'Lower CI - ' + str(c) + '%'], color = "black", linewidth = 0.75, linestyle = 'dotted', label = 'Lower CI - ' + str(c) + '%')
+            ax.plot(range(len(df_register_T)), df_register_T.loc[:,'Mean'], color = "#A52A2A", linewidth = 0.75, linestyle = 'solid', label = 'Mean')
+            #ax.fill_between(x = range(len(df_register_T)), y1 = df_register_T.loc[:,'Upper CI - ' + str(alpha_value) + '%'], y2 =  df_register_T.loc[:,'Lower CI - ' + str(alpha_value) + '%'],  alpha = 0.2, color = "#1f77b4") # Polígono
+
+            xlim = len(iterations)
+            plt.xticks(range(0, xlim, 20), fontsize = fs_others)
+            plt.xlim(0, xlim)
+            plt.yticks(fontsize = fs_others)
+            plt.ylim(Lower_bound, Upper_bound)
+
+            plt.title(str(b), fontsize = fs_title, weight = "bold")
+            plt.xlabel("Iterations", fontsize = fs_others, weight = "bold")
+            plt.ylabel("log E", fontsize = fs_others, weight = "bold")
+            plt.legend(loc='upper right', fontsize = fs_others)
+
+            plt.savefig(os.path.join(path_results, 'Graphs', 'LogE_vs_iter_' + str(a) + '_' + str(b) + '_' + str(c) + '.png'))
+            plt.savefig(os.path.join(path_results, 'Graphs', 'LogE_vs_iter_' + str(a) + '_' + str(b) + '_' + str(c) + '.eps'), format = 'eps', dpi = 1200)
+            plt.clf()
+
+print(df_mean)
+#---    Graph 2
+fig2, ax2 = plt.subplots(figsize = (16, 8))
+ax2.plot(range(len(df_mean)), df_mean.loc[:, 'DPSO; n = 20'], color = "black", linewidth = 0.75, linestyle = 'solid', label = 'DPSO; n = 20')
+ax2.plot(range(len(df_mean)), df_mean.loc[:, 'DDE; n = 20'], color = "#A52A2A", linewidth = 0.75, linestyle = 'solid', label = 'DDE; n = 20')
+ax2.plot(range(len(df_mean)), df_mean.loc[:, 'DPSO; n = 35'], color = "black", linewidth = 0.75, linestyle = 'dashed', label = 'DPSO; n = 35')
+ax2.plot(range(len(df_mean)), df_mean.loc[:, 'DDE; n = 35'], color = "#A52A2A", linewidth = 0.75, linestyle = 'dashed', label = 'DDE; n = 35')
+ax2.plot(range(len(df_mean)), df_mean.loc[:, 'DPSO; n = 50'], color = "black", linewidth = 0.75, linestyle = 'dotted', label = 'DPSO; n = 50')
+ax2.plot(range(len(df_mean)), df_mean.loc[:, 'DDE; n = 50'], color = "#A52A2A", linewidth = 0.75, linestyle = 'dotted', label = 'DDE; n = 50')
+
+plt.xticks(range(0, xlim, 20), fontsize = fs_others)
 plt.xlim(0, xlim)
+plt.yticks(fontsize = fs_others)
 plt.ylim(Lower_bound, Upper_bound)
 
-plt.title(str(title), fontsize = 14, weight = "bold")
-plt.xlabel("Iterations", fontsize = 10)
-plt.ylabel("log E", fontsize = 10)
-plt.legend(loc='upper right')
+plt.xlabel("Iteration", fontsize = fs_others, weight = "bold")
+plt.ylabel("Log E", fontsize = fs_others, weight = "bold")
+plt.legend(bbox_to_anchor = (0,1,5,0), mode = "expandir", ncol = 3, loc = 'lower left', fontsize = fs_others)
 
-plt.savefig(os.path.join(r'D:\1_PaperI', methodology, 'Graficas', 'error_vs_iteration_' + methodology + '_' + configuration + '_' + str(alpha_value) + '.png'))  ## GENERAL
+plt.savefig(os.path.join(path_results, 'Graphs', 'Mean_LogE_vs_iter.png'))
+plt.savefig(os.path.join(path_results, 'Graphs', 'Mean_LogE_vs_iter.eps'), format = 'eps', dpi = 1200)
 plt.clf()
-
-#---    Convert .PNG to .EPS
-image_png = os.path.join(r'D:\1_PaperI', methodology, 'Graficas', 'error_vs_iteration_' + methodology + '_' + configuration + '_' + str(alpha_value) + '.png')
-im = Image.open(image_png)
-#print(im.mode)
-
-fig = im.convert('CMYK')                #L, RGB, CMYK
-fig.save(os.path.join(r'D:\1_PaperI', methodology, 'Graficas', 'error_vs_iteration_' + methodology + '_' + configuration + '_' + str(alpha_value) + '.eps'), lossless = True)
