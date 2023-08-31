@@ -60,9 +60,9 @@ for a in methodology:
     
         #---    Transpose to reorder
         df_y_log_T = df_y_log.transpose()
-
+        
+        #---    Confidence Intervals
         for c in alpha_value:
-            #---    Confidence Intervals
             df_register = pd.DataFrame(index = ['Upper CI - ' + str(c) + '%', 'Lower CI - ' + str(c) + '%', 'Mean'])
 
             for m in iterations:
