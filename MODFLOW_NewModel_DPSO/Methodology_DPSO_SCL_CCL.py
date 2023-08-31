@@ -127,10 +127,9 @@ else:
 
         w = f["w"][ITERATION - 1]                               # inertia velocity
     f.close()
-
-    gbest = send_request_py(IP_SERVER_ADD, pob.y, pob.x)           # Update global particle
     
-    time.sleep(1)
+    time.sleep(np.random.randint(10,30,size = 1)[0])
+    gbest = send_request_py(IP_SERVER_ADD, pob.y, pob.x)           # Update global particle
 
     #---    Update particle velocity
     ϵ1,ϵ2 = np.around(np.random.uniform(),4), np.around(np.random.uniform(),4)            # [0, 1]
