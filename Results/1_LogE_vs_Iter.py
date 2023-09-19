@@ -13,7 +13,7 @@ warnings.filterwarnings('ignore')
 
 #---    Initial information
 methodology = ['DPSO', 'DDE']
-configuration = ['n = 20']                                          # 'n = 35', 'n = 50'
+configuration = ['n = 20', 'n = 35', 'n = 50']                                          # 'n = 35', 'n = 50'
 experiments = ['E1', 'E2', 'E3', 'E4', 'E5']                        # 'E4', 'E5'
 iterations = list(range(201))
 
@@ -110,7 +110,7 @@ for a in methodology:
             plt.clf()
 
 print(df_mean)
-"""
+
 #---    Graph 2
 fig2, ax2 = plt.subplots(figsize = (16, 8))
 ax2.plot(range(len(df_mean)), df_mean.loc[:, 'DPSO; n = 20'], color = "black", linewidth = 0.75, linestyle = 'solid', label = 'DPSO; n = 20')
@@ -132,4 +132,3 @@ plt.legend(bbox_to_anchor = (0,1,5,0), mode = "expandir", ncol = 3, loc = 'lower
 plt.savefig(os.path.join(path_results, 'Graphs', 'Mean_LogE_vs_iter.png'))
 plt.savefig(os.path.join(path_results, 'Graphs', 'Mean_LogE_vs_iter.eps'), format = 'eps', dpi = 1200)
 plt.clf()
-"""
