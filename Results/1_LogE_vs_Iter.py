@@ -23,8 +23,8 @@ alpha_value = [90, 95, 99]
 
 df_mean = pd.DataFrame()
 
-fs_title = 20
-fs_others = 16
+fs_title = 21
+fs_others = 18
 
 for a in methodology:
     for b in configuration: 
@@ -60,7 +60,24 @@ for a in methodology:
     
         #---    Transpose to reorder
         df_y_log_T = df_y_log.transpose()
-        
+        print(df_y_log)
+        """
+        #---    BOXPLOT
+        df = df_y
+        column_list = df.columns
+        df_concat = df.iloc[:,0]
+        for m in range(len(column_list)-1):
+            df_concat = pd.concat([df_concat, df.iloc[:,m+1]])
+        df_concat = df_concat.reset_index()
+        print(df_concat)
+        del df_concat['index']
+        df_concat = df_concat.dropna()
+        print(df_concat)
+        fig, ax = plt.subplots(figsize=(8, 6))
+        ax.boxplot(df_concat)
+        plt.savefig(os.path.join(path_results, 'Graphs', 'Boxplot_error_' + str(a) + '_' + str(b) + '.png'))       ## GENERAL
+        plt.clf()
+        """
         #---    Confidence Intervals
         for c in alpha_value:
             df_register = pd.DataFrame(index = ['Upper CI - ' + str(c) + '%', 'Lower CI - ' + str(c) + '%', 'Mean'])
@@ -88,7 +105,7 @@ for a in methodology:
             Lower_bound = 3.5
             Upper_bound = 6.0
 
-            fig, ax = plt.subplots(figsize=(16, 8))
+            fig, ax = plt.subplots(figsize=(14, 7))
             ax.plot(range(len(df_register_T)), df_register_T.loc[:,'Upper CI - ' + str(c) + '%'], color = "black", linewidth = 0.75, linestyle = 'dashed', label = 'Upper CI - ' + str(c) + '%')
             ax.plot(range(len(df_register_T)), df_register_T.loc[:,'Lower CI - ' + str(c) + '%'], color = "black", linewidth = 0.75, linestyle = 'dotted', label = 'Lower CI - ' + str(c) + '%')
             ax.plot(range(len(df_register_T)), df_register_T.loc[:,'Mean'], color = "#A52A2A", linewidth = 0.75, linestyle = 'solid', label = 'Mean')
@@ -100,12 +117,18 @@ for a in methodology:
             plt.yticks(fontsize = fs_others)
             plt.ylim(Lower_bound, Upper_bound)
 
-            plt.title(str(b), fontsize = fs_title, weight = "bold")
+            if b == 'n = 20':
+                title = 'NP = 20'
+            elif b == 'n = 35':
+                title = 'NP = 35'
+            elif b == 'n = 50':
+                title = 'NP = 50'
+            plt.title(str(title), fontsize = fs_title, weight = "bold")
             plt.xlabel("Iterations", fontsize = fs_others, weight = "bold")
             plt.ylabel("log E", fontsize = fs_others, weight = "bold")
             plt.legend(loc='upper right', fontsize = fs_others)
 
-            plt.savefig(os.path.join(path_results, 'Graphs', 'LogE_vs_iter_' + str(a) + '_' + str(b) + '_' + str(c) + '.png'))
+            plt.savefig(os.path.join(path_results, 'Graphs', 'LogE_vs_iter_' + str(a) + '_' + str(b) + '_' + str(c) + '.png'), dpi = 1200)
             plt.savefig(os.path.join(path_results, 'Graphs', 'LogE_vs_iter_' + str(a) + '_' + str(b) + '_' + str(c) + '.eps'), format = 'eps', dpi = 1200)
             plt.clf()
 
