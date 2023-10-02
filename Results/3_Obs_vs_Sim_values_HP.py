@@ -29,10 +29,10 @@ path_results = os.path.join(r'D:\1_PaperI', methodology, configuration)
 
 #---    DDE
 methodology_2 = 'DDE'        
-configuration_2 = 'n = 20'
-best_experiment_2 = 'E4'
-best_result_2 = 'vm11'
-best_iteration_2 = 197
+configuration_2 = 'n = 35'
+best_experiment_2 = 'E7'
+best_result_2 = 'vm27'
+best_iteration_2 = 192
 best_shape_2 = 'Elements_iter_' + str(best_iteration_2) + '.shp'
 best_q_2 = 'iter_' + str(best_iteration_2) + '_Streamflow_gauges.csv'
 best_w_2 = 'iter_' + str(best_iteration_2) + '_Wells_simulation.csv'

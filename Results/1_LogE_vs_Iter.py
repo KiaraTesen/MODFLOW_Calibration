@@ -14,7 +14,7 @@ warnings.filterwarnings('ignore')
 #---    Initial information
 methodology = ['DPSO', 'DDE']
 configuration = ['n = 20', 'n = 35', 'n = 50']                                          # 'n = 35', 'n = 50'
-experiments = ['E1', 'E2', 'E3', 'E4', 'E5']                        # 'E4', 'E5'
+experiments = ['E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7']                        # 'E4', 'E5'
 iterations = list(range(201))
 
 path_results = os.path.join(r'D:\1_PaperI') 

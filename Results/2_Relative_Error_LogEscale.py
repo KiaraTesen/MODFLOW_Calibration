@@ -76,13 +76,13 @@ for n in variables:
 
 #---    Initial information
 methodology = 'DDE'                #'DDE'
-configuration = 'n = 20'
+configuration = 'n = 35'
 path_results = os.path.join(r'D:\1_PaperI', methodology, configuration) 
 elements_init = 'Elements_initial_unique_value_v2'
 
-best_experiment = 'E4'
-best_result = 'vm11'
-best_iteration = 197
+best_experiment = 'E7'
+best_result = 'vm27'
+best_iteration = 192
 
 best_shape = 'Elements_iter_' + str(best_iteration) + '.shp'
 best_q = 'iter_' + str(best_iteration) + '_Streamflow_gauges.csv'
