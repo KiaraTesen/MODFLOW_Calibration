@@ -64,9 +64,9 @@ for n in variables:
     plt.clim(0.001, 10000)
 
     if n == 'kx':
-        plt.title('Relative error (%) - Hydraulic Conductivity', fontsize = 21, weight = "bold")
+        plt.title('RE (%) - K', fontsize = 21, weight = "bold")
     else:
-        plt.title('Relative error (%) - Specific yield', fontsize = 21, weight = "bold")
+        plt.title('RE (%) - Sy', fontsize = 21, weight = "bold")
     plt.xlabel('Column', fontsize = 18)
     plt.ylabel('Row', fontsize = 18 )
     
@@ -123,9 +123,9 @@ for n in variables:
     plt.clim(0.001, 10000)
 
     if n == 'kx':
-        plt.title('Relative error (%) - Hydraulic Conductivity', fontsize = 21, weight = "bold")
+        plt.title('RE (%) - K', fontsize = 21, weight = "bold")
     else:
-        plt.title('Relative error (%) - Specific yield', fontsize = 21, weight = "bold")
+        plt.title('RE (%) - Sy', fontsize = 21, weight = "bold")
     plt.xlabel('Column', fontsize = 18)
     plt.ylabel('Row', fontsize = 18 )
     
