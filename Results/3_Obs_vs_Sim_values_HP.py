@@ -96,7 +96,7 @@ ymin = min(DF_q['Modeled - ADPSO-CL'].to_numpy().min(), DF_q['Modeled - ADDE-CL'
 ymax = max(DF_q['Modeled - ADPSO-CL'].to_numpy().max(), DF_q['Modeled - ADDE-CL'].to_numpy().max(), DF_q['Observed'].to_numpy().max())
 dif_v = ymax - ymin
 
-plt.ylim(0, ymax + dif_v)
+plt.ylim(0, round(ymax + dif_v/2))
 plt.ylabel('Streamflow ($m^{3}/s$)', fontsize = 18)
 plt.xlabel('Years', fontsize = 18)
 plt.xticks(fontsize = 18)
