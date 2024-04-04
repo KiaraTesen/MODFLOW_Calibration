@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 #---    Packages
-from Functions_DPSO_SCL_CCL import *
+from Functions_DPSO_SCL import *
 import numpy as np
 import h5py
 import os
