@@ -164,55 +164,56 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
     for i,j in zip(favorites["BranchVariable"],favorites["WEAP Export"]):
         WEAP.LoadFavorite(i)
         WEAP.ExportResults(os.path.join(dir_iteration, f"iter_{str(iteration)}_{j}.csv"), True, True, True, False, False)
-    print('CORRIÓ WEAP Y SE EXPORTARON RESULTADOS')
+
     #---------------------------------
     #---    Objective Function    ----
     #---------------------------------
     #---    Well analysis
-#    obs_well = get_data(os.path.join(path_obs_data, 'Wells_observed.csv'), 3)
-#    ow = obs_well.columns
+    obs_well = get_data(os.path.join(path_obs_data, 'Wells_observed.csv'), 3)
+    ow = obs_well.columns
 
-#    sim_well = get_data(os.path.join(dir_iteration, f"iter_{str(iteration)}_Wells_simulation.csv"), 3)
+    sim_well = get_data(os.path.join(dir_iteration, f"iter_{str(iteration)}_Wells_simulation.csv"), 3)
 
-#    g_srmse_well = 0
-#    srmse_well = 0
-#    for i in ow:
-#        if i == "OW51" or i == "OW87" or i == "OW97" or i == "OW100" or i == "OW157" or i == "OW167" or i == "OW181" or i == "OW188" or i == "OW233" or i == "OW234" or i == "OW235":
-#            g = 0.8
-#        else:
-#            g = 0.8
+    g_srmse_well = 0
+    srmse_well = 0
+    for i in ow:
+        if i == "OW51" or i == "OW87" or i == "OW97" or i == "OW100" or i == "OW157" or i == "OW167" or i == "OW181" or i == "OW188" or i == "OW233" or i == "OW234" or i == "OW235":
+            g = 0.8
+        else:
+            g = 0.8
 
-#        mse_well = mean_squared_error(obs_well[i], sim_well[i])
-#        rmse_well = math.sqrt(mse_well)
-#        g_rmse_well = g * rmse_well
+        mse_well = mean_squared_error(obs_well[i], sim_well[i])
+        rmse_well = math.sqrt(mse_well)
+        g_rmse_well = g * rmse_well
 
-#        srmse_well += rmse_well
-#        g_srmse_well += g_rmse_well
+        srmse_well += rmse_well
+        g_srmse_well += g_rmse_well
 
     #---    Streamflow analysis
-#    df_q = pd.read_csv(os.path.join(dir_iteration, f"iter_{str(iteration)}_Streamflow_gauges.csv"), skiprows = 3)
-#    df_q = df_q.set_index('Statistic')
-#    df_q = df_q.set_index(pd.to_datetime(df_q.index))
-#    df_q = df_q.iloc[36:,:]
+    df_q = pd.read_csv(os.path.join(dir_iteration, f"iter_{str(iteration)}_Streamflow_gauges.csv"), skiprows = 3)
+    df_q = df_q.set_index('Statistic')
+    df_q = df_q.set_index(pd.to_datetime(df_q.index))
+    df_q = df_q.iloc[36:,:]
 
-#    df_q_obs = get_data(os.path.join(path_obs_data, 'StreamflowGauges_KPR_vf.csv'), 2)
+    df_q_obs = get_data(os.path.join(path_obs_data, 'StreamflowGauges_KPR_vf.csv'), 2)
     
-#    mse_q = mean_squared_error(df_q_obs['Observed'], df_q['Modeled'])
-#    rmse_q = math.sqrt(mse_q)
+    mse_q = mean_squared_error(df_q_obs['Observed'], df_q['Modeled'])
+    rmse_q = math.sqrt(mse_q)
 
     #---    Subject to
-#    kx_min = 0.280
-#    kx_max = 67.056
-#    sy_min = 0.01
-#    sy_max = 0.1282
+    kx_min = 0.280
+    kx_max = 67.056
+    sy_min = 0.01
+    sy_max = 0.1282
 
-#    for i in HP:
-#        globals()["vector_modif_" + str(i)] = get_eliminate_zeros(globals()["vector_" + str(i)].tolist())
-#        globals()["P_" + str(i)] = get_evaluate_st_bounds((locals()[str(i) + "_min"]), (locals()[str(i) + "_max"]), globals()["vector_modif_" + str(i)])
+    for i in HP:
+        globals()["vector_modif_" + str(i)] = get_eliminate_zeros(globals()["vector_" + str(i)].tolist())
+        globals()["P_" + str(i)] = get_evaluate_st_bounds((locals()[str(i) + "_min"]), (locals()[str(i) + "_max"]), globals()["vector_modif_" + str(i)])
 
     #---    Total Objective Function
-#    g2 = 0.6
-#    g3 = 0.6
+    g2 = 0.6
+    g3 = 0.6
 
-#    of = g_srmse_well + g2*rmse_q + g3*(P_kx + P_sy)
-#    return of
+    of = g_srmse_well + g2*rmse_q + g3*(P_kx + P_sy)
+    print(of)
+    return of
