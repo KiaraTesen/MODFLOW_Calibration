@@ -70,11 +70,9 @@ if ITERATION == 0:
     with h5py.File('Pre_DPSO_historial.h5', 'r') as f:
         pob.x = np.copy(f["pob_x"][VM-2])
     f.close()
-
-    print('HASTA AQUÍ OK')
     
     y_init = Run_WEAP_MODFLOW(path_output, str(ITERATION), initial_shape_HP, HP, active_cells, pob.x, n_var, active_matriz, path_init_model, path_model, path_nwt_exe, path_obs_data)
-    """
+    
     pob.y = y_init
     pob.y_best = y_init
 
@@ -116,7 +114,8 @@ else:
 
         w = f["w"][ITERATION - 1]                               # inertia velocity
     f.close()
-    
+    print('FUNCIONA HASTA ANTES DE MANDAR EL RESULTADO')
+    """
     time.sleep(np.random.randint(10,30,size = 1)[0])
     gbest = send_request_py(IP_SERVER_ADD, pob.y, pob.x)           # Update global particle
 
