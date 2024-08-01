@@ -95,39 +95,37 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
     if not os.path.isdir(dir_iteration):
         os.mkdir(dir_iteration)
     
-    print('SE CREÓ CARPETA')
-    
     #--------------------------
     #---    Run MODFLOW    ----
     #--------------------------
     #---    Modified matriz
-#    pre_shape_HP = initial_shape_HP.copy()
-#    new_shape_HP = initial_shape_HP.copy()
+    pre_shape_HP = initial_shape_HP.copy()
+    new_shape_HP = initial_shape_HP.copy()
 
-#    for m in HP:
-#        if m == "kx":
-#            begin = 0
-#            end = active_cells
-#        elif m == "sy":
-#            begin = active_cells
-#            end = active_cells * 2
-#        globals()["matriz_pre_" + str(m)] = get_pre_HP(initial_shape_HP, pre_shape_HP, str(m), sample_scaled, begin, end)
-#        get_image_matriz(globals()["matriz_pre_" + str(m)], str(m), os.path.join(dir_iteration, 'Pre_' + str(m) +'.png'))
-#        plt.clf
-#        globals()["vector_" + str(m)] = globals()["matriz_pre_" + str(m)].flatten()
+    for m in HP:
+        if m == "kx":
+            begin = 0
+            end = active_cells
+        elif m == "sy":
+            begin = active_cells
+            end = active_cells * 2
+        globals()["matriz_pre_" + str(m)] = get_pre_HP(initial_shape_HP, pre_shape_HP, str(m), sample_scaled, begin, end)
+        get_image_matriz(globals()["matriz_pre_" + str(m)], str(m), os.path.join(dir_iteration, 'Pre_' + str(m) +'.png'))
+        plt.clf
+        globals()["vector_" + str(m)] = globals()["matriz_pre_" + str(m)].flatten()
 
     #---    Other variables that MODFLOW require
-#    matriz_kx = matriz_pre_kx
-#    matriz_sy = matriz_pre_sy    
-#    matriz_kz = matriz_kx/10
-#    matriz_ss = matriz_sy/100
+    matriz_kx = matriz_pre_kx
+    matriz_sy = matriz_pre_sy    
+    matriz_kz = matriz_kx/10
+    matriz_ss = matriz_sy/100
 
-#    new_shape_HP['kx'] = matriz_kx.flatten()
-#    new_shape_HP['sy'] = matriz_sy.flatten()
-#    new_shape_HP['kz'] = matriz_kz.flatten()
-#    new_shape_HP['ss'] = matriz_ss.flatten()
-#    new_shape_HP.to_file(os.path.join(dir_iteration, 'Elements_iter_' + str(iteration) + '.shp'))
-
+    new_shape_HP['kx'] = matriz_kx.flatten()
+    new_shape_HP['sy'] = matriz_sy.flatten()
+    new_shape_HP['kz'] = matriz_kz.flatten()
+    new_shape_HP['ss'] = matriz_ss.flatten()
+    new_shape_HP.to_file(os.path.join(dir_iteration, 'Elements_iter_' + str(iteration) + '.shp'))
+    print('SE CREO SHAPEFILE')
     #---    Generate new native files
 #    model = fpm.Modflow.load(path_init_model + '/SyntheticAquifer_NY.nam', version = 'mfnwt', exe_name = path_nwt_exe)
 #    model.write_input()
