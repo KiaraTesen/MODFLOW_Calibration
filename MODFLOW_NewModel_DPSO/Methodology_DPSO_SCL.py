@@ -2,34 +2,34 @@
 
 #---    Packages
 from Functions_DPSO_SCL import *
-import geopandas as gpd
-import pandas as pd
-import numpy as np
-import h5py
-import matplotlib.pyplot as plt
-import os
-from functools import reduce
-import time
-import sys
-from request_server.request_server import send_request_py
-import warnings
-warnings.filterwarnings('ignore')
+#import geopandas as gpd
+#import pandas as pd
+#import numpy as np
+#import h5py
+#import matplotlib.pyplot as plt
+#import os
+#from functools import reduce
+#import time
+#import sys
+#from request_server.request_server import send_request_py
+#import warnings
+#warnings.filterwarnings('ignore')
 
-IP_SERVER_ADD = sys.argv[1]
-ITERATION = int(sys.argv[2])
-TOTAL_ITERATION = int(sys.argv[3])
-FINAL_ITERATION = int(sys.argv[4])
+#IP_SERVER_ADD = sys.argv[1]
+#ITERATION = int(sys.argv[2])
+#TOTAL_ITERATION = int(sys.argv[3])
+#FINAL_ITERATION = int(sys.argv[4])
 
-VM = int(sys.argv[5])
+#VM = int(sys.argv[5])
 
 #---    Paths
-path_WEAP = r'C:\Users\Administrator\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
-path_model = os.path.join(path_WEAP, 'MODFLOW_model')
-path_init_model = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\data\MODFLOW_model\MODFLOW_model_vinit'
-path_nwt_exe = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\data\MODFLOW-NWT_1.2.0\bin\MODFLOW-NWT_64.exe'
-path_GIS = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\data\GIS'    
-path_output = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\MODFLOW_NewModel_DPSO\output'         # Need full path for WEAP Export
-path_obs_data = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\data\ObservedData'
+#path_WEAP = r'C:\Users\Administrator\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
+#path_model = os.path.join(path_WEAP, 'MODFLOW_model')
+#path_init_model = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\data\MODFLOW_model\MODFLOW_model_vinit'
+#path_nwt_exe = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\data\MODFLOW-NWT_1.2.0\bin\MODFLOW-NWT_64.exe'
+#ath_GIS = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\data\GIS'    
+#path_output = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\MODFLOW_NewModel_DPSO\output'         # Need full path for WEAP Export
+#path_obs_data = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\data\ObservedData'
 
 #path_WEAP = r'C:\Users\vagrant\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
 #path_model = os.path.join(path_WEAP, 'MODFLOW_model')
