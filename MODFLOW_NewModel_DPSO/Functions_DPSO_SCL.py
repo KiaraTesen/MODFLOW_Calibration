@@ -125,33 +125,33 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
     new_shape_HP['kz'] = matriz_kz.flatten()
     new_shape_HP['ss'] = matriz_ss.flatten()
     new_shape_HP.to_file(os.path.join(dir_iteration, 'Elements_iter_' + str(iteration) + '.shp'))
-    print('SE CREO SHAPEFILE')
+
     #---    Generate new native files
-#    model = fpm.Modflow.load(path_init_model + '/SyntheticAquifer_NY.nam', version = 'mfnwt', exe_name = path_nwt_exe)
-#    model.write_input()
-#    model.remove_package("UPW")
-#    upw = fpm.ModflowUpw(model = model, laytyp=1, layavg=0, chani=-1.0, layvka=0, laywet=0, hdry=-888, iphdry=1, hk=matriz_kx, hani=1.0, vka=matriz_kz, ss=matriz_ss, sy=matriz_sy, extension='upw')
-#    upw.write_file()
-#    model.run_model()
+    model = fpm.Modflow.load(path_init_model + '/SyntheticAquifer_NY.nam', version = 'mfnwt', exe_name = path_nwt_exe)
+    model.write_input()
+    model.remove_package("UPW")
+    upw = fpm.ModflowUpw(model = model, laytyp=1, layavg=0, chani=-1.0, layvka=0, laywet=0, hdry=-888, iphdry=1, hk=matriz_kx, hani=1.0, vka=matriz_kz, ss=matriz_ss, sy=matriz_sy, extension='upw')
+    upw.write_file()
+    model.run_model()
     
     #---    Move native files to WEAP
-#    get_old_files = os.listdir(path_model)
-#    get_new_files = os.listdir(os.getcwd())
+    get_old_files = os.listdir(path_model)
+    get_new_files = os.listdir(os.getcwd())
 
     #---    Delete old files
-#    for g in get_old_files:
-#        try:
-#            os.remove(os.path.join(path_model, g))
-#        except:
-#            print('No hay archivos')
+    for g in get_old_files:
+        try:
+            os.remove(os.path.join(path_model, g))
+        except:
+            print('No hay archivos')
 
     #---    Move new files
-#    for h in get_new_files:
-#        if h.endswith('.py') or h == '__pycache__' or h == 'sp' or h.endswith('.txt') or h == 'output' or h.endswith('.ps1') or h.endswith('.h5'):
-#            pass 
-#        else:
-#            shutil.move(os.path.join(os.getcwd(), h), os.path.join(path_model, h))
-    
+    for h in get_new_files:
+        if h.endswith('.py') or h == '__pycache__' or h == 'sp' or h.endswith('.txt') or h == 'output' or h.endswith('.ps1') or h.endswith('.h5'):
+            pass 
+        else:
+            shutil.move(os.path.join(os.getcwd(), h), os.path.join(path_model, h))
+    print('SE PASO MODELO MODFLOW')    
     #-------------------------------------
     #---    Run WEAP-MODFLOW model    ----
     #-------------------------------------
