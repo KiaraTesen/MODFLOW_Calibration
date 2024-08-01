@@ -31,8 +31,6 @@ ath_GIS = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\data\GIS'
 path_output = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\MODFLOW_NewModel_DPSO\output'         # Need full path for WEAP Export
 path_obs_data = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\data\ObservedData'
 
-print('HASTA AQUÍ OK')
-
 #path_WEAP = r'C:\Users\vagrant\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
 #path_model = os.path.join(path_WEAP, 'MODFLOW_model')
 #path_init_model = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\MODFLOW_model\MODFLOW_model_vinit'
@@ -41,7 +39,6 @@ print('HASTA AQUÍ OK')
 #path_output = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\MODFLOW_NewModel_DPSO\output'         # Need full path for WEAP Export
 #path_obs_data = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\ObservedData'
 
-"""
 #---    Initial matriz
 HP = ['kx', 'sy'] 
 initial_shape_HP = gpd.read_file(path_GIS + '/Elements_initial_unique_value_v2.shp')   # /Elements_initial_unique_value.shp, /Elements_initial_zones_reduced.shp
@@ -74,9 +71,9 @@ if ITERATION == 0:
         pob.x = np.copy(f["pob_x"][VM-2])
     f.close()
 
-    y_init = Run_WEAP_MODFLOW(path_output, str(ITERATION), initial_shape_HP, HP, active_cells, pob.x, n_var, 
-                              active_matriz, path_init_model, path_model, path_nwt_exe, 
-                              path_obs_data)
+    print('HASTA AQUÍ OK')
+    """
+    y_init = Run_WEAP_MODFLOW(path_output, str(ITERATION), initial_shape_HP, HP, active_cells, pob.x, n_var, active_matriz, path_init_model, path_model, path_nwt_exe, path_obs_data)
  
     pob.y = y_init
     pob.y_best = y_init
