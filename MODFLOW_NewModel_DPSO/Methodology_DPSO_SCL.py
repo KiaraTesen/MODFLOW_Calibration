@@ -114,8 +114,7 @@ else:
 
         w = f["w"][ITERATION - 1]                               # inertia velocity
     f.close()
-    print('FUNCIONA HASTA ANTES DE MANDAR EL RESULTADO')
-    """
+
     time.sleep(np.random.randint(10,30,size = 1)[0])
     gbest = send_request_py(IP_SERVER_ADD, pob.y, pob.x)           # Update global particle
 
@@ -146,9 +145,7 @@ else:
         pob.x[index_pMin] = l_bounds[index_pMin]
 
     #---    Evaluate the fitnness function
-    y = Run_WEAP_MODFLOW(path_output, str(ITERATION), initial_shape_HP, HP, active_cells, pob.x, n_var, 
-                         active_matriz, path_init_model, path_model, path_nwt_exe, 
-                         path_obs_data)
+    y = Run_WEAP_MODFLOW(path_output, str(ITERATION), initial_shape_HP, HP, active_cells, pob.x, n_var, active_matriz, path_init_model, path_model, path_nwt_exe, path_obs_data)
     
     if y < pob.y_best:
         pob.x_best = np.copy(pob.x)
@@ -171,4 +168,3 @@ else:
 
         f["w"][ITERATION] = w
     f.close()
-"""
