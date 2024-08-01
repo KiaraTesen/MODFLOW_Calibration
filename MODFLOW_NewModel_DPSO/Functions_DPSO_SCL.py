@@ -96,126 +96,125 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
         os.mkdir(dir_iteration)
     
     print('SE CREÓ CARPETA')
-    """
+    
     #--------------------------
     #---    Run MODFLOW    ----
     #--------------------------
     #---    Modified matriz
-    pre_shape_HP = initial_shape_HP.copy()
-    new_shape_HP = initial_shape_HP.copy()
+#    pre_shape_HP = initial_shape_HP.copy()
+#    new_shape_HP = initial_shape_HP.copy()
 
-    for m in HP:
-        if m == "kx":
-            begin = 0
-            end = active_cells
-        elif m == "sy":
-            begin = active_cells
-            end = active_cells * 2
-        globals()["matriz_pre_" + str(m)] = get_pre_HP(initial_shape_HP, pre_shape_HP, str(m), sample_scaled, begin, end)
-        get_image_matriz(globals()["matriz_pre_" + str(m)], str(m), os.path.join(dir_iteration, 'Pre_' + str(m) +'.png'))
-        plt.clf
-        globals()["vector_" + str(m)] = globals()["matriz_pre_" + str(m)].flatten()
+#    for m in HP:
+#        if m == "kx":
+#            begin = 0
+#            end = active_cells
+#        elif m == "sy":
+#            begin = active_cells
+#            end = active_cells * 2
+#        globals()["matriz_pre_" + str(m)] = get_pre_HP(initial_shape_HP, pre_shape_HP, str(m), sample_scaled, begin, end)
+#        get_image_matriz(globals()["matriz_pre_" + str(m)], str(m), os.path.join(dir_iteration, 'Pre_' + str(m) +'.png'))
+#        plt.clf
+#        globals()["vector_" + str(m)] = globals()["matriz_pre_" + str(m)].flatten()
 
     #---    Other variables that MODFLOW require
-    matriz_kx = matriz_pre_kx
-    matriz_sy = matriz_pre_sy    
-    matriz_kz = matriz_kx/10
-    matriz_ss = matriz_sy/100
+#    matriz_kx = matriz_pre_kx
+#    matriz_sy = matriz_pre_sy    
+#    matriz_kz = matriz_kx/10
+#    matriz_ss = matriz_sy/100
 
-    new_shape_HP['kx'] = matriz_kx.flatten()
-    new_shape_HP['sy'] = matriz_sy.flatten()
-    new_shape_HP['kz'] = matriz_kz.flatten()
-    new_shape_HP['ss'] = matriz_ss.flatten()
-    new_shape_HP.to_file(os.path.join(dir_iteration, 'Elements_iter_' + str(iteration) + '.shp'))
+#    new_shape_HP['kx'] = matriz_kx.flatten()
+#    new_shape_HP['sy'] = matriz_sy.flatten()
+#    new_shape_HP['kz'] = matriz_kz.flatten()
+#    new_shape_HP['ss'] = matriz_ss.flatten()
+#    new_shape_HP.to_file(os.path.join(dir_iteration, 'Elements_iter_' + str(iteration) + '.shp'))
 
     #---    Generate new native files
-    model = fpm.Modflow.load(path_init_model + '/SyntheticAquifer_NY.nam', version = 'mfnwt', exe_name = path_nwt_exe)
-    model.write_input()
-    model.remove_package("UPW")
-    upw = fpm.ModflowUpw(model = model, laytyp=1, layavg=0, chani=-1.0, layvka=0, laywet=0, hdry=-888, iphdry=1, hk=matriz_kx, hani=1.0, vka=matriz_kz, ss=matriz_ss, sy=matriz_sy, extension='upw')
-    upw.write_file()
-    model.run_model()
+#    model = fpm.Modflow.load(path_init_model + '/SyntheticAquifer_NY.nam', version = 'mfnwt', exe_name = path_nwt_exe)
+#    model.write_input()
+#    model.remove_package("UPW")
+#    upw = fpm.ModflowUpw(model = model, laytyp=1, layavg=0, chani=-1.0, layvka=0, laywet=0, hdry=-888, iphdry=1, hk=matriz_kx, hani=1.0, vka=matriz_kz, ss=matriz_ss, sy=matriz_sy, extension='upw')
+#    upw.write_file()
+#    model.run_model()
     
     #---    Move native files to WEAP
-    get_old_files = os.listdir(path_model)
-    get_new_files = os.listdir(os.getcwd())
+#    get_old_files = os.listdir(path_model)
+#    get_new_files = os.listdir(os.getcwd())
 
     #---    Delete old files
-    for g in get_old_files:
-        try:
-            os.remove(os.path.join(path_model, g))
-        except:
-            print('No hay archivos')
+#    for g in get_old_files:
+#        try:
+#            os.remove(os.path.join(path_model, g))
+#        except:
+#            print('No hay archivos')
 
     #---    Move new files
-    for h in get_new_files:
-        if h.endswith('.py') or h == '__pycache__' or h == 'sp' or h.endswith('.txt') or h == 'output' or h.endswith('.ps1') or h.endswith('.h5'):
-            pass 
-        else:
-            shutil.move(os.path.join(os.getcwd(), h), os.path.join(path_model, h))
+#    for h in get_new_files:
+#        if h.endswith('.py') or h == '__pycache__' or h == 'sp' or h.endswith('.txt') or h == 'output' or h.endswith('.ps1') or h.endswith('.h5'):
+#            pass 
+#        else:
+#            shutil.move(os.path.join(os.getcwd(), h), os.path.join(path_model, h))
     
     #-------------------------------------
     #---    Run WEAP-MODFLOW model    ----
     #-------------------------------------
-    WEAP = win32.Dispatch("WEAP.WEAPApplication")
-    WEAP.ActiveArea = "SyntheticProblem_WEAPMODFLOW"
-    WEAP.Calculate()
+#    WEAP = win32.Dispatch("WEAP.WEAPApplication")
+#    WEAP.ActiveArea = "SyntheticProblem_WEAPMODFLOW"
+#    WEAP.Calculate()
 
     #---    Export results
-    favorites = pd.read_excel(r"C:\Users\vagrant\Documents\MODFLOW_Calibration\data\Favorites_WEAP.xlsx")
-    for i,j in zip(favorites["BranchVariable"],favorites["WEAP Export"]):
-        WEAP.LoadFavorite(i)
-        WEAP.ExportResults(os.path.join(dir_iteration, f"iter_{str(iteration)}_{j}.csv"), True, True, True, False, False)
+#    favorites = pd.read_excel(r"C:\Users\vagrant\Documents\MODFLOW_Calibration\data\Favorites_WEAP.xlsx")
+#    for i,j in zip(favorites["BranchVariable"],favorites["WEAP Export"]):
+#        WEAP.LoadFavorite(i)
+#        WEAP.ExportResults(os.path.join(dir_iteration, f"iter_{str(iteration)}_{j}.csv"), True, True, True, False, False)
 
     #---------------------------------
     #---    Objective Function    ----
     #---------------------------------
     #---    Well analysis
-    obs_well = get_data(os.path.join(path_obs_data, 'Wells_observed.csv'), 3)
-    ow = obs_well.columns
+#    obs_well = get_data(os.path.join(path_obs_data, 'Wells_observed.csv'), 3)
+#    ow = obs_well.columns
 
-    sim_well = get_data(os.path.join(dir_iteration, f"iter_{str(iteration)}_Wells_simulation.csv"), 3)
+#    sim_well = get_data(os.path.join(dir_iteration, f"iter_{str(iteration)}_Wells_simulation.csv"), 3)
 
-    g_srmse_well = 0
-    srmse_well = 0
-    for i in ow:
-        if i == "OW51" or i == "OW87" or i == "OW97" or i == "OW100" or i == "OW157" or i == "OW167" or i == "OW181" or i == "OW188" or i == "OW233" or i == "OW234" or i == "OW235":
-            g = 0.8
-        else:
-            g = 0.8
+#    g_srmse_well = 0
+#    srmse_well = 0
+#    for i in ow:
+#        if i == "OW51" or i == "OW87" or i == "OW97" or i == "OW100" or i == "OW157" or i == "OW167" or i == "OW181" or i == "OW188" or i == "OW233" or i == "OW234" or i == "OW235":
+#            g = 0.8
+#        else:
+#            g = 0.8
 
-        mse_well = mean_squared_error(obs_well[i], sim_well[i])
-        rmse_well = math.sqrt(mse_well)
-        g_rmse_well = g * rmse_well
+#        mse_well = mean_squared_error(obs_well[i], sim_well[i])
+#        rmse_well = math.sqrt(mse_well)
+#        g_rmse_well = g * rmse_well
 
-        srmse_well += rmse_well
-        g_srmse_well += g_rmse_well
+#        srmse_well += rmse_well
+#        g_srmse_well += g_rmse_well
 
     #---    Streamflow analysis
-    df_q = pd.read_csv(os.path.join(dir_iteration, f"iter_{str(iteration)}_Streamflow_gauges.csv"), skiprows = 3)
-    df_q = df_q.set_index('Statistic')
-    df_q = df_q.set_index(pd.to_datetime(df_q.index))
-    df_q = df_q.iloc[36:,:]
+#    df_q = pd.read_csv(os.path.join(dir_iteration, f"iter_{str(iteration)}_Streamflow_gauges.csv"), skiprows = 3)
+#    df_q = df_q.set_index('Statistic')
+#    df_q = df_q.set_index(pd.to_datetime(df_q.index))
+#    df_q = df_q.iloc[36:,:]
 
-    df_q_obs = get_data(os.path.join(path_obs_data, 'StreamflowGauges_KPR_vf.csv'), 2)
+#    df_q_obs = get_data(os.path.join(path_obs_data, 'StreamflowGauges_KPR_vf.csv'), 2)
     
-    mse_q = mean_squared_error(df_q_obs['Observed'], df_q['Modeled'])
-    rmse_q = math.sqrt(mse_q)
+#    mse_q = mean_squared_error(df_q_obs['Observed'], df_q['Modeled'])
+#    rmse_q = math.sqrt(mse_q)
 
     #---    Subject to
-    kx_min = 0.280
-    kx_max = 67.056
-    sy_min = 0.01
-    sy_max = 0.1282
+#    kx_min = 0.280
+#    kx_max = 67.056
+#    sy_min = 0.01
+#    sy_max = 0.1282
 
-    for i in HP:
-        globals()["vector_modif_" + str(i)] = get_eliminate_zeros(globals()["vector_" + str(i)].tolist())
-        globals()["P_" + str(i)] = get_evaluate_st_bounds((locals()[str(i) + "_min"]), (locals()[str(i) + "_max"]), globals()["vector_modif_" + str(i)])
+#    for i in HP:
+#        globals()["vector_modif_" + str(i)] = get_eliminate_zeros(globals()["vector_" + str(i)].tolist())
+#        globals()["P_" + str(i)] = get_evaluate_st_bounds((locals()[str(i) + "_min"]), (locals()[str(i) + "_max"]), globals()["vector_modif_" + str(i)])
 
     #---    Total Objective Function
-    g2 = 0.6
-    g3 = 0.6
+#    g2 = 0.6
+#    g3 = 0.6
 
-    of = g_srmse_well + g2*rmse_q + g3*(P_kx + P_sy)
-    return of
-"""
+#    of = g_srmse_well + g2*rmse_q + g3*(P_kx + P_sy)
+#    return of
