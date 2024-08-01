@@ -151,20 +151,20 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
             pass 
         else:
             shutil.move(os.path.join(os.getcwd(), h), os.path.join(path_model, h))
-    print('SE PASO MODELO MODFLOW')    
+
     #-------------------------------------
     #---    Run WEAP-MODFLOW model    ----
     #-------------------------------------
-#    WEAP = win32.Dispatch("WEAP.WEAPApplication")
-#    WEAP.ActiveArea = "SyntheticProblem_WEAPMODFLOW"
-#    WEAP.Calculate()
+    WEAP = win32.Dispatch("WEAP.WEAPApplication")
+    WEAP.ActiveArea = "SyntheticProblem_WEAPMODFLOW"
+    WEAP.Calculate()
 
     #---    Export results
-#    favorites = pd.read_excel(r"C:\Users\vagrant\Documents\MODFLOW_Calibration\data\Favorites_WEAP.xlsx")
-#    for i,j in zip(favorites["BranchVariable"],favorites["WEAP Export"]):
-#        WEAP.LoadFavorite(i)
-#        WEAP.ExportResults(os.path.join(dir_iteration, f"iter_{str(iteration)}_{j}.csv"), True, True, True, False, False)
-
+    favorites = pd.read_excel(r"C:\Users\vagrant\Documents\MODFLOW_Calibration\data\Favorites_WEAP.xlsx")
+    for i,j in zip(favorites["BranchVariable"],favorites["WEAP Export"]):
+        WEAP.LoadFavorite(i)
+        WEAP.ExportResults(os.path.join(dir_iteration, f"iter_{str(iteration)}_{j}.csv"), True, True, True, False, False)
+    print('CORRIÓ WEAP Y SE EXPORTARON RESULTADOS')
     #---------------------------------
     #---    Objective Function    ----
     #---------------------------------
