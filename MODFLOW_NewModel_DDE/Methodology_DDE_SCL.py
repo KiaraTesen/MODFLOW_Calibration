@@ -19,7 +19,7 @@ warnings.filterwarnings('ignore')
 #---    Configure IP and PORT
 VM = int(sys.argv[1])
 
-MY_IP = f"10.0.0.{10+VM}"
+MY_IP = f"10.0.1.{10+VM}"                  ## Cambiamos el IP por AWS
 MY_IP_PORT = f"{MY_IP}:8888"
 
 ITERATION = int(sys.argv[2])
@@ -29,13 +29,13 @@ FINAL_ITERATION = int(sys.argv[4])
 VMS = int(sys.argv[5])
 
 #---    Paths
-path_WEAP = r'C:\Users\vagrant\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
+path_WEAP = r'C:\Users\Administrator\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
 path_model = os.path.join(path_WEAP, 'MODFLOW_model')
-path_init_model = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\MODFLOW_model\MODFLOW_model_vinit'
-path_nwt_exe = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\MODFLOW-NWT_1.2.0\bin\MODFLOW-NWT_64.exe'
-path_GIS = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\GIS'    
-path_output = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\MODFLOW_NewModel_DDE\output'         # Need full path for WEAP Export
-path_obs_data = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\ObservedData'
+path_init_model = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\data\MODFLOW_model\MODFLOW_model_vinit'
+path_nwt_exe = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\data\MODFLOW-NWT_1.2.0\bin\MODFLOW-NWT_64.exe'
+path_GIS = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\data\GIS'    
+path_output = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\MODFLOW_NewModel_DDE\output'         # Need full path for WEAP Export
+path_obs_data = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\data\ObservedData'
 
 #---    Initial matriz
 HP = ['kx', 'sy'] 
@@ -67,9 +67,8 @@ if ITERATION == 0:
     f.close()
 
     #---    Initial Sampling - Pob(0)
-    y_init = Run_WEAP_MODFLOW(path_output, str(ITERATION), initial_shape_HP, HP, active_cells, pob.x, n_var, 
-                              active_matriz, path_init_model, path_model, path_nwt_exe, 
-                              path_obs_data)
+    y_init = Run_WEAP_MODFLOW(path_output, str(ITERATION), initial_shape_HP, HP, active_cells, pob.x, 
+                              n_var, active_matriz, path_init_model, path_model, path_nwt_exe, path_obs_data)
     pob.y = y_init
 
     # send xi to the server
@@ -149,8 +148,7 @@ else:
     
     # Obtain the OF of the trial vector
     vt_of = Run_WEAP_MODFLOW(path_output, str(ITERATION), initial_shape_HP, HP, active_cells, Vt, n_var, 
-                             active_matriz, path_init_model, path_model, path_nwt_exe, 
-                             path_obs_data)
+                             active_matriz, path_init_model, path_model, path_nwt_exe, path_obs_data)
     
     # Select the id_pop individual for the next generation
     if vt_of < pob.y:
