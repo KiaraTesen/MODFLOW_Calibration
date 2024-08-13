@@ -50,9 +50,7 @@ Add-Member -InputObject $Instance -MemberType ScriptProperty -Name RemoteSession
 }
 }
 
-ConvertTo-SecureString -AsPlainText -Force -String ('gXOhzrLp2f)FMPbLo-.7R9j0dRC&xk6?')
-
-## NUEVAS ORDENES
+## NUEVAS ORDENES - ADPSO
 # Verificar hostnames
 Invoke-Command -Session $InstanceList.RemoteSession -ScriptBlock {hostname}
 
@@ -68,3 +66,22 @@ Invoke-Command -Session $InstanceList.RemoteSession -ScriptBlock {cd C:\Users\Ad
 
 # Borrar outputs
 Invoke-Command -Session $InstanceList.RemoteSession -ScriptBlock {cd C:\Users\Administrator\Documents\MODFLOW_Calibration\MODFLOW_NewModel_DPSO\output; rm iter_*}
+
+## NUEVAS ORDENES - ADDE
+# Actualizar repositorios
+Invoke-Command -Session $InstanceList.RemoteSession -ScriptBlock {cd C:\Users\Administrator\Documents\tcp_server\; git pull}														#1
+Invoke-Command -Session $InstanceList.RemoteSession -ScriptBlock {cd C:\Users\Administrator\Documents\MODFLOW_Calibration\; git pull}
+Invoke-Command -Session $InstanceList.RemoteSession -ScriptBlock {cd C:\Users\Administrator\Documents\MODFLOW_Calibration\MODFLOW_NewModel_DDE; ls}
+
+# Revisar outputs
+Invoke-Command -Session $InstanceList.RemoteSession -ScriptBlock {cd C:\Users\Administrator\Documents\MODFLOW_Calibration\MODFLOW_NewModel_DDE\output; ls}				#2
+
+# Activas - escucha / Mandar orden
+Invoke-Command -Session $InstanceList.RemoteSession -ScriptBlock {cd C:\Users\Administrator\Documents\tcp_server; powershell ‘./Cargo_run_DDE.ps1’} -AsJob				#3
+Invoke-Command -Session $InstanceList.RemoteSession -ScriptBlock {Get-Process cargo*}																											#3.1
+
+Invoke-Command -Session $InstanceList.RemoteSession -ScriptBlock {cd C:\Users\Administrator\Documents\MODFLOW_Calibration\MODFLOW_NewModel_DDE; .\sp\Scripts\activate; powershell ‘./Run_DDE.ps1 0 201 202 20’} -AsJob	#4
+Invoke-Command -Session $InstanceList.RemoteSession -ScriptBlock {cd C:\Users\Administrator\Documents\MODFLOW_Calibration\MODFLOW_NewModel_DDE; .\sp\Scripts\activate; powershell ‘./Run_DDE.ps1 0 4 5 4’} -AsJob	#4
+
+# Borrar outputs
+Invoke-Command -Session $InstanceList.RemoteSession -ScriptBlock {cd C:\Users\Administrator\Documents\MODFLOW_Calibration\MODFLOW_NewModel_DDE\output; rm iter_*}
