@@ -85,3 +85,29 @@ Invoke-Command -Session $InstanceList.RemoteSession -ScriptBlock {cd C:\Users\Ad
 
 # Borrar outputs
 Invoke-Command -Session $InstanceList.RemoteSession -ScriptBlock {cd C:\Users\Administrator\Documents\MODFLOW_Calibration\MODFLOW_NewModel_DDE\output; rm iter_*}
+
+
+
+foreach ($Instance in $InstanceList) {
+Add-Member -InputObject $Instance -MemberType ScriptProperty -Name Credential -Value {
+	return [pscredential]::new(($this.PublicIpAddress + '\Administrator'), (ConvertTo-SecureString -AsPlainText -Force -String ('Qw9-H=q)ekympZAPh!C3v;*9P5&XTcqY')))
+    }
+Add-Member -InputObject $Instance -MemberType ScriptProperty -Name RemoteSession -Value {
+	$ThisSession = Get-PSSession -Name $this.InstanceId -ErrorAction Ignore
+	if ($ThisSession) { return $ThisSession }
+	else { return New-PSSession -ComputerName $this.PublicIpAddress -Credential $this.Credential -Name $this.InstanceId }
+    }
+}
+
+
+
+foreach ($Instance in $InstanceList) {
+Add-Member -InputObject $Instance -MemberType ScriptProperty -Name Credential -Value {
+	return [pscredential]::new(($this.PublicIpAddress + '\Administrator'), (ConvertTo-SecureString -AsPlainText -Force -String ('7cMOzsA!WsLBj=011!UkVIJOFCtMrkzP')))
+    }
+Add-Member -InputObject $Instance -MemberType ScriptProperty -Name RemoteSession -Value {
+	$ThisSession = Get-PSSession -Name $this.InstanceId -ErrorAction Ignore
+	if ($ThisSession) { return $ThisSession }
+	else { return New-PSSession -ComputerName $this.PublicIpAddress -Credential $this.Credential -Name $this.InstanceId }
+    }
+}
