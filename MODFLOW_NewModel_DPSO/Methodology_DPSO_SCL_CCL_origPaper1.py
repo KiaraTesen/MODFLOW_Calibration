@@ -111,8 +111,8 @@ if ITERATION == 0:
 
 else:
     #---    PSO
-    α = 0.8                                                    # Cognitive scaling parameter  # 0.8 # 1.49
-    β = 0.8                                                    # Social scaling parameter     # 0.8 # 1.49                       
+    α = 1.49   ## ORIGINAL PAPER: 0.8                                                 # Cognitive scaling parameter  # 0.8 # 1.49
+    β = 1.49   ## ORIGINAL PAPER: 0.8                                                 # Social scaling parameter     # 0.8 # 1.49                       
     w_min = 0.4                                                 # minimum value for the inertia velocity
     w_max = 0.9                                                 # maximum value for the inertia velocity
     vMax = np.around(np.multiply(u_bounds-l_bounds,0.8),4)      # Max velocity # De 0.8 a 0.4
