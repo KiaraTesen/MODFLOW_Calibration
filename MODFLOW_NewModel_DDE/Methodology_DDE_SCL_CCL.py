@@ -132,7 +132,7 @@ else:
     
     #---    Randomly pick 3 candidate solution using indexes ids_vms
     # Generate IP_PORT_POOL
-    IP_POOL = [f"10.0.0.{12+i}" for i in range(VMS)]    # vm1 is the server  machine
+    IP_POOL = [f"10.0.1.{12+i}" for i in range(VMS)]    # vm1 is the server  machine
     IP_POOL.remove(MY_IP)
 
     IP_PORT_POOL = [f"{ip}:8888" for ip in IP_POOL]
