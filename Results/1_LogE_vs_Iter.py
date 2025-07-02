@@ -17,7 +17,7 @@ configuration = ['n = 20', 'n = 35', 'n = 50']                                  
 experiments = ['E1', 'E2', 'E3', 'E4', 'E5', 'E6', 'E7']                        # 'E4', 'E5'
 iterations = list(range(201))
 
-path_results = os.path.join(r'D:\1_PaperI') 
+path_results = os.path.join(r'D:\PaperI') 
 
 alpha_value = [90, 95, 99]
 
@@ -86,7 +86,8 @@ for a in methodology:
                 df_value = df_y_log_T.iloc[:,m]
                 df_value = df_value.dropna()
 
-                CI = st.norm.interval(alpha = c/100, loc = np.mean(df_value), scale = st.sem(df_value))
+                alpha__ = c/100
+                CI = st.norm.interval(float(alpha__), loc = np.mean(df_value), scale = st.sem(df_value))
                 mean_value = np.mean(df_value)
                 #print(m, mean_value, CI, df_value.size)
 
@@ -102,38 +103,47 @@ for a in methodology:
             df_mean[str(a) + '; ' + str(b)] = df_register_T['Mean']
 
             #---    Graph 1
-            Lower_bound = 3.5
-            Upper_bound = 6.0
+            Lower_bound = 3.7
+            Upper_bound = 5.71
 
             fig, ax = plt.subplots(figsize=(14, 7))
-            ax.plot(range(len(df_register_T)), df_register_T.loc[:,'Upper CI - ' + str(c) + '%'], color = "black", linewidth = 0.75, linestyle = 'dashed', label = 'Upper CI - ' + str(c) + '%')
-            ax.plot(range(len(df_register_T)), df_register_T.loc[:,'Lower CI - ' + str(c) + '%'], color = "black", linewidth = 0.75, linestyle = 'dotted', label = 'Lower CI - ' + str(c) + '%')
-            ax.plot(range(len(df_register_T)), df_register_T.loc[:,'Mean'], color = "#A52A2A", linewidth = 0.75, linestyle = 'solid', label = 'Mean')
+            ax.plot(range(len(df_register_T)), df_register_T.loc[:,'Upper CI - ' + str(c) + '%'], color = "blue", linewidth = 1.25, linestyle = 'dashed', label = 'Upper CI - ' + str(c) + '%')
+            ax.plot(range(len(df_register_T)), df_register_T.loc[:,'Lower CI - ' + str(c) + '%'], color = "blue", linewidth = 1.25, linestyle = 'dotted', label = 'Lower CI - ' + str(c) + '%')
+            ax.plot(range(len(df_register_T)), df_register_T.loc[:,'Mean'], color = "red", linewidth = 1.25, linestyle = 'solid', label = 'Mean')
             #ax.fill_between(x = range(len(df_register_T)), y1 = df_register_T.loc[:,'Upper CI - ' + str(alpha_value) + '%'], y2 =  df_register_T.loc[:,'Lower CI - ' + str(alpha_value) + '%'],  alpha = 0.2, color = "#1f77b4") # Polígono
 
             xlim = len(iterations)
             plt.xticks(range(0, xlim, 20), fontsize = fs_others)
             plt.xlim(0, xlim)
-            plt.yticks(fontsize = fs_others)
+            plt.yticks(np.arange(Lower_bound, Upper_bound, 0.4), fontsize = fs_others)
             plt.ylim(Lower_bound, Upper_bound)
 
-            if b == 'n = 20':
-                title = 'NP = 20'
-            elif b == 'n = 35':
-                title = 'NP = 35'
-            elif b == 'n = 50':
-                title = 'NP = 50'
+            if a == 'DPSO':
+                if b == 'n = 20':
+                    title = 'ADPSO-CL; NP = 20'
+                elif b == 'n = 35':
+                    title = 'ADPSO-CL; NP = 35'
+                elif b == 'n = 50':
+                    title = 'ADPSO-CL; NP = 50'
+            else:
+                if b == 'n = 20':
+                    title = 'ADDE-CL; NP = 20'
+                elif b == 'n = 35':
+                    title = 'ADDE-CL; NP = 35'
+                elif b == 'n = 50':
+                    title = 'ADDE-CL; NP = 50'
+
             plt.title(str(title), fontsize = fs_title, weight = "bold")
             plt.xlabel("Iterations", fontsize = fs_others, weight = "bold")
-            plt.ylabel("log E", fontsize = fs_others, weight = "bold")
+            plt.ylabel("Objective function (log E)", fontsize = fs_others, weight = "bold")
             plt.legend(loc='upper right', fontsize = fs_others)
 
-            plt.savefig(os.path.join(path_results, 'Graphs', 'LogE_vs_iter_' + str(a) + '_' + str(b) + '_' + str(c) + '.png'), dpi = 1200)
-            plt.savefig(os.path.join(path_results, 'Graphs', 'LogE_vs_iter_' + str(a) + '_' + str(b) + '_' + str(c) + '.eps'), format = 'eps', dpi = 1200)
+            plt.savefig(os.path.join(r'C:\Users\aimee\Desktop\Graphs_New', 'LogE_vs_iter_' + str(a) + '_' + str(b) + '_' + str(c) + '.png'), dpi = 1200)
+            plt.savefig(os.path.join(r'C:\Users\aimee\Desktop\Graphs_New', 'LogE_vs_iter_' + str(a) + '_' + str(b) + '_' + str(c) + '.eps'), format = 'eps', dpi = 1200)
             plt.clf()
 
 print(df_mean)
-
+"""
 #---    Graph 2
 fig2, ax2 = plt.subplots(figsize = (16, 8))
 ax2.plot(range(len(df_mean)), df_mean.loc[:, 'DPSO; n = 20'], color = "black", linewidth = 0.75, linestyle = 'solid', label = 'DPSO; n = 20')
@@ -155,3 +165,4 @@ plt.legend(bbox_to_anchor = (0,1,5,0), mode = "expandir", ncol = 3, loc = 'lower
 plt.savefig(os.path.join(path_results, 'Graphs', 'Mean_LogE_vs_iter.png'))
 plt.savefig(os.path.join(path_results, 'Graphs', 'Mean_LogE_vs_iter.eps'), format = 'eps', dpi = 1200)
 plt.clf()
+"""

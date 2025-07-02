@@ -19,7 +19,7 @@ warnings.filterwarnings('ignore')
 #---    Configure IP and PORT
 VM = int(sys.argv[1])
 
-MY_IP = f"10.0.0.{10+VM}"
+MY_IP = f"10.0.1.{10+VM}"       #f"10.0.0.{10+VM}"
 MY_IP_PORT = f"{MY_IP}:8888"
 
 ITERATION = int(sys.argv[2])
@@ -29,13 +29,13 @@ FINAL_ITERATION = int(sys.argv[4])
 VMS = int(sys.argv[5])
 
 #---    Paths
-path_WEAP = r'C:\Users\vagrant\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
+path_WEAP = r'C:\Users\Administrator\Documents\WEAP Areas\SyntheticProblem_WEAPMODFLOW'
 path_model = os.path.join(path_WEAP, 'MODFLOW_model')
-path_init_model = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\MODFLOW_model\MODFLOW_model_vinit'
-path_nwt_exe = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\MODFLOW-NWT_1.2.0\bin\MODFLOW-NWT_64.exe'
-path_GIS = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\GIS'    
-path_output = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\MODFLOW_NewModel_DDE\output'         # Need full path for WEAP Export
-path_obs_data = r'C:\Users\vagrant\Documents\MODFLOW_Calibration\data\ObservedData'
+path_init_model = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\data\MODFLOW_model\MODFLOW_model_vinit'
+path_nwt_exe = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\data\MODFLOW-NWT_1.2.0\bin\MODFLOW-NWT_64.exe'
+path_GIS = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\data\GIS'    
+path_output = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\MODFLOW_NewModel_DDE\output'         # Need full path for WEAP Export
+path_obs_data = r'C:\Users\Administrator\Documents\MODFLOW_Calibration\data\ObservedData'
 
 #---    Initial matriz
 HP = ['kx', 'sy'] 
@@ -93,7 +93,7 @@ if ITERATION == 0:
 
     # send xi to the server
     send_request_py(MY_IP_PORT, 1, pob.x)
-    time.sleep(60)
+    time.sleep(45)
 
     file = open(f"ind_{MY_IP}_8888.txt", "w")
     file.write(f"{ITERATION},{pob.y}\n")
@@ -116,8 +116,8 @@ if ITERATION == 0:
 
 else:
     #---    DDE 
-    α = 0.8         # Step size [0, 0.9] - [0.45, 0.95]
-    pc = 0.8        # Crossover probability - [0.1, 0.8]
+    α = 0.9         # ORIG: 0.8 # Step size [0, 0.9] - [0.45, 0.95]
+    pc = 0.9        # ORIG: 0.8 # Crossover probability - [0.1, 0.8]
 
     with h5py.File('DDE_historial.h5', 'r') as f:
         pob.x = np.copy(f["pob_x"][ITERATION - 1])

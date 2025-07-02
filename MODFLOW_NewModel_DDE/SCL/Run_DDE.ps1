@@ -10,7 +10,7 @@ $vm = [int]((hostname) -replace '\D+(\d+)','$1')
 while($iteration -ne $total_iteration){
       #Write-Host "Run experiment : "$iteration
       #Get-Date -Format "dddd MM/dd/yyyy HH:mm K"
-      python Methodology_DDE_SCL_CCL.py $vm $iteration $total_iteration $final_iteration $vms
+      python Methodology_DDE_SCL.py $vm $iteration $total_iteration $final_iteration $vms
       if($error.count -eq 0){
           print($iteration)
           $iteration++
