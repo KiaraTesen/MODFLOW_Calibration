@@ -188,7 +188,7 @@ def Run_WEAP_MODFLOW(path_output, iteration, initial_shape_HP, HP, active_cells,
 
     #---    Move new files
     for h in get_new_files:
-        if h.endswith('.py') or h == '__pycache__' or h == 'sp' or h.endswith('.txt') or h == 'output' or h.endswith('.ps1') or h.endswith('.h5'):
+        if h.endswith('.py') or h == '__pycache__' or h == 'sp' or h.endswith('.txt') or h == 'output' or h.endswith('.ps1') or h.endswith('.h5') or h =='Sin CL':
             pass 
         else:
             shutil.move(os.path.join(os.getcwd(), h), os.path.join(path_model, h))
