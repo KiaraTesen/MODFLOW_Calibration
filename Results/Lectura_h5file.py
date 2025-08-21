@@ -4,11 +4,14 @@
 import h5py
 import os
 import pandas as pd
-import matplotlib.pyplot as plt
 import numpy as np
 import warnings
 warnings.filterwarnings('ignore')
 
+#------------------------------
+#----    LECTURA VARIOS    ----
+#------------------------------
+"""
 #---    Initial information
 configuration = 'n = 35'
 title = 'n = 35'
@@ -21,9 +24,7 @@ path_results = os.path.join(r'D:\1_PaperI\DPSO\n = 35')
 
 #---    Lectura archivos h5
 df_y = pd.DataFrame()
-df_y_log = pd.DataFrame()
 for i in experiments:
-    df_y_exp = pd.DataFrame()
     for j in machines:
         path_experiment = os.path.join(path_results, i, methodology + '_historial_vm' + str(j) + '.h5')
 
@@ -38,9 +39,27 @@ for i in experiments:
         for k in iterations:
             df_y.loc[k,"Y-vm" + str(j) + '-' + str(i)] = y[k, 0]
             df_y.loc[df_y["Y-vm" + str(j) + '-' + str(i)] == 0, "Y-vm" + str(j) + '-' + str(i)] = np.nan
-    
-            df_y_exp.loc[k,"Y-vm" + str(j) + '-' + str(i)] = y[k, 0]
-            df_y_exp.loc[df_y_exp["Y-vm" + str(j) + '-' + str(i)] == 0, "Y-vm" + str(j) + '-' + str(i)] = np.nan
 
-print(df_y_exp)
-df_y_exp.to_csv('prueba.csv')
+print(df_y)
+"""
+
+#------------------------------
+#----    LECTURA SIMPLE    ----
+#------------------------------
+
+#---    Initial information
+iterations = list(range(201))
+path_results = os.path.join(r'C:\Users\aimee\Desktop\Github\MODFLOW_Calibration\Results')
+##path_results = os.path.join(r'D:\PaperI_Results\Sensitivity Analysis - Hyperparameters\ADPSO-CL\var1\E3')
+path_experiment = os.path.join(path_results, 'DPSO_historial_vm3.h5')
+
+#---    Lectura archivos h5
+df_y = pd.DataFrame()
+
+with h5py.File(path_experiment, 'r') as f:
+   y = f["pob_y"][:]
+
+for k in iterations:
+   df_y.loc[k,"Y-vm"] = y[k, 0]
+   df_y.loc[df_y["Y-vm"] == 0, "Y-vm"] = np.nan
+print(df_y)
